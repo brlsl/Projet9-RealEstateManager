@@ -6,6 +6,7 @@ import android.net.wifi.WifiManager;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Philippe on 21/02/2018.
@@ -23,13 +24,20 @@ public class Utils {
         return (int) Math.round(dollars * 0.812);
     }
 
+
+    // method added
+    public static int convertEuroToDollar(int euros){
+        return (int) Math.round(euros * 1.231);
+    }
+
     /**
      * Conversion de la date d'aujourd'hui en un format plus approprié
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
      * @return
      */
     public static String getTodayDate(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd"); // previous method
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy", Locale.FRANCE);
         return dateFormat.format(new Date());
     }
 
