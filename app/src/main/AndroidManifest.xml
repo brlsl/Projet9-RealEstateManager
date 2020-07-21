@@ -22,7 +22,7 @@
         </activity>
 
         <!--Second Activity-->
-        <activity android:name="com.openclassrooms.realestatemanager.controllers.SecondActivity"></activity>
+        <activity android:name="com.openclassrooms.realestatemanager.controllers.PropertyDetailActivity"></activity>
     </application>
 
 </manifest>
