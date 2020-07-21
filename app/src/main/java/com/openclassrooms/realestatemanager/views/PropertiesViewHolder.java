@@ -1,32 +1,35 @@
 package com.openclassrooms.realestatemanager.views;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.controllers.PropertyDetailActivity;
+
+import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
 import com.openclassrooms.realestatemanager.models.Property;
 
-public class PropertiesViewHolder extends RecyclerView.ViewHolder {
+public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 
     // FOR DATA
     private Context mContext;
-    public static final String PROPERTY_CITY = "property_city";
-    public static final String PROPERTY_PRICE = "property_price";
+    public static final String PROPERTY_CITY = "PROPERTY CITY";
+    public static final String PROPERTY_PRICE = "PROPERTY PRICE";
 
-    // for UI
+    // FOR UI
     private TextView mPropertyPrice, mPropertyCity;
     private ImageView mPropertyPhoto;
 
     public PropertiesViewHolder(@NonNull View itemView) {
         super(itemView);
+
         mContext = itemView.getContext();
         mPropertyPrice = itemView.findViewById(R.id.property_price);
         mPropertyCity = itemView.findViewById(R.id.property_city);
@@ -43,15 +46,29 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder {
                 .centerCrop()
                 .into(mPropertyPhoto);
 
+/*
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), PropertyDetailActivity.class);
-                intent.putExtra(PROPERTY_CITY, property.getCity());
-                intent.putExtra(PROPERTY_PRICE, property.getPrice());
-                view.getContext().startActivity(intent);
+
+                AppCompatActivity activity = (AppCompatActivity) mContext;
+
+                PropertyDetailFragment fragment = new PropertyDetailFragment();
+
+                // pass data to other fragment
+                Bundle bundle = new Bundle();
+                bundle.putString(PROPERTY_CITY, property.getCity());
+                bundle.putInt(PROPERTY_PRICE, property.getPrice());
+                fragment.setArguments(bundle);
+
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
-    }
 
+ */
+    }
 }

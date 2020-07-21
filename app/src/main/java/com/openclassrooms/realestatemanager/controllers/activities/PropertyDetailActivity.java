@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.controllers;
+package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,13 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.openclassrooms.realestatemanager.R;
 
-import org.w3c.dom.Text;
-
 public class PropertyDetailActivity extends AppCompatActivity {
 
     // FOR DATA
-    public static final String PROPERTY_CITY = "property_city";
-    public static final String PROPERTY_PRICE = "property_price";
+    public static final String PROPERTY_CITY = "PROPERTY CITY";
+    public static final String PROPERTY_PRICE = "PROPERTY PRICE";
 
     // FOR UI
     TextView mPropertyCity, mPropertyPrice;
@@ -22,7 +20,8 @@ public class PropertyDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.property_detail_activity);
+        setContentView(R.layout.fragment_property_detail);
+
 
         Intent intent = getIntent();
 
@@ -30,7 +29,7 @@ public class PropertyDetailActivity extends AppCompatActivity {
         int propertyPrice = intent.getIntExtra(PROPERTY_PRICE,0);
 
         mPropertyCity = findViewById(R.id.detail_activity_property_city);
-        mPropertyPrice = findViewById(R.id.detail_activit_property_price);
+        mPropertyPrice = findViewById(R.id.detail_fragment_property_price);
 
         mPropertyCity.setText(propertyCity);
         mPropertyPrice.setText(String.valueOf(propertyPrice));

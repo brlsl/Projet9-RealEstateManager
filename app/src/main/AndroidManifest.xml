@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <!--Main Activity -->
-        <activity android:name="com.openclassrooms.realestatemanager.controllers.MainActivity">
+        <activity android:name="com.openclassrooms.realestatemanager.controllers.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
         </activity>
 
         <!--Second Activity-->
-        <activity android:name="com.openclassrooms.realestatemanager.controllers.PropertyDetailActivity"></activity>
+        <activity android:name="com.openclassrooms.realestatemanager.controllers.activities.PropertyDetailActivity"></activity>
     </application>
 
 </manifest>
