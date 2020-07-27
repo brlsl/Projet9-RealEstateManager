@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
-import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -60,11 +59,12 @@ public class PropertyDaoTest {
         // BEFORE : add agent in db
         this.database.agentDao().createAgent(AGENT_DEMO);
         // TEST
+        Agent agent = LiveDataTestUtil.getValue(this.database.agentDao().getAgent(AGENT_ID));
         List<Agent> agentList = LiveDataTestUtil.getValue(this.database.agentDao().getAgentList());
-        assertTrue(agentList.get(0).getId() == (AGENT_DEMO.getId())
-                && agentList.get(0).getName().equals(AGENT_DEMO.getName())
-                && agentList.get(0).getSurname().equals(AGENT_DEMO.getSurname()));
-        assertEquals(1, agentList.size());
+        assertTrue(agent.getId() == (AGENT_DEMO.getId())
+                && agent.getName().equals(AGENT_DEMO.getName())
+                && agent.getSurname().equals(AGENT_DEMO.getSurname())
+                && agentList.size() == 1);
     }
 
     @Test
@@ -100,18 +100,19 @@ public class PropertyDaoTest {
         this.database.agentDao().createAgent(AGENT_DEMO);
         this.database.propertyDao().createProperty(PROPERTY_DEMO);
 
+        Property property = LiveDataTestUtil.getValue(database.propertyDao().getProperty(AGENT_ID));
         List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
-        assertTrue(propertyList.size() == 1
-                && propertyList.get(0).getAgentId() == AGENT_DEMO.getId()
-                && propertyList.get(0).getCity().equals("Paris")
-                && propertyList.get(0).getPrice() == 123);
+        assertTrue(property.getAgentId() == AGENT_DEMO.getId()
+                && property.getCity().equals(PROPERTY_DEMO.getCity())
+                && property.getPrice() == PROPERTY_DEMO.getPrice()
+                && propertyList.size() == 1);
     }
 
     @Test
     public void insertAndUpdateProperty() throws InterruptedException{
         this.database.agentDao().createAgent(AGENT_DEMO);
         this.database.propertyDao().createProperty(PROPERTY_DEMO);
-        Property property = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList()).get(0);
+        Property property = LiveDataTestUtil.getValue(database.propertyDao().getProperty(AGENT_ID));
         property.setCity("Marseille");
         property.setPrice(456);
         this.database.propertyDao().updateProperty(property);

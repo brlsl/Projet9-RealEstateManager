@@ -13,12 +13,7 @@ import java.util.List;
 
 @Dao
 public interface AgentDao {
-/*
-    @Query("SELECT * FROM agent_table")
-    LiveData<List<Agent>> getAgentList();
 
-
- */
     @Insert
     void createAgent(Agent agent);
 

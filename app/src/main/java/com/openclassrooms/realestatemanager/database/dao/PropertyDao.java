@@ -14,14 +14,14 @@ import java.util.List;
 @Dao
 public interface PropertyDao {
 
-    @Query("SELECT * FROM property_table")
-    LiveData<List<Property>> getPropertyList();
-
     @Insert
     void createProperty(Property property);
 
     @Query("SELECT * FROM property_table WHERE agentId = :agentId")
     LiveData<Property> getProperty(long agentId);
+
+    @Query("SELECT * FROM property_table")
+    LiveData<List<Property>> getPropertyList();
 
     @Update
     void updateProperty(Property property);
