@@ -37,4 +37,9 @@ public class PropertiesAdapter extends RecyclerView.Adapter<PropertiesViewHolder
         return mPropertiesList.size();
     }
 
+
+    public void updatePropertyList(List<Property> propertyList){
+        mPropertiesList = propertyList;
+        notifyDataSetChanged();
+    }
 }

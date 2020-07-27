@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +21,6 @@ import com.openclassrooms.realestatemanager.views.PropertiesAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.openclassrooms.realestatemanager.views.PropertiesViewHolder.PROPERTY_CITY;
-import static com.openclassrooms.realestatemanager.views.PropertiesViewHolder.PROPERTY_PRICE;
 
 public class PropertiesListFragment extends BaseFragment {
 
@@ -30,7 +28,6 @@ public class PropertiesListFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private PropertiesAdapter mAdapter;
     List<Property> mPropertiesList = new ArrayList<>();
-
 
     @Nullable
     @Override
@@ -67,35 +64,17 @@ public class PropertiesListFragment extends BaseFragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Log.e("TAG", "Position : "+position);
-/*
-                        AppCompatActivity activity = (AppCompatActivity) getActivity();
 
-                        PropertyDetailFragment fragment = new PropertyDetailFragment();
-
-                        // pass data to other fragment
-                        Bundle bundle = new Bundle();
-                        bundle.putString(PROPERTY_CITY, mPropertiesList.get(position).getCity());
-                        bundle.putInt(PROPERTY_PRICE, mPropertiesList.get(position).getPrice());
-                        fragment.setArguments(bundle);
-
-                        activity.getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.container, fragment)
-                                .addToBackStack(null)
-                                .commit();
-
-
- */
-                        mCallback.onOptionSelected(mPropertiesList.get(position));
+                        mCallback.onItemPropertySelected(mPropertiesList.get(position));
                     }
                 });
     }
 
-    public interface OnOptionClickListener{
-        void onOptionSelected(Property property);
+    public interface OnItemPropertyClickListener {
+        void onItemPropertySelected(Property property);
     }
 
-    private OnOptionClickListener mCallback;
+    private OnItemPropertyClickListener mCallback;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -105,7 +84,7 @@ public class PropertiesListFragment extends BaseFragment {
         // Now the SettingOptionsFragment needs to get an instance to the MainActivity that implements OnOptionClickListener.
         // You can grab the Activity in the onAttach method of a fragment.
         try {
-            mCallback = (OnOptionClickListener) context;
+            mCallback = (OnItemPropertyClickListener) context;
         } catch (Exception e) {
             throw new ClassCastException(context.toString() + " must implement SettingOptionsFragment.OnOptionClickListener");
         }

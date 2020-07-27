@@ -2,19 +2,17 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
 import com.openclassrooms.realestatemanager.models.Property;
-import com.openclassrooms.realestatemanager.views.PropertiesAdapter;
 
 import static com.openclassrooms.realestatemanager.views.PropertiesViewHolder.PROPERTY_CITY;
 import static com.openclassrooms.realestatemanager.views.PropertiesViewHolder.PROPERTY_PRICE;
 
 
-public class MainActivity extends BaseActivity implements PropertiesListFragment.OnOptionClickListener {
+public class MainActivity extends BaseActivity implements PropertiesListFragment.OnItemPropertyClickListener {
 
     // FOR DATA
     FragmentManager mFragmentManager;
@@ -45,7 +43,7 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
 
     @Override
-    public void onOptionSelected(Property property) {
+    public void onItemPropertySelected(Property property) {
         PropertyDetailFragment fragment = new PropertyDetailFragment();
 
         // pass data to other fragment
@@ -67,7 +65,6 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
                     .replace(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit();
-
         }
     }
 }
