@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,10 +11,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.openclassrooms.realestatemanager.PropertyViewModel;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.controllers.activities.AddPropertyActivity;
+import com.openclassrooms.realestatemanager.injection.Injection;
+import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 import com.openclassrooms.realestatemanager.views.PropertiesAdapter;
@@ -27,7 +35,31 @@ public class PropertiesListFragment extends BaseFragment {
     // FOR DATA
     private RecyclerView mRecyclerView;
     private PropertiesAdapter mAdapter;
-    List<Property> mPropertiesList = new ArrayList<>();
+    private List<Property> mPropertiesList = new ArrayList<>();
+    private PropertyViewModel mPropertyViewModel;
+
+    // FOR UI
+    private FloatingActionButton mFabAddProperty;
+
+    // CALLBACK
+    private OnItemPropertyClickListener mCallback;
+
+    public interface OnItemPropertyClickListener {
+        void onItemPropertySelected(Property property);
+    }
+
+    // LIFECYCLE
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        // Now the Fragment needs to get an instance to the MainActivity that implements OnItemPropertyClickListener.
+        try {
+            mCallback = (OnItemPropertyClickListener) context;
+        } catch (Exception e) {
+            throw new ClassCastException(context.toString() + " must implement SettingOptionsFragment.OnOptionClickListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -37,10 +69,31 @@ public class PropertiesListFragment extends BaseFragment {
         configureRecyclerView(view);
         configureOnClickRecyclerView();
 
+        configureViewModel();
+
+        // observe Room database changes(add, update) and updates it in rv
+        mPropertyViewModel.getPropertyList().observe(this, new Observer<List<Property>>() {
+            @Override
+            public void onChanged(List<Property> propertyList) {
+                mAdapter.updatePropertyList(propertyList);
+                mPropertiesList = propertyList;
+            }
+        });
+
+
+        mFabAddProperty = view.findViewById(R.id.add_property_fab);
+        mFabAddProperty.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), AddPropertyActivity.class);
+            startActivity(intent);
+        });
+
+
         return view;
     }
 
+
     private void configureRecyclerView(View view) {
+        /*
         mPropertiesList.add(new Property("Paris",123));
         mPropertiesList.add(new Property("Marseille",456));
         mPropertiesList.add(new Property("Toulouse",789));
@@ -52,6 +105,7 @@ public class PropertiesListFragment extends BaseFragment {
         mPropertiesList.add(new Property("Troyes",2021));
         mPropertiesList.add(new Property("Dijon",2223));
 
+         */
         mRecyclerView = view.findViewById(R.id.properties_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new PropertiesAdapter(mPropertiesList);
@@ -70,23 +124,11 @@ public class PropertiesListFragment extends BaseFragment {
                 });
     }
 
-    public interface OnItemPropertyClickListener {
-        void onItemPropertySelected(Property property);
+
+    private void configureViewModel() {
+        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(requireContext());
+        mPropertyViewModel = new ViewModelProvider(this, mViewModelFactory).get(PropertyViewModel.class);
+        //mPropertyViewModel.init();
     }
 
-    private OnItemPropertyClickListener mCallback;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        // 2
-        // Now the SettingOptionsFragment needs to get an instance to the MainActivity that implements OnOptionClickListener.
-        // You can grab the Activity in the onAttach method of a fragment.
-        try {
-            mCallback = (OnItemPropertyClickListener) context;
-        } catch (Exception e) {
-            throw new ClassCastException(context.toString() + " must implement SettingOptionsFragment.OnOptionClickListener");
-        }
-    }
 }

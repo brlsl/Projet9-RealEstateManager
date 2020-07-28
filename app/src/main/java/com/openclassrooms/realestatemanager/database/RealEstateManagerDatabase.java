@@ -15,8 +15,10 @@ import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Property;
 
+
 @Database(entities = {Agent.class, Property.class}, version = 1, exportSchema = false)
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
+
 
     private static volatile RealEstateManagerDatabase INSTANCE;
 
@@ -46,7 +48,15 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
 
-                // TODO: prepopulate with property list
+                ContentValues values = new ContentValues();
+                values.put("agentId", 1);
+                values.put("city", "CityTest");
+                values.put("price", 123);
+                values.put("surface",100);
+                values.put("numberOfRooms", 6);
+                values.put("numberOfBedrooms", 3);
+                values.put("numberOfBathrooms", 1);
+                db.insert("property_table", OnConflictStrategy.IGNORE, values);
             }
         };
     }

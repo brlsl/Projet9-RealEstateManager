@@ -21,20 +21,25 @@
 
     <TextView
         android:id="@+id/property_price"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:text="Price"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/property_photo"
         app:layout_constraintTop_toTopOf="@+id/property_photo" />
 
     <TextView
         android:id="@+id/property_city"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:text="property_city"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/property_price"
         app:layout_constraintTop_toBottomOf="@+id/property_price" />
 </androidx.constraintlayout.widget.ConstraintLayout>

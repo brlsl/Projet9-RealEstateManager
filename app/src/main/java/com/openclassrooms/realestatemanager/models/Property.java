@@ -26,16 +26,24 @@ public class Property {
     private int numberOfBedrooms;
     private int numberOfBathRooms;
 
-    @Ignore
-    public Property(String city, int price){
-        this.city = city;
-        this.price = price;
-    }
 
+    // constructor for database testing
+    @Ignore
     public Property(long agentId, String city, int price){
         this.agentId = agentId;
         this.city = city;
         this.price = price;
+    }
+
+    public Property(long agentId, String city, String type, int price, int surface, int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms) {
+        this.agentId = agentId;
+        this.city = city;
+        this.type = type;
+        this.price = price;
+        this.surface = surface;
+        this.numberOfRooms = numberOfRooms;
+        this.numberOfBedrooms = numberOfBedrooms;
+        this.numberOfBathRooms = numberOfBathRooms;
     }
 
     public long getId() {

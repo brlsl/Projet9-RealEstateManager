@@ -53,7 +53,6 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
         fragment.setArguments(bundle);
 
         if(isTwoPane){
-
             this.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.detail_container, fragment)

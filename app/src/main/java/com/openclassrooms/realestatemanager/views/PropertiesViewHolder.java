@@ -45,30 +45,5 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
                 .load(R.drawable.ic_launcher_background)
                 .centerCrop()
                 .into(mPropertyPhoto);
-
-/*
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AppCompatActivity activity = (AppCompatActivity) mContext;
-
-                PropertyDetailFragment fragment = new PropertyDetailFragment();
-
-                // pass data to other fragment
-                Bundle bundle = new Bundle();
-                bundle.putString(PROPERTY_CITY, property.getCity());
-                bundle.putInt(PROPERTY_PRICE, property.getPrice());
-                fragment.setArguments(bundle);
-
-                activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-
- */
     }
 }
