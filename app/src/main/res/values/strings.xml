@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+    <string-array name="spinner_type">
+        <item> </item>
+        <item>House</item>
+        <item>Apartment</item>
+        <item>Manor</item>
+        <item>Loft</item>
+    </string-array>
 </resources>

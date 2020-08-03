@@ -48,15 +48,22 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
 
-                ContentValues values = new ContentValues();
-                values.put("agentId", 1);
-                values.put("city", "CityTest");
-                values.put("price", 123);
-                values.put("surface",100);
-                values.put("numberOfRooms", 6);
-                values.put("numberOfBedrooms", 3);
-                values.put("numberOfBathrooms", 1);
-                db.insert("property_table", OnConflictStrategy.IGNORE, values);
+                ContentValues agent = new ContentValues();
+                agent.put("id", 1);
+                agent.put("name", "REM");
+                agent.put("surname", "Agency");
+                db.insert("agent_table", OnConflictStrategy.IGNORE, agent);
+
+                ContentValues property = new ContentValues();
+                property.put("agentId", 1);
+                property.put("city", "CityTest");
+                property.put("price", 123);
+                property.put("type", "Apartment");
+                property.put("surface",100);
+                property.put("numberOfRooms", 6);
+                property.put("numberOfBedrooms", 3);
+                property.put("numberOfBathrooms", 1);
+                db.insert("property_table", OnConflictStrategy.IGNORE, property);
             }
         };
     }

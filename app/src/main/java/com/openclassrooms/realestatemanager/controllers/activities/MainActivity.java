@@ -3,18 +3,17 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
+
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
 import com.openclassrooms.realestatemanager.models.Property;
 
-import static com.openclassrooms.realestatemanager.views.PropertiesViewHolder.PROPERTY_CITY;
-import static com.openclassrooms.realestatemanager.views.PropertiesViewHolder.PROPERTY_PRICE;
-
-
 public class MainActivity extends BaseActivity implements PropertiesListFragment.OnItemPropertyClickListener {
 
     // FOR DATA
+    public static final String PROPERTY_OBJECT = "PROPERTY_OBJECT";
+
     FragmentManager mFragmentManager;
     private boolean isTwoPane;
 
@@ -41,15 +40,13 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
         }
     }
 
-
     @Override
     public void onItemPropertySelected(Property property) {
         PropertyDetailFragment fragment = new PropertyDetailFragment();
 
-        // pass data to other fragment
+        // pass property object to detail fragment
         Bundle bundle = new Bundle();
-        bundle.putString(PROPERTY_CITY, property.getCity());
-        bundle.putInt(PROPERTY_PRICE, property.getPrice());
+        bundle.putParcelable(PROPERTY_OBJECT, property);
         fragment.setArguments(bundle);
 
         if(isTwoPane){

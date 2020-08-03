@@ -7,24 +7,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 
-import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
 import com.openclassrooms.realestatemanager.models.Property;
 
 public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 
     // FOR DATA
     private Context mContext;
-    public static final String PROPERTY_CITY = "PROPERTY CITY";
-    public static final String PROPERTY_PRICE = "PROPERTY PRICE";
 
     // FOR UI
-    private TextView mPropertyPrice, mPropertyCity;
+    private TextView mPropertyPrice, mPropertyCity, mPropertyType;
     private ImageView mPropertyPhoto;
 
     public PropertiesViewHolder(@NonNull View itemView) {
@@ -33,13 +29,15 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
         mContext = itemView.getContext();
         mPropertyPrice = itemView.findViewById(R.id.property_price);
         mPropertyCity = itemView.findViewById(R.id.property_city);
+        mPropertyType = itemView.findViewById(R.id.property_type);
         mPropertyPhoto = itemView.findViewById(R.id.property_photo);
     }
 
     public void displayData(final Property property) {
-
         mPropertyCity.setText(property.getCity());
         mPropertyPrice.setText(String.valueOf(property.getPrice()));
+        mPropertyType.setText(property.getType());
+
 
         Glide.with(mContext)
                 .load(R.drawable.ic_launcher_background)

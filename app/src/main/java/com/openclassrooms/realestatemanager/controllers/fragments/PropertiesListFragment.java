@@ -80,32 +80,16 @@ public class PropertiesListFragment extends BaseFragment {
             }
         });
 
-
         mFabAddProperty = view.findViewById(R.id.add_property_fab);
         mFabAddProperty.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddPropertyActivity.class);
             startActivity(intent);
         });
 
-
         return view;
     }
 
-
     private void configureRecyclerView(View view) {
-        /*
-        mPropertiesList.add(new Property("Paris",123));
-        mPropertiesList.add(new Property("Marseille",456));
-        mPropertiesList.add(new Property("Toulouse",789));
-        mPropertiesList.add(new Property("Rennes",1011));
-        mPropertiesList.add(new Property("Lille",1213));
-        mPropertiesList.add(new Property("Strasbourg",1415));
-        mPropertiesList.add(new Property("Montpellier",1617));
-        mPropertiesList.add(new Property("Strasbourg",1819));
-        mPropertiesList.add(new Property("Troyes",2021));
-        mPropertiesList.add(new Property("Dijon",2223));
-
-         */
         mRecyclerView = view.findViewById(R.id.properties_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new PropertiesAdapter(mPropertiesList);
@@ -118,12 +102,10 @@ public class PropertiesListFragment extends BaseFragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Log.e("TAG", "Position : "+position);
-
                         mCallback.onItemPropertySelected(mPropertiesList.get(position));
                     }
                 });
     }
-
 
     private void configureViewModel() {
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(requireContext());

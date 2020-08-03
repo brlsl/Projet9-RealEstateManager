@@ -20,6 +20,7 @@ public class PropertyViewModel extends ViewModel {
 
     private LiveData<List<Property>> mPropertyList;
 
+
     public PropertyViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
         this.agentDataSource = agentDataSource;
         this.propertyDataSource = propertyDataSource;
@@ -27,7 +28,7 @@ public class PropertyViewModel extends ViewModel {
     }
 
 
-    public void init(){
+    public void init(long agentId){
         if (mPropertyList == null){
             mPropertyList = propertyDataSource.getPropertyList();
         }
@@ -36,6 +37,7 @@ public class PropertyViewModel extends ViewModel {
     // ---------
     // AGENT
     // ---------
+
 
     public void createAgent(Agent agent){
         executor.execute(()->

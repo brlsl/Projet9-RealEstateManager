@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.PropertyViewModel;
+
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 

@@ -1,9 +1,13 @@
 package com.openclassrooms.realestatemanager.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
 
 @Entity(tableName = "property_table",
         foreignKeys = @ForeignKey(entity = Agent.class,
@@ -11,7 +15,7 @@ import androidx.room.PrimaryKey;
         childColumns = "agentId"
         ))
 
-public class Property {
+public class Property implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -45,6 +49,30 @@ public class Property {
         this.numberOfBedrooms = numberOfBedrooms;
         this.numberOfBathRooms = numberOfBathRooms;
     }
+
+    protected Property(Parcel in) {
+        id = in.readLong();
+        agentId = in.readLong();
+        city = in.readString();
+        type = in.readString();
+        price = in.readInt();
+        surface = in.readInt();
+        numberOfRooms = in.readInt();
+        numberOfBedrooms = in.readInt();
+        numberOfBathRooms = in.readInt();
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -112,5 +140,23 @@ public class Property {
 
     public void setNumberOfBathRooms(int numberOfBathRooms) {
         this.numberOfBathRooms = numberOfBathRooms;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeLong(agentId);
+        parcel.writeString(city);
+        parcel.writeString(type);
+        parcel.writeInt(price);
+        parcel.writeInt(surface);
+        parcel.writeInt(numberOfRooms);
+        parcel.writeInt(numberOfBedrooms);
+        parcel.writeInt(numberOfBathRooms);
     }
 }
