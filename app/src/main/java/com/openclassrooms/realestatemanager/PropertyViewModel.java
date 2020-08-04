@@ -44,11 +44,11 @@ public class PropertyViewModel extends ViewModel {
                 agentDataSource.createAgent(agent));
     }
 
-    public LiveData<Agent> getAgent(Agent agent){
-        return agentDataSource.getAgent(agent.getId());
+    public LiveData<Agent> getAgent(long id){
+        return agentDataSource.getAgent(id);
     }
 
-    public LiveData<List<Agent>> getAgentList(Agent agent){
+    public LiveData<List<Agent>> getAgentList(){
         return agentDataSource.getAgentList();
     }
 

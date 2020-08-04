@@ -12,32 +12,59 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        
+
+        <EditText
+            android:id="@+id/editText_number_of_room_add_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="2"
+            android:inputType="numberDecimal"
+            android:maxLength="2"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            app:layout_constraintStart_toStartOf="@+id/editText_surface_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_surface_add_activity" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Room(s)"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room_add_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_number_of_room_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_add_activity"
+            app:layout_constraintVertical_bias="0.406" />
+
         <Spinner
             android:id="@+id/add_activity_spinner_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toTopOf="@+id/editText_price"
-            app:layout_constraintEnd_toEndOf="@+id/editText_price"
-            app:layout_constraintHorizontal_bias="0.432"
-            app:layout_constraintStart_toStartOf="@+id/editText_price"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    
+
         <EditText
-            android:id="@+id/editText_price"
+            android:id="@+id/editText_price_add_activity"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_border"
             android:ems="8"
-            android:hint="Price"
+            android:hint="Price "
             android:inputType="number"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_activity_spinner_type" />
-    
+            app:layout_constraintStart_toEndOf="@+id/add_activity_spinner_type"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -45,62 +72,127 @@
             android:layout_marginStart="8dp"
             android:text="€"
             android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_price"
-            app:layout_constraintStart_toEndOf="@+id/editText_price"
-            app:layout_constraintTop_toTopOf="@+id/editText_price" />
-    
+            app:layout_constraintBottom_toBottomOf="@+id/editText_price_add_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_price_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_price_add_activity" />
+
         <EditText
-            android:id="@+id/editText_city"
-            android:layout_width="wrap_content"
+            android:id="@+id/editText_address_add_activity"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="8"
+            android:hint="Address"
+            android:inputType="text"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText_city_add_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_border"
             android:ems="8"
             android:hint="City"
             android:inputType="text"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_price" />
-    
+            app:layout_constraintStart_toStartOf="@+id/editText_address_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
+
         <EditText
-            android:id="@+id/editText_adress"
+            android:id="@+id/editText_number_of_bedroom_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_border"
             android:ems="8"
-            android:hint="Address"
-            android:inputType="text"
-            android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_city" />
-    
-        <EditText
-            android:id="@+id/editText_number_of_room"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Number of rooms"
+            android:hint="Number of bedrooms"
             android:inputType="number"
+            android:maxLength="2"
+            android:paddingStart="5dp"
+
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_adress" />
-    
+            app:layout_constraintStart_toStartOf="@+id/editText_city_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Room(s)"
+            android:text="Bedroom(s)"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room"
-            app:layout_constraintStart_toEndOf="@+id/editText_number_of_room"
-            app:layout_constraintTop_toTopOf="@+id/editText_number_of_room" />
+            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bedroom_add_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_number_of_bedroom_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_number_of_bedroom_add_activity" />
+
+        <EditText
+            android:id="@+id/editText_number_of_bathroom_add_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="8"
+            android:hint="Number of bathrooms"
+            android:inputType="number"
+            android:maxLength="2"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bedroom_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_add_activity" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Bathroom(s)"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bathroom_add_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_number_of_bathroom_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_number_of_bathroom_add_activity"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <EditText
+            android:id="@+id/editText_surface_add_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="Surface "
+            android:inputType="number"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bathroom_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bathroom_add_activity" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="m²"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_surface_add_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_surface_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_surface_add_activity" />
 
         <Button
             android:id="@+id/activity_add_property_button"
@@ -112,33 +204,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room2" />
+            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bathroom_add_activity" />
 
-        <EditText
-            android:id="@+id/editText_number_of_room2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Number of rooms"
-            android:inputType="number"
-            android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room" />
-    
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Bathroom(s)"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room2"
-            app:layout_constraintStart_toEndOf="@+id/editText_number_of_room2"
-            app:layout_constraintTop_toTopOf="@+id/editText_number_of_room2"
-            app:layout_constraintVertical_bias="0.0" />
-    
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
