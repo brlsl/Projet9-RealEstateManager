@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.openclassrooms.realestatemanager.PropertyViewModel;
+import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentBottomSheetFragment;
 import com.openclassrooms.realestatemanager.injection.Injection;
@@ -24,7 +24,6 @@ import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Property;
-import com.openclassrooms.realestatemanager.views.AgentList.AgentAdapter;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -32,7 +31,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class AddPropertyActivity extends BaseActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener {
     // FOR DATA
-    private PropertyViewModel mPropertyViewModel;
+    private REMViewModel mPropertyViewModel;
 
     private static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final String CAMERA_PERMS = Manifest.permission.CAMERA;
@@ -152,7 +151,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
-        mPropertyViewModel = new ViewModelProvider(this, viewModelFactory).get(PropertyViewModel.class);
+        mPropertyViewModel = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
     }
 
     private void configureSpinnerType() {

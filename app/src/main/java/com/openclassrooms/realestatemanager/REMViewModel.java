@@ -11,7 +11,7 @@ import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class PropertyViewModel extends ViewModel {
+public class REMViewModel extends ViewModel {
 
     private final AgentDataRepository agentDataSource;
     private final PropertyDataRepository propertyDataSource;
@@ -21,7 +21,7 @@ public class PropertyViewModel extends ViewModel {
     private LiveData<List<Property>> mPropertyList;
 
 
-    public PropertyViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
+    public REMViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
         this.agentDataSource = agentDataSource;
         this.propertyDataSource = propertyDataSource;
         this.executor = executor;

@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.openclassrooms.realestatemanager.PropertyViewModel;
+import com.openclassrooms.realestatemanager.REMViewModel;
 
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
@@ -27,8 +27,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if(modelClass.isAssignableFrom(PropertyViewModel.class)) {
-            return (T) new PropertyViewModel(agentDataSource, propertyDataSource, executor);
+        if(modelClass.isAssignableFrom(REMViewModel.class)) {
+            return (T) new REMViewModel(agentDataSource, propertyDataSource, executor);
         }
         throw  new IllegalArgumentException("Unknown ViewModel Class");
     }

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.openclassrooms.realestatemanager.PropertyViewModel;
+import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.AddPropertyActivity;
 import com.openclassrooms.realestatemanager.injection.Injection;
@@ -36,7 +36,7 @@ public class PropertiesListFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private PropertiesAdapter mAdapter;
     private List<Property> mPropertiesList = new ArrayList<>();
-    private PropertyViewModel mPropertyViewModel;
+    private REMViewModel mPropertyViewModel;
 
     // FOR UI
     private FloatingActionButton mFabAddProperty;
@@ -67,19 +67,12 @@ public class PropertiesListFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rv_properties_list,container,false);
 
+        configureViewModel();
         configureRecyclerView(view);
         configureOnClickRecyclerView();
 
-        configureViewModel();
 
-        // observe Room database changes(add, update) and updates it in rv
-        mPropertyViewModel.getPropertyList().observe(this, new Observer<List<Property>>() {
-            @Override
-            public void onChanged(List<Property> propertyList) {
-                mAdapter.updatePropertyList(propertyList);
-                mPropertiesList = propertyList;
-            }
-        });
+
 
         mFabAddProperty = view.findViewById(R.id.add_property_fab);
         mFabAddProperty.setOnClickListener(v -> {
@@ -95,6 +88,16 @@ public class PropertiesListFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new PropertiesAdapter(mPropertiesList);
         mRecyclerView.setAdapter(mAdapter);
+
+
+        // observe Room database changes(add, update) and updates it in rv
+        mPropertyViewModel.getPropertyList().observe(this, new Observer<List<Property>>() {
+            @Override
+            public void onChanged(List<Property> propertyList) {
+                mAdapter.updatePropertyList(propertyList);
+                mPropertiesList = propertyList;
+            }
+        });
     }
 
     private void configureOnClickRecyclerView(){
@@ -110,7 +113,7 @@ public class PropertiesListFragment extends BaseFragment {
 
     private void configureViewModel() {
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(requireContext());
-        mPropertyViewModel = new ViewModelProvider(this, mViewModelFactory).get(PropertyViewModel.class);
+        mPropertyViewModel = new ViewModelProvider(this, mViewModelFactory).get(REMViewModel.class);
         //mPropertyViewModel.init();
     }
 
