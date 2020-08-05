@@ -29,6 +29,9 @@ public class Property implements Parcelable {
     private int numberOfRooms; // kitchen, living room, rooms, etc
     private int numberOfBedrooms;
     private int numberOfBathRooms;
+    //    private String description;
+  //  private String pointsOfInterest;
+   // private boolean isAvailable;
 
 
     // constructor for database testing

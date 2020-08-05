@@ -16,7 +16,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.1"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -31,7 +30,6 @@
         app:layout_constraintStart_toEndOf="@+id/property_photo"
         app:layout_constraintTop_toTopOf="@+id/property_photo" />
 
-    " />
 
     <TextView
         android:id="@+id/property_price"

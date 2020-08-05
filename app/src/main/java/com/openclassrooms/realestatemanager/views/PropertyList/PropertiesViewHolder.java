@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.views;
+package com.openclassrooms.realestatemanager.views.PropertyList;
 
 import android.content.Context;
 import android.os.Bundle;

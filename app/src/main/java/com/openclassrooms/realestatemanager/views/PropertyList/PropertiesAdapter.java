@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.views;
+package com.openclassrooms.realestatemanager.views.PropertyList;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +23,7 @@ public class PropertiesAdapter extends RecyclerView.Adapter<PropertiesViewHolder
     @NonNull
     @Override
     public PropertiesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_property, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_property_item, parent,false);
         return new PropertiesViewHolder(view);
     }
 

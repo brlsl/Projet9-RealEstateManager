@@ -24,7 +24,7 @@ import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
-import com.openclassrooms.realestatemanager.views.PropertiesAdapter;
+import com.openclassrooms.realestatemanager.views.PropertyList.PropertiesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +49,7 @@ public class PropertiesListFragment extends BaseFragment {
     }
 
     // LIFECYCLE
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -97,7 +98,7 @@ public class PropertiesListFragment extends BaseFragment {
     }
 
     private void configureOnClickRecyclerView(){
-        ItemClickSupport.addTo(mRecyclerView, R.layout.rv_item_property)
+        ItemClickSupport.addTo(mRecyclerView, R.layout.rv_property_item)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
