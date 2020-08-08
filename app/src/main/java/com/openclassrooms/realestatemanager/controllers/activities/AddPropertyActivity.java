@@ -2,17 +2,24 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.REMViewModel;
@@ -25,27 +32,35 @@ import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Property;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
 public class AddPropertyActivity extends BaseActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener {
-    // FOR DATA
+    // ----- FOR DATA -----
     private REMViewModel mPropertyViewModel;
 
     private static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private static final String WRITE_EXT_STORAGE_PERMS = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private static final String CAMERA_PERMS = Manifest.permission.CAMERA;
     private static final int RC_IMAGE_PERMS = 100;
     private static final int RC_CHOOSE_PHOTO = 200;
     public static final int RC_TAKE_PHOTO = 300;
 
-    // FOR UI
+    // ----- FOR UI -----
     private Button mAddPropertyButton;
     private Spinner mTypeSpinner;
     private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom;
     private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface,mEdtTxtNbrRoom,mEdtTxtNbrBedroom,mEdtTxtNbrBathroom;
     private Button mButtonSelectPhoto, mButtonTakePhoto, mButtonChooseAgent;
-    private TextView mAgentChosen;
+    private TextView mAgentSelected;
+
+    // ----- LIFECYCLE -----
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +70,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         configureViewModel();
         configureSpinnerType();
         configureFields();
+        configurePhotoLinearLayout();
         
         onClickAddPicture();
         onClickAddProperty();
@@ -62,91 +78,20 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         onClickChooseAgent();
     }
 
-    private void onClickChooseAgent() {
-        mButtonChooseAgent.setOnClickListener(view -> {
-            AddAgentBottomSheetFragment.newInstance().show(getSupportFragmentManager(),"AddAgentBottomSheetFragment");
-            Toast.makeText(this, "Open Bottom Sheet Agent", Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    @AfterPermissionGranted(RC_IMAGE_PERMS)
-    private void onClickAddPicture() {
-        mButtonSelectPhoto.setOnClickListener(view ->{
-            if (!EasyPermissions.hasPermissions(this, READ_EXT_STORAGE_PERMS))
-            {
-                EasyPermissions.requestPermissions(this,"Real Estate Manager needs to access your photo storage",RC_IMAGE_PERMS, READ_EXT_STORAGE_PERMS);
-                return;
-            }
-            // Intent for Selection Image Activity
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RC_CHOOSE_PHOTO);
-        });
-    }
-
-    @AfterPermissionGranted(RC_TAKE_PHOTO)
-    private void onClickTakePicture(){
-        mButtonTakePhoto.setOnClickListener(view ->{
-            if(!EasyPermissions.hasPermissions(this, CAMERA_PERMS)){
-                EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS);
-                return;
-            }
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePictureIntent, RC_TAKE_PHOTO);
-        });
-
-    }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_CHOOSE_PHOTO){
-            if (resultCode == RESULT_OK){
-                Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
-            } else{
-                Toast.makeText(this, "Picture has not been selected", Toast.LENGTH_SHORT).show();
-            }
+    // ----- CONFIGURATION METHODS -----
+    private void configurePhotoLinearLayout() {
+        LinearLayout layout = findViewById(R.id.linear_layout_photo_add_activity);
+        for (int i = 0; i < 100 ; i++) {
+            ImageView imageView = new ImageView(this);
+            imageView.setId(i);
+            imageView.setPadding(20, 20, 20, 20);
+            imageView.setImageBitmap(BitmapFactory.decodeResource(
+                    getResources(), R.drawable.ic_baseline_add_24));
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            layout.addView(imageView);
         }
-
-        if(requestCode == RC_TAKE_PHOTO){
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-    private void onClickAddProperty() {
-        mAddPropertyButton.setOnClickListener(view -> {
-            mCity = mEdtTxtCity.getText().toString().trim();
-            mPrice = mEdtTxtPrice.getText().toString().trim();
-            mAddress = mEdtTxtAddress.getText().toString().trim();
-            mSurface = mEdtTxtSurface.getText().toString().trim();
-            mNbrOfRoom = mEdtTxtNbrRoom.getText().toString().trim();
-            mNbrOfBedroom = mEdtTxtNbrBedroom.getText().toString().trim();
-            mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
-
-            mType = mTypeSpinner.getSelectedItem().toString();
-
-            if (mCity.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mType.isEmpty() ||
-                    mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty())
-                Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
-            else {
-                Property propertyAdded = new Property(1,
-                        mCity,
-                        mType,
-                        Integer.parseInt(mPrice),
-                        Integer.parseInt(mSurface),
-                        Integer.parseInt(mNbrOfRoom),
-                        Integer.parseInt(mNbrOfBedroom),
-                        Integer.parseInt(mNbrOfBathroom));
-                mPropertyViewModel.createProperty(propertyAdded);
-                finish();
-                Toast.makeText(AddPropertyActivity.this, "Property added", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void configureViewModel() {
@@ -176,12 +121,171 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mButtonTakePhoto = findViewById(R.id.button_take_picture_add_activity);
         mButtonChooseAgent = findViewById(R.id.choose_agent_button_add_activity);
 
-        mAgentChosen = findViewById(R.id.agent_chosen_add_property_activity);
+        mAgentSelected = findViewById(R.id.agent_chosen_add_property_activity);
 
     }
+
+    // ----- ON CLICK LISTENER -----
+
+    private void onClickChooseAgent() {
+        mButtonChooseAgent.setOnClickListener(view -> {
+            AddAgentBottomSheetFragment.newInstance().show(getSupportFragmentManager(),"AddAgentBottomSheetFragment");
+            Toast.makeText(this, "Open Bottom Sheet Agent", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
+
+    private void onClickAddProperty() {
+        mAddPropertyButton.setOnClickListener(view -> {
+            mCity = mEdtTxtCity.getText().toString().trim();
+            mPrice = mEdtTxtPrice.getText().toString().trim();
+            mAddress = mEdtTxtAddress.getText().toString().trim();
+            mSurface = mEdtTxtSurface.getText().toString().trim();
+            mNbrOfRoom = mEdtTxtNbrRoom.getText().toString().trim();
+            mNbrOfBedroom = mEdtTxtNbrBedroom.getText().toString().trim();
+            mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
+
+            String agentSelected = mAgentSelected.getText().toString().trim(); // TODO: add a string "No agent selected"
+            mType = mTypeSpinner.getSelectedItem().toString();
+
+            if (mCity.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mType.isEmpty() ||
+                    mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty())
+                Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
+            else {
+                Property propertyAdded = new Property(1,
+                        mCity,
+                        mType,
+                        Integer.parseInt(mPrice),
+                        Integer.parseInt(mSurface),
+                        Integer.parseInt(mNbrOfRoom),
+                        Integer.parseInt(mNbrOfBedroom),
+                        Integer.parseInt(mNbrOfBathroom));
+                mPropertyViewModel.createProperty(propertyAdded);
+                finish();
+                Toast.makeText(AddPropertyActivity.this, "Property added", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     @Override
     public void onClickAgentItem(Agent agent) {
-        mAgentChosen.setText(agent.getName());
+        mAgentSelected.setText(agent.getName());
     }
+
+
+    @AfterPermissionGranted(RC_CHOOSE_PHOTO)
+    private void onClickAddPicture() {
+        mButtonSelectPhoto.setOnClickListener(view ->{
+            if (!EasyPermissions.hasPermissions(this, READ_EXT_STORAGE_PERMS))
+            {
+                EasyPermissions.requestPermissions(this,"Real Estate Manager needs to access your photo storage",RC_CHOOSE_PHOTO, READ_EXT_STORAGE_PERMS);
+                return;
+            }
+            // Intent for Selection Image Activity
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RC_CHOOSE_PHOTO);
+        });
+    }
+
+    @AfterPermissionGranted(RC_TAKE_PHOTO)
+    private void onClickTakePicture(){
+        mButtonTakePhoto.setOnClickListener(view ->{
+            if(!EasyPermissions.hasPermissions(this, CAMERA_PERMS, WRITE_EXT_STORAGE_PERMS)){
+                EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS, WRITE_EXT_STORAGE_PERMS);
+                return;
+            }
+            takePictureIntent();
+
+        });
+
+    }
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        Log.d("Photo Path", "Photo Path :" + currentPhotoPath);
+        return image;
+    }
+
+
+    private void takePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+                Log.d("AddPropertyActivity", "Create File" + photoFile.toString());
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.d("AddPropertyActivity", "Error while creating the File", ex);
+            }
+
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                try {
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.openclassrooms.realestatemanager.fileprovider",
+                            photoFile);
+
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, RC_TAKE_PHOTO);
+
+                } catch (Exception e){
+                    Log.e("AddPropertyActivity","File path exception:" + e);
+                }
+            }
+        }
+    }
+
+    // ----- ON ACTIVITY RESULT -----
+
+    private void addPictureToGallery() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_CHOOSE_PHOTO){
+            if (resultCode == RESULT_OK){
+
+                Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(this, "Picture has not been selected", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(requestCode == RC_TAKE_PHOTO){
+            if (resultCode == RESULT_OK) {
+                addPictureToGallery();
+                Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

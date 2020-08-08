@@ -86,7 +86,7 @@
             android:background="@drawable/edit_text_border"
             android:ems="8"
             android:hint="Address"
-            android:inputType="text"
+            android:inputType="textPostalAddress"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
@@ -199,13 +199,13 @@
             android:id="@+id/activity_add_property_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="500dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
             android:text="Add Property"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bathroom_add_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
 
         <Button
             android:id="@+id/button_select_picture_add_activity"
@@ -244,6 +244,25 @@
             app:layout_constraintEnd_toEndOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintStart_toStartOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontal_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/activity_add_property_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity">
+
+            <LinearLayout
+                android:id="@+id/linear_layout_photo_add_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

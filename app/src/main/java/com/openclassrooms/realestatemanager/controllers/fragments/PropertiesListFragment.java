@@ -105,7 +105,6 @@ public class PropertiesListFragment extends BaseFragment {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Log.e("TAG", "Position : "+position);
                         mCallback.onItemPropertySelected(mPropertiesList.get(position));
                     }
                 });

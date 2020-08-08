@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +23,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Agent;
-import com.openclassrooms.realestatemanager.models.Property;
+
 import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 import com.openclassrooms.realestatemanager.views.AgentList.AgentAdapter;
 
@@ -40,7 +39,6 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
 
     // FOR UI
     private RecyclerView mRecyclerView;
-
 
 
     // LISTENER
@@ -99,45 +97,22 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void configureClickOnAgentItem() {
         ItemClickSupport.addTo(mRecyclerView, R.layout.rv_agent_item_bottom_sheet_fragment)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        mListener.onClickAgentItem(mAgentList.get(position));
-                        Toast.makeText(requireContext(), "Agent is chosen", Toast.LENGTH_SHORT).show();
-                    }
+                .setOnItemClickListener((recyclerView, position, v) -> {
+                    mListener.onClickAgentItem(mAgentList.get(position));
+                    Toast.makeText(requireContext(), "Agent is chosen", Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void configureRecyclerView(View view) {
-       /*
-        Agent agent = new Agent(2,"nameTest","surnameTest");
-        Agent agent2 = new Agent(3,"nameTest2","surnameTest2");
-        mAgentList.add(agent);
-        mAgentList.add(agent2);
-        mAgentList.add(agent);
-        mAgentList.add(agent2);
-        mAgentList.add(agent);
-        mAgentList.add(agent2);
-        mAgentList.add(agent);
-        mAgentList.add(agent2);
-        mAgentList.add(agent);
-        mAgentList.add(agent2);
-
-
-        */
-
         mRecyclerView = view.findViewById(R.id.agent_list_recyclerview);
         mAdapter = new AgentAdapter(mAgentList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
 
-        // observe Room database changes(add, update) and updates it in rv
-        mAgentViewModel.getAgentList().observe(this, new Observer<List<Agent>>() {
-            @Override
-            public void onChanged(List<Agent> agentList) {
-                mAdapter.updateAgentList(agentList);
-                mAgentList = agentList;
-            }
+        // observe Room database changes and updates it in rv
+        mAgentViewModel.getAgentList().observe(this, agentList -> {
+            mAdapter.updateAgentList(agentList);
+            mAgentList = agentList;
         });
     }
 
