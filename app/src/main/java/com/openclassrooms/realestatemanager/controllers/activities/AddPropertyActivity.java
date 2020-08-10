@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,7 +71,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         configureViewModel();
         configureSpinnerType();
         configureFields();
-        configurePhotoLinearLayout();
         
         onClickAddPicture();
         onClickAddProperty();
@@ -81,18 +81,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
 
     // ----- CONFIGURATION METHODS -----
-    private void configurePhotoLinearLayout() {
-        LinearLayout layout = findViewById(R.id.linear_layout_photo_add_activity);
-        for (int i = 0; i < 100 ; i++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setId(i);
-            imageView.setPadding(20, 20, 20, 20);
-            imageView.setImageBitmap(BitmapFactory.decodeResource(
-                    getResources(), R.drawable.ic_baseline_add_24));
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            layout.addView(imageView);
-        }
-    }
+
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
@@ -280,12 +269,68 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         if(requestCode == RC_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
                 addPictureToGallery();
+                setPic();
+
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = 300;
+        int targetH = 300;
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+
+        ImageView imageView = new ImageView(this);
+
+        imageView.setImageBitmap(bitmap);
+
+
+        addPhotoLinearLayout(imageView);
+    }
+
+    private void addPhotoLinearLayout(ImageView imageView) {
+        LinearLayout layout = findViewById(R.id.linear_layout_photo_add_activity);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.setPadding(20,20,20,20);
+        layout.addView(imageView);
+        /*
+        for (int i = 0; i < 100 ; i++) {
+            ImageView imageView = new ImageView(this);
+            imageView.setId(i);
+            imageView.setPadding(20, 20, 20, 20);
+
+
+            imageView.setImageBitmap(BitmapFactory.decodeResource(
+                    getResources(), R.drawable.ic_baseline_add_24));
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            layout.addView(imageView);
+        }
+
+         */
     }
 
 }
