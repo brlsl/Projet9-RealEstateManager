@@ -63,6 +63,10 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 property.put("numberOfRooms", 6);
                 property.put("numberOfBedrooms", 3);
                 property.put("numberOfBathrooms", 1);
+                property.put("description", "Nice apartment, well located");
+                property.put("dateAvailable", "01/01/2021");
+                property.put("isAvailable",  true);
+
                 db.insert("property_table", OnConflictStrategy.IGNORE, property);
             }
         };

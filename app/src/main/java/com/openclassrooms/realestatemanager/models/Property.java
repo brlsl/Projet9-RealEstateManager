@@ -29,9 +29,10 @@ public class Property implements Parcelable {
     private int numberOfRooms; // kitchen, living room, rooms, etc
     private int numberOfBedrooms;
     private int numberOfBathRooms;
-    //    private String description;
-  //  private String pointsOfInterest;
-   // private boolean isAvailable;
+    private String description;
+    private String pointsOfInterest;
+    private String dateAvailable;
+    private boolean isAvailable;
 
 
     // constructor for database testing
@@ -42,7 +43,7 @@ public class Property implements Parcelable {
         this.price = price;
     }
 
-    public Property(long agentId, String city, String type, int price, int surface, int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms) {
+    public Property(long agentId, String city, String type, int price, int surface, int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description, String dateAvailable, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
@@ -51,6 +52,9 @@ public class Property implements Parcelable {
         this.numberOfRooms = numberOfRooms;
         this.numberOfBedrooms = numberOfBedrooms;
         this.numberOfBathRooms = numberOfBathRooms;
+        this.description = description;
+        this.dateAvailable = dateAvailable;
+        this.isAvailable = isAvailable;
     }
 
     protected Property(Parcel in) {
@@ -65,6 +69,9 @@ public class Property implements Parcelable {
         numberOfBathRooms = in.readInt();
     }
 
+    // ----- PARCELABLE IMPLEMENTATION -----
+
+
     public static final Creator<Property> CREATOR = new Creator<Property>() {
         @Override
         public Property createFromParcel(Parcel in) {
@@ -77,33 +84,52 @@ public class Property implements Parcelable {
         }
     };
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeLong(agentId);
+        parcel.writeString(city);
+        parcel.writeString(type);
+        parcel.writeInt(price);
+        parcel.writeInt(surface);
+        parcel.writeInt(numberOfRooms);
+        parcel.writeInt(numberOfBedrooms);
+        parcel.writeInt(numberOfBathRooms);
+        parcel.writeString(description);
+        parcel.writeString(pointsOfInterest);
+        parcel.writeString(dateAvailable);
+        parcel.writeByte((byte) (isAvailable ? 1 : 0));
+    }
+
+    // ----- GETTERS AND SETTERS -----
     public long getId() {
         return id;
     }
-    public long getAgentId() {
-        return agentId;
-    }
-    public int getPrice() {
-        return price;
-    }
-    public String getCity() {
-        return city;
-    }
-
 
     public void setId(long id) {
         this.id = id;
     }
+
+    public long getAgentId() {
+        return agentId;
+    }
+
     public void setAgentId(long agentId) {
         this.agentId = agentId;
     }
-    public void setPrice(int price) {
-        this.price = price;
+
+    public String getCity() {
+        return city;
     }
+
     public void setCity(String city) {
         this.city = city;
     }
-
 
     public String getType() {
         return type;
@@ -111,6 +137,14 @@ public class Property implements Parcelable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public int getSurface() {
@@ -145,21 +179,37 @@ public class Property implements Parcelable {
         this.numberOfBathRooms = numberOfBathRooms;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeLong(agentId);
-        parcel.writeString(city);
-        parcel.writeString(type);
-        parcel.writeInt(price);
-        parcel.writeInt(surface);
-        parcel.writeInt(numberOfRooms);
-        parcel.writeInt(numberOfBedrooms);
-        parcel.writeInt(numberOfBathRooms);
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+    public String getPointsOfInterest() {
+        return pointsOfInterest;
+    }
+
+    public void setPointsOfInterest(String pointsOfInterest) {
+        this.pointsOfInterest = pointsOfInterest;
+    }
+
+    public String getDateAvailable() {
+        return dateAvailable;
+    }
+
+    public void setDateAvailable(String dateAvailable) {
+        this.dateAvailable = dateAvailable;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+
 }

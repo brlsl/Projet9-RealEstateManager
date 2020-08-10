@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -56,10 +59,12 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     // ----- FOR UI -----
     private Button mAddPropertyButton;
     private Spinner mTypeSpinner;
-    private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom;
-    private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface,mEdtTxtNbrRoom,mEdtTxtNbrBedroom,mEdtTxtNbrBathroom;
+    private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription, mDateAvailable;
+    private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface,mEdtTxtNbrRoom,mEdtTxtNbrBedroom,mEdtTxtNbrBathroom, mEdtTxtDescription;
     private Button mButtonSelectPhoto, mButtonTakePhoto, mButtonChooseAgent;
-    private TextView mAgentSelected;
+    private TextView mTxtViewAgent, mTxtViewDescriptionTitle;
+    private int mNumberOfPictureAdded = 0;
+    private boolean isAvailable;
 
     // ----- LIFECYCLE -----
 
@@ -70,13 +75,15 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         configureViewModel();
         configureSpinnerType();
-        configureFields();
+        configureViews();
         
         onClickAddPicture();
         onClickAddProperty();
         onClickTakePicture();
         onClickChooseAgent();
+
     }
+
 
 
 
@@ -95,7 +102,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mTypeSpinner.setAdapter(adapter);
     }
 
-    private void configureFields() {
+    private void configureViews() {
         mEdtTxtCity = findViewById(R.id.editText_city_add_activity);
         mEdtTxtPrice = findViewById(R.id.editText_price_add_activity);
         mEdtTxtAddress = findViewById(R.id.editText_address_add_activity);
@@ -103,6 +110,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mEdtTxtNbrRoom = findViewById(R.id.editText_number_of_room_add_activity);
         mEdtTxtNbrBedroom = findViewById(R.id.editText_number_of_bedroom_add_activity);
         mEdtTxtNbrBathroom = findViewById(R.id.editText_number_of_bathroom_add_activity);
+        mEdtTxtDescription = findViewById(R.id.editText_description_add_activity);
 
         mAddPropertyButton = findViewById(R.id.activity_add_property_button);
 
@@ -110,8 +118,27 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mButtonTakePhoto = findViewById(R.id.button_take_picture_add_activity);
         mButtonChooseAgent = findViewById(R.id.choose_agent_button_add_activity);
 
-        mAgentSelected = findViewById(R.id.agent_chosen_add_property_activity);
+        mTxtViewAgent = findViewById(R.id.agent_chosen_add_property_activity);
+        mTxtViewDescriptionTitle = findViewById(R.id.textview_description_add_activity);
+        descriptionTitleLengthListener();
+    }
 
+    private void descriptionTitleLengthListener() {
+        mEdtTxtDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int maxLength = 300;
+                mTxtViewDescriptionTitle.setText("Description (" + (maxLength - mEdtTxtDescription.length()) + "/300)" );
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     // ----- ON CLICK LISTENER -----
@@ -123,8 +150,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         });
     }
 
-
-
     private void onClickAddProperty() {
         mAddPropertyButton.setOnClickListener(view -> {
             mCity = mEdtTxtCity.getText().toString().trim();
@@ -134,12 +159,12 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             mNbrOfRoom = mEdtTxtNbrRoom.getText().toString().trim();
             mNbrOfBedroom = mEdtTxtNbrBedroom.getText().toString().trim();
             mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
-
-            String agentSelected = mAgentSelected.getText().toString().trim(); // TODO: add a string "No agent selected"
+            mDescription = mEdtTxtDescription.getText().toString();
             mType = mTypeSpinner.getSelectedItem().toString();
 
-            if (mCity.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mType.isEmpty() ||
-                    mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty())
+            String agentSelected = mTxtViewAgent.getText().toString().trim();
+
+            if (agentSelected.isEmpty())
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
             else {
                 Property propertyAdded = new Property(1,
@@ -149,7 +174,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         Integer.parseInt(mSurface),
                         Integer.parseInt(mNbrOfRoom),
                         Integer.parseInt(mNbrOfBedroom),
-                        Integer.parseInt(mNbrOfBathroom));
+                        Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, isAvailable);
                 mPropertyViewModel.createProperty(propertyAdded);
                 finish();
                 Toast.makeText(AddPropertyActivity.this, "Property added", Toast.LENGTH_SHORT).show();
@@ -160,7 +185,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     @Override
     public void onClickAgentItem(Agent agent) {
-        mAgentSelected.setText(agent.getName());
+        mTxtViewAgent.setText(agent.getName());
     }
 
 
@@ -192,6 +217,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     }
 
     String currentPhotoPath;
+    String selectedImagePath;
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -204,7 +230,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
@@ -246,7 +271,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     // ----- ON ACTIVITY RESULT -----
 
-    private void addPictureToGallery() {
+    private void addPhotoToGallery() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(currentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
@@ -258,7 +283,16 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_CHOOSE_PHOTO){
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK && data != null){
+
+
+                Uri uri = data.getData();
+                ImageView imageView = new ImageView(this);
+                imageView.setImageURI(uri);
+                selectedImagePath = getPath(uri);
+                setPicture(selectedImagePath); // and add to linear layout
+
+                Log.e("Tag", "Selected picture path:" + selectedImagePath);
 
                 Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
             } else{
@@ -268,8 +302,8 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         if(requestCode == RC_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
-                addPictureToGallery();
-                setPic();
+                addPhotoToGallery();
+                setPicture(currentPhotoPath);
 
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
 
@@ -279,16 +313,16 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         }
     }
 
-    private void setPic() {
+    private void setPicture(String photoPath) {
         // Get the dimensions of the View
-        int targetW = 300;
-        int targetH = 300;
+        int targetW = 400;
+        int targetH = 400;
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
 
-        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        BitmapFactory.decodeFile(photoPath, bmOptions);
 
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
@@ -301,36 +335,36 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 
         ImageView imageView = new ImageView(this);
 
         imageView.setImageBitmap(bitmap);
 
-
-        addPhotoLinearLayout(imageView);
+        addPhotoToLinearLayout(imageView);
     }
 
-    private void addPhotoLinearLayout(ImageView imageView) {
+    private void addPhotoToLinearLayout(ImageView imageView) {
         LinearLayout layout = findViewById(R.id.linear_layout_photo_add_activity);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setPadding(20,20,20,20);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setPadding(5,5,5,5);
         layout.addView(imageView);
-        /*
-        for (int i = 0; i < 100 ; i++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setId(i);
-            imageView.setPadding(20, 20, 20, 20);
+        Log.e("Tag", "Number of picture in Linear Layout : " + layout.getChildCount());
+        mNumberOfPictureAdded = layout.getChildCount();
+    }
 
-
-            imageView.setImageBitmap(BitmapFactory.decodeResource(
-                    getResources(), R.drawable.ic_baseline_add_24));
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            layout.addView(imageView);
+    //helper to retrieve the path of an image URI
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if(cursor!=null)
+        {
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
         }
-
-         */
+        else return null;
     }
 
 }

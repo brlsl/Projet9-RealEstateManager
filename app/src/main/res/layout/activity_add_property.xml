@@ -211,10 +211,10 @@
             android:id="@+id/button_select_picture_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
             android:text="Select picture from media"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_take_picture_add_activity"
             app:layout_constraintTop_toBottomOf="@+id/agent_chosen_add_property_activity" />
 
         <Button
@@ -222,9 +222,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
             android:text="take_photo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_select_picture_add_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/agent_chosen_add_property_activity" />
 
         <Button
             android:id="@+id/choose_agent_button_add_activity"
@@ -240,7 +241,6 @@
             android:id="@+id/agent_chosen_add_property_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintEnd_toEndOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintStart_toStartOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity" />
@@ -251,6 +251,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="2dp"
+            android:background="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/activity_add_property_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -263,6 +264,37 @@
                 android:orientation="horizontal" />
 
         </HorizontalScrollView>
+
+        <EditText
+            android:id="@+id/editText_description_add_activity"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:maxLength="300"
+            android:background="@drawable/edit_text_border"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_select_picture_add_activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
+
+        <TextView
+            android:id="@+id/textview_description_add_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Description (300/300)"
+            app:layout_constraintBottom_toTopOf="@+id/editText_description_add_activity"
+            app:layout_constraintEnd_toEndOf="@+id/editText_description_add_activity"
+            app:layout_constraintStart_toStartOf="@+id/editText_description_add_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
