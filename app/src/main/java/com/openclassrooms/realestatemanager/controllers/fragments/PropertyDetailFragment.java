@@ -20,7 +20,7 @@ public class PropertyDetailFragment extends BaseFragment {
     // FOR DATA
 
     // FOR UI
-    TextView mPropertyCity, mPropertyPrice, mPropertyType;
+    private TextView mCity, mAddress, mPrice, mType, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription, mAgentInCharge;
 
     @Nullable
     @Override
@@ -33,20 +33,31 @@ public class PropertyDetailFragment extends BaseFragment {
 
             Property property = bundle.getParcelable(PROPERTY_OBJECT);
 
-            mPropertyCity = view.findViewById(R.id.detail_activity_property_city);
-            mPropertyPrice = view.findViewById(R.id.detail_fragment_property_price);
-            mPropertyType = view.findViewById(R.id.detail_activity_property_type);
+            mCity = view.findViewById(R.id.detail_activity_property_city);
+            mAddress = view.findViewById(R.id.detail_fragment_property_address);
+            mPrice = view.findViewById(R.id.detail_fragment_property_price);
+            mType = view.findViewById(R.id.detail_fragment_property_type);
+            mSurface = view.findViewById(R.id.detail_fragment_property_surface);
+            mNbrOfRoom = view.findViewById(R.id.detail_fragment_property_number_of_room);
+            mNbrOfBedroom = view.findViewById(R.id.detail_fragment_property_number_of_bedroom);
+            mNbrOfBathroom = view.findViewById(R.id.detail_fragment_property_number_of_bathroom);
+            mDescription = view.findViewById(R.id.detail_fragment_property_description);
+            mAgentInCharge = view.findViewById(R.id.detail_fragment_property_agent);
 
             if (property != null) {
-                mPropertyCity.setText(property.getCity());
-                mPropertyPrice.setText(String.valueOf(property.getPrice()));
-                mPropertyType.setText(property.getType());
+                mCity.setText(property.getCity());
+                mAddress.setText(property.getAddress());
+                mPrice.setText(property.getPrice());
+                mType.setText(property.getType());
+                mSurface.setText(property.getSurface());
+                mNbrOfRoom.setText(property.getNumberOfRooms());
+                mNbrOfBathroom.setText(property.getNumberOfBathRooms());
+                mNbrOfBedroom.setText(property.getNumberOfBedrooms());
+                mDescription.setText(property.getDescription());
+                //mAgentInCharge.setText();
+
             }
 
-            System.out.println("Value of property id: " + property.getId() );
-            System.out.println("Value of property agent id: " + property.getAgentId()
-                    +property.getNumberOfBathRooms()
-                    + property.getNumberOfRooms() );
         }
 
         return view;

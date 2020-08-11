@@ -46,7 +46,7 @@ public class PropertyDaoTest {
     // DATA SET FOR TEST
     private static long AGENT_ID = 42;
     private static Agent AGENT_DEMO = new Agent(AGENT_ID,"ABC","Br");
-    private static Property PROPERTY_DEMO = new Property(AGENT_ID, "Paris", 123);
+    private static Property PROPERTY_DEMO = new Property(AGENT_ID, "Paris", "123");
 
     @Test
     public void getAgentListWhenNoAgentInserted() throws InterruptedException {
@@ -104,7 +104,7 @@ public class PropertyDaoTest {
         List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
         assertTrue(property.getAgentId() == AGENT_DEMO.getId()
                 && property.getCity().equals(PROPERTY_DEMO.getCity())
-                && property.getPrice() == PROPERTY_DEMO.getPrice()
+                && property.getPrice().equals(PROPERTY_DEMO.getPrice())
                 && propertyList.size() == 1);
     }
 
@@ -114,13 +114,13 @@ public class PropertyDaoTest {
         this.database.propertyDao().createProperty(PROPERTY_DEMO);
         Property property = LiveDataTestUtil.getValue(database.propertyDao().getProperty(AGENT_ID));
         property.setCity("Marseille");
-        property.setPrice(456);
+        property.setPrice("456");
         this.database.propertyDao().updateProperty(property);
 
         List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
         assertTrue(propertyList.size() == 1
                 && propertyList.get(0).getCity().equals("Marseille")
-                && propertyList.get(0).getPrice() == 456);
+                && propertyList.get(0).getPrice().equals("456"));
     }
 
 }

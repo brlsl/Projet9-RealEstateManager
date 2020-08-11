@@ -56,16 +56,18 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
                 ContentValues property = new ContentValues();
                 property.put("agentId", 1);
+                property.put("type", "Apartment");
                 property.put("city", "CityTest");
                 property.put("address","123 test street");
-                property.put("price", 123);
-                property.put("type", "Apartment");
-                property.put("surface",100);
-                property.put("numberOfRooms", 6);
-                property.put("numberOfBedrooms", 3);
-                property.put("numberOfBathrooms", 1);
+                property.put("price", "123");
+
+                property.put("surface", "100");
+                property.put("numberOfRooms", "6");
+                property.put("numberOfBedrooms", "3");
+                property.put("numberOfBathrooms", "1");
                 property.put("description", "Nice apartment, well located");
                 property.put("dateAvailable", "01/01/2021");
+                property.put("pointsOfInterest", "School");
                 property.put("isAvailable",  true);
 
                 db.insert("property_table", OnConflictStrategy.IGNORE, property);

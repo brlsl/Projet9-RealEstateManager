@@ -209,11 +209,10 @@
             android:id="@+id/button_select_picture_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Select picture from media"
-            app:layout_constraintStart_toEndOf="@+id/button_take_picture_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/agent_chosen_add_property_activity" />
+            app:layout_constraintStart_toStartOf="@+id/button_take_picture_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity" />
 
         <Button
             android:id="@+id/button_take_picture_add_activity"
@@ -252,8 +251,9 @@
             android:background="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/activity_add_property_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity">
+            app:layout_constraintTop_toBottomOf="@+id/button_avaibility_date_add_activity">
 
             <LinearLayout
                 android:id="@+id/linear_layout_photo_add_activity"
@@ -298,11 +298,10 @@
             android:id="@+id/button_avaibility_date_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             android:text="Avaibility date"
-            app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
-            app:layout_constraintStart_toEndOf="@+id/button_select_picture_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_description_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/button_select_picture_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/button_select_picture_add_activity" />
 
         <TextView
             android:id="@+id/textView__avaibility_date_add_property_activity"

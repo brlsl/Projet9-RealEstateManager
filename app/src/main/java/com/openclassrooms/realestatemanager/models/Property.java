@@ -25,11 +25,11 @@ public class Property implements Parcelable {
     private String type; // apartment, house, etc
     private String city;
     private String address;
-    private int price;
-    private int surface; // in square meters
-    private int numberOfRooms; // kitchen, living room, rooms, etc
-    private int numberOfBedrooms;
-    private int numberOfBathRooms;
+    private String price;
+    private String surface; // in square meters
+    private String numberOfRooms; // kitchen, living room, rooms, etc
+    private String numberOfBedrooms;
+    private String numberOfBathRooms;
     private String description;
     private String pointsOfInterest;
     private String dateAvailable;
@@ -38,14 +38,14 @@ public class Property implements Parcelable {
 
     // constructor for database testing
     @Ignore
-    public Property(long agentId, String city, int price){
+    public Property(long agentId, String city, String price){
         this.agentId = agentId;
         this.city = city;
         this.price = price;
     }
 
-    public Property(long agentId, String city, String type, String address, int price, int surface,
-                    int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description,
+    public Property(long agentId, String city, String type, String address, String price, String surface,
+                    String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
                     String dateAvailable, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
@@ -70,11 +70,11 @@ public class Property implements Parcelable {
         type = in.readString();
         city = in.readString();
         address = in.readString();
-        price = in.readInt();
-        surface = in.readInt();
-        numberOfRooms = in.readInt();
-        numberOfBedrooms = in.readInt();
-        numberOfBathRooms = in.readInt();
+        price = in.readString();
+        surface = in.readString();
+        numberOfRooms = in.readString();
+        numberOfBedrooms = in.readString();
+        numberOfBathRooms = in.readString();
         description = in.readString();
         pointsOfInterest = in.readString();
         dateAvailable = in.readString();
@@ -105,11 +105,11 @@ public class Property implements Parcelable {
         parcel.writeString(type);
         parcel.writeString(city);
         parcel.writeString(address);
-        parcel.writeInt(price);
-        parcel.writeInt(surface);
-        parcel.writeInt(numberOfRooms);
-        parcel.writeInt(numberOfBedrooms);
-        parcel.writeInt(numberOfBathRooms);
+        parcel.writeString(price);
+        parcel.writeString(surface);
+        parcel.writeString(numberOfRooms);
+        parcel.writeString(numberOfBedrooms);
+        parcel.writeString(numberOfBathRooms);
         parcel.writeString(description);
         parcel.writeString(pointsOfInterest);
         parcel.writeString(dateAvailable);
@@ -149,43 +149,43 @@ public class Property implements Parcelable {
         this.type = type;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public int getSurface() {
+    public String getSurface() {
         return surface;
     }
 
-    public void setSurface(int surface) {
+    public void setSurface(String surface) {
         this.surface = surface;
     }
 
-    public int getNumberOfRooms() {
+    public String getNumberOfRooms() {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(int numberOfRooms) {
+    public void setNumberOfRooms(String numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 
-    public int getNumberOfBedrooms() {
+    public String getNumberOfBedrooms() {
         return numberOfBedrooms;
     }
 
-    public void setNumberOfBedrooms(int numberOfBedrooms) {
+    public void setNumberOfBedrooms(String numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
     }
 
-    public int getNumberOfBathRooms() {
+    public String getNumberOfBathRooms() {
         return numberOfBathRooms;
     }
 
-    public void setNumberOfBathRooms(int numberOfBathRooms) {
+    public void setNumberOfBathRooms(String numberOfBathRooms) {
         this.numberOfBathRooms = numberOfBathRooms;
     }
 

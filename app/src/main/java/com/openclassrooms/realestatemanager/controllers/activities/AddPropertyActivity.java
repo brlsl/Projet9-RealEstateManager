@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -14,7 +15,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -130,6 +130,31 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         setDatePickerDialog();
     }
 
+    private void setDatePickerDialog(){
+        mButtonAvailabilityDate.setOnClickListener(view -> {
+            int currentYear, currentMonth, currentDayOfMonth ;
+            Calendar calendar = Calendar.getInstance();
+            currentYear = calendar.get(Calendar.YEAR);
+            currentMonth = calendar.get(Calendar.MONTH);
+            currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(AddPropertyActivity.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                    if(dayOfMonth <10 && month < 10)
+                        mTxtViewAvailabilityDate.setText("0"+ dayOfMonth +"/" + "0"+(month + 1) + "/"+ year);
+                    else if (dayOfMonth < 10)
+                        mTxtViewAvailabilityDate.setText("0"+ dayOfMonth +"/" +(month + 1) + "/"+ year);
+                    else if (month < 10)
+                        mTxtViewAvailabilityDate.setText(dayOfMonth +"/" +"0"+(month + 1) + "/"+ year);
+                    else
+                        mTxtViewAvailabilityDate.setText(dayOfMonth +"/" +(month + 1) + "/"+ year);
+                }
+            }, currentYear, currentMonth, currentDayOfMonth);
+            datePickerDialog.show();
+        });
+    }
+
     private void descriptionTitleLengthListener() {
         mEdtTxtDescription.addTextChangedListener(new TextWatcher() {
             @Override
@@ -182,11 +207,11 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         mCity,
                         mType,
                         mAddress,
-                        Integer.parseInt(mPrice),
-                        Integer.parseInt(mSurface),
-                        Integer.parseInt(mNbrOfRoom),
-                        Integer.parseInt(mNbrOfBedroom),
-                        Integer.parseInt(mNbrOfBathroom),
+                        mPrice,
+                        mSurface,
+                        mNbrOfRoom,
+                        mNbrOfBedroom,
+                        mNbrOfBathroom,
                         mDescription,
                         dateAvailable,
                         isAvailable);
@@ -227,31 +252,12 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 return;
             }
             takePictureIntent();
-
         });
 
     }
 
     String currentPhotoPath;
     String selectedImagePath;
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        Log.d("Photo Path", "Photo Path :" + currentPhotoPath);
-        return image;
-    }
 
 
     private void takePictureIntent() {
@@ -284,24 +290,40 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             }
         }
     }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir;
+        if(Build.VERSION.SDK_INT < 29) {
+             storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        } else
+        {
+            storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        }
+
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        Log.d("Photo Path", "Photo Path :" + currentPhotoPath);
+        return image;
+    }
+
+
 
     // ----- ON ACTIVITY RESULT -----
-
-    private void addPhotoToGallery() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_CHOOSE_PHOTO){
             if (resultCode == RESULT_OK && data != null){
-
-
                 Uri uri = data.getData();
                 ImageView imageView = new ImageView(this);
                 imageView.setImageURI(uri);
@@ -318,7 +340,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         if(requestCode == RC_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
-                addPhotoToGallery();
+                if(Build.VERSION.SDK_INT < 29) {
+                    addPhotoToGallery();
+                }
                 setPicture(currentPhotoPath);
 
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
@@ -327,6 +351,14 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void addPhotoToGallery() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     private void setPicture(String photoPath) {
@@ -375,40 +407,16 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if(cursor!=null)
         {
+            cursor.moveToFirst();
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
+
             return cursor.getString(column_index);
         }
-        else return null;
+        else{
+            return uri.getPath();
+        }
+
     }
 
-
-    private void setDatePickerDialog(){
-        mButtonAvailabilityDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentYear, currentMonth, currentDayOfMonth ;
-                Calendar calendar = Calendar.getInstance();
-                currentYear = calendar.get(Calendar.YEAR);
-                currentMonth = calendar.get(Calendar.MONTH);
-                currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddPropertyActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        if(dayOfMonth <10 && month < 10)
-                            mTxtViewAvailabilityDate.setText("0"+ dayOfMonth +"/" + "0"+(month + 1) + "/"+ year);
-                        else if (dayOfMonth < 10)
-                            mTxtViewAvailabilityDate.setText("0"+ dayOfMonth +"/" +(month + 1) + "/"+ year);
-                        else if (month < 10)
-                            mTxtViewAvailabilityDate.setText(dayOfMonth +"/" +"0"+(month + 1) + "/"+ year);
-                        else
-                            mTxtViewAvailabilityDate.setText(dayOfMonth +"/" +(month + 1) + "/"+ year);
-                    }
-                }, currentYear, currentMonth, currentDayOfMonth);
-                datePickerDialog.show();
-            }
-        });
-    }
 }
