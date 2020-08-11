@@ -57,6 +57,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 ContentValues property = new ContentValues();
                 property.put("agentId", 1);
                 property.put("city", "CityTest");
+                property.put("address","123 test street");
                 property.put("price", 123);
                 property.put("type", "Apartment");
                 property.put("surface",100);

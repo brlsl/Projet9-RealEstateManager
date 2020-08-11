@@ -22,8 +22,9 @@ public class Property implements Parcelable {
 
     private long agentId;
 
-    private String city;
     private String type; // apartment, house, etc
+    private String city;
+    private String address;
     private int price;
     private int surface; // in square meters
     private int numberOfRooms; // kitchen, living room, rooms, etc
@@ -43,10 +44,13 @@ public class Property implements Parcelable {
         this.price = price;
     }
 
-    public Property(long agentId, String city, String type, int price, int surface, int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description, String dateAvailable, boolean isAvailable) {
+    public Property(long agentId, String city, String type, String address, int price, int surface,
+                    int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description,
+                    String dateAvailable, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
+        this.address = address;
         this.price = price;
         this.surface = surface;
         this.numberOfRooms = numberOfRooms;
@@ -57,20 +61,25 @@ public class Property implements Parcelable {
         this.isAvailable = isAvailable;
     }
 
+
+    // ----- PARCELABLE IMPLEMENTATION -----
+
     protected Property(Parcel in) {
         id = in.readLong();
         agentId = in.readLong();
-        city = in.readString();
         type = in.readString();
+        city = in.readString();
+        address = in.readString();
         price = in.readInt();
         surface = in.readInt();
         numberOfRooms = in.readInt();
         numberOfBedrooms = in.readInt();
         numberOfBathRooms = in.readInt();
+        description = in.readString();
+        pointsOfInterest = in.readString();
+        dateAvailable = in.readString();
+        isAvailable = in.readByte() != 0;
     }
-
-    // ----- PARCELABLE IMPLEMENTATION -----
-
 
     public static final Creator<Property> CREATOR = new Creator<Property>() {
         @Override
@@ -93,8 +102,9 @@ public class Property implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
         parcel.writeLong(agentId);
-        parcel.writeString(city);
         parcel.writeString(type);
+        parcel.writeString(city);
+        parcel.writeString(address);
         parcel.writeInt(price);
         parcel.writeInt(surface);
         parcel.writeInt(numberOfRooms);
@@ -209,6 +219,15 @@ public class Property implements Parcelable {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 

@@ -118,8 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Number of bedrooms"
+            android:ems="2"
             android:inputType="number"
             android:maxLength="2"
             android:paddingStart="5dp"
@@ -147,8 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Number of bathrooms"
+            android:ems="2"
             android:inputType="number"
             android:maxLength="2"
             android:paddingStart="5dp"
@@ -295,6 +293,27 @@
             app:layout_constraintBottom_toTopOf="@+id/editText_description_add_activity"
             app:layout_constraintEnd_toEndOf="@+id/editText_description_add_activity"
             app:layout_constraintStart_toStartOf="@+id/editText_description_add_activity" />
+
+        <Button
+            android:id="@+id/button_avaibility_date_add_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Avaibility date"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
+            app:layout_constraintStart_toEndOf="@+id/button_select_picture_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_description_add_activity" />
+
+        <TextView
+            android:id="@+id/textView__avaibility_date_add_property_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_avaibility_date_add_activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_avaibility_date_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/button_avaibility_date_add_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

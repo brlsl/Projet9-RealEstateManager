@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,8 +14,10 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +42,7 @@ import com.openclassrooms.realestatemanager.models.Property;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -52,19 +56,19 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final String WRITE_EXT_STORAGE_PERMS = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private static final String CAMERA_PERMS = Manifest.permission.CAMERA;
-    private static final int RC_IMAGE_PERMS = 100;
-    private static final int RC_CHOOSE_PHOTO = 200;
-    public static final int RC_TAKE_PHOTO = 300;
+    private static final int RC_CHOOSE_PHOTO = 100;
+    public static final int RC_TAKE_PHOTO = 200;
 
     // ----- FOR UI -----
     private Button mAddPropertyButton;
     private Spinner mTypeSpinner;
-    private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription, mDateAvailable;
+    private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
     private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface,mEdtTxtNbrRoom,mEdtTxtNbrBedroom,mEdtTxtNbrBathroom, mEdtTxtDescription;
-    private Button mButtonSelectPhoto, mButtonTakePhoto, mButtonChooseAgent;
-    private TextView mTxtViewAgent, mTxtViewDescriptionTitle;
+    private Button mButtonSelectPhoto, mButtonTakePhoto, mButtonChooseAgent, mButtonAvailabilityDate;
+    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewAvailabilityDate;
     private int mNumberOfPictureAdded = 0;
-    private boolean isAvailable;
+    private long mSelectedAgentId = -1;
+    private boolean isAvailable = true;
 
     // ----- LIFECYCLE -----
 
@@ -117,10 +121,13 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mButtonSelectPhoto = findViewById(R.id.button_select_picture_add_activity);
         mButtonTakePhoto = findViewById(R.id.button_take_picture_add_activity);
         mButtonChooseAgent = findViewById(R.id.choose_agent_button_add_activity);
+        mButtonAvailabilityDate = findViewById(R.id.button_avaibility_date_add_activity);
 
         mTxtViewAgent = findViewById(R.id.agent_chosen_add_property_activity);
         mTxtViewDescriptionTitle = findViewById(R.id.textview_description_add_activity);
+        mTxtViewAvailabilityDate = findViewById(R.id.textView__avaibility_date_add_property_activity);
         descriptionTitleLengthListener();
+        setDatePickerDialog();
     }
 
     private void descriptionTitleLengthListener() {
@@ -152,29 +159,37 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     private void onClickAddProperty() {
         mAddPropertyButton.setOnClickListener(view -> {
-            mCity = mEdtTxtCity.getText().toString().trim();
+            mType = mTypeSpinner.getSelectedItem().toString();
             mPrice = mEdtTxtPrice.getText().toString().trim();
             mAddress = mEdtTxtAddress.getText().toString().trim();
+            mCity = mEdtTxtCity.getText().toString().trim();
             mSurface = mEdtTxtSurface.getText().toString().trim();
             mNbrOfRoom = mEdtTxtNbrRoom.getText().toString().trim();
             mNbrOfBedroom = mEdtTxtNbrBedroom.getText().toString().trim();
             mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
             mDescription = mEdtTxtDescription.getText().toString();
-            mType = mTypeSpinner.getSelectedItem().toString();
 
             String agentSelected = mTxtViewAgent.getText().toString().trim();
+            String dateAvailable = mTxtViewAvailabilityDate.getText().toString().trim();
 
-            if (agentSelected.isEmpty())
+            if (mSelectedAgentId == -1 || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
+                    mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
+                    mNumberOfPictureAdded == 0 || agentSelected.isEmpty() || dateAvailable.isEmpty()
+            )
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
             else {
-                Property propertyAdded = new Property(1,
+                Property propertyAdded = new Property(mSelectedAgentId,
                         mCity,
                         mType,
+                        mAddress,
                         Integer.parseInt(mPrice),
                         Integer.parseInt(mSurface),
                         Integer.parseInt(mNbrOfRoom),
                         Integer.parseInt(mNbrOfBedroom),
-                        Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, isAvailable);
+                        Integer.parseInt(mNbrOfBathroom),
+                        mDescription,
+                        dateAvailable,
+                        isAvailable);
                 mPropertyViewModel.createProperty(propertyAdded);
                 finish();
                 Toast.makeText(AddPropertyActivity.this, "Property added", Toast.LENGTH_SHORT).show();
@@ -185,7 +200,8 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     @Override
     public void onClickAgentItem(Agent agent) {
-        mTxtViewAgent.setText(agent.getName());
+        mTxtViewAgent.setText(agent.getName() +" " + agent.getSurname());
+        mSelectedAgentId = agent.getId();
     }
 
 
@@ -367,4 +383,32 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         else return null;
     }
 
+
+    private void setDatePickerDialog(){
+        mButtonAvailabilityDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentYear, currentMonth, currentDayOfMonth ;
+                Calendar calendar = Calendar.getInstance();
+                currentYear = calendar.get(Calendar.YEAR);
+                currentMonth = calendar.get(Calendar.MONTH);
+                currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddPropertyActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                        if(dayOfMonth <10 && month < 10)
+                            mTxtViewAvailabilityDate.setText("0"+ dayOfMonth +"/" + "0"+(month + 1) + "/"+ year);
+                        else if (dayOfMonth < 10)
+                            mTxtViewAvailabilityDate.setText("0"+ dayOfMonth +"/" +(month + 1) + "/"+ year);
+                        else if (month < 10)
+                            mTxtViewAvailabilityDate.setText(dayOfMonth +"/" +"0"+(month + 1) + "/"+ year);
+                        else
+                            mTxtViewAvailabilityDate.setText(dayOfMonth +"/" +(month + 1) + "/"+ year);
+                    }
+                }, currentYear, currentMonth, currentDayOfMonth);
+                datePickerDialog.show();
+            }
+        });
+    }
 }
