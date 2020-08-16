@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.injection.Injection;
@@ -34,8 +35,8 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
 
     // FOR DATA
     private AgentAdapter mAdapter;
-    List<Agent> mAgentList = new ArrayList<>();
-    REMViewModel mAgentViewModel;
+    private List<Agent> mAgentList = new ArrayList<>();
+    private REMViewModel mViewModel;
 
     // FOR UI
     private RecyclerView mRecyclerView;
@@ -78,6 +79,8 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
         return dialog;
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,10 +93,25 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
         configureViewModel();
         configureRecyclerView(view);
         configureClickOnAgentItem();
+        onClickAddAgentFAB(view);
 
     }
 
     // ----- CONFIGURATION METHODS ------
+
+
+    private void onClickAddAgentFAB(View view){
+        FloatingActionButton addAgentFab = view.findViewById(R.id.add_agent_bottom_sheet_fragment_fab);
+        addAgentFab.setOnClickListener(v -> showAddAgentDialogFragment());
+
+    }
+
+    private void showAddAgentDialogFragment(){
+        AddAgentDialogFragment addAgentDialogFragment = new AddAgentDialogFragment();
+        if (getFragmentManager() != null) {
+            addAgentDialogFragment.show(getFragmentManager(), "Add agent dialog fragment");
+        }
+    }
 
     private void configureClickOnAgentItem() {
         ItemClickSupport.addTo(mRecyclerView, R.layout.rv_agent_item_bottom_sheet_fragment)
@@ -110,7 +128,7 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
 
         // observe Room database changes and updates it in rv
-        mAgentViewModel.getAgentList().observe(this, agentList -> {
+        mViewModel.getAgentList().observe(this, agentList -> {
             mAdapter.updateAgentList(agentList);
             mAgentList = agentList;
         });
@@ -118,6 +136,6 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(requireContext());
-        mAgentViewModel = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
     }
 }
