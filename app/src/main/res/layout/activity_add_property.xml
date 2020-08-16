@@ -86,7 +86,7 @@
             android:background="@drawable/edit_text_border"
             android:ems="8"
             android:hint="Address"
-            android:inputType="textPostalAddress"
+            android:inputType="textNoSuggestions"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
@@ -104,7 +104,7 @@
             android:background="@drawable/edit_text_border"
             android:ems="8"
             android:hint="City"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
@@ -205,32 +205,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_select_picture_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Select picture from media"
+            app:srcCompat="@drawable/ic_picture_from_files"
             app:layout_constraintStart_toStartOf="@+id/button_take_picture_add_activity"
             app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_take_picture_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
-            android:text="take_photo"
+            app:srcCompat="@drawable/ic_take_picture"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/agent_chosen_add_property_activity" />
 
-        <Button
+        <ImageButton
             android:id="@+id/choose_agent_button_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="24dp"
-            android:text="Choose Agent"
+            app:srcCompat="@drawable/ic_agent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room_add_activity" />
 
@@ -273,7 +273,7 @@
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textNoSuggestions"
             android:maxLength="300"
             android:background="@drawable/edit_text_border"
             android:paddingStart="10dp"
@@ -294,12 +294,12 @@
             app:layout_constraintEnd_toEndOf="@+id/editText_description_add_activity"
             app:layout_constraintStart_toStartOf="@+id/editText_description_add_activity" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_avaibility_date_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Avaibility date"
+            app:srcCompat="@drawable/ic_calendar"
             app:layout_constraintStart_toStartOf="@+id/button_select_picture_add_activity"
             app:layout_constraintTop_toBottomOf="@+id/button_select_picture_add_activity" />
 
@@ -309,6 +309,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_border"
             app:layout_constraintBottom_toBottomOf="@+id/button_avaibility_date_add_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_avaibility_date_add_activity"

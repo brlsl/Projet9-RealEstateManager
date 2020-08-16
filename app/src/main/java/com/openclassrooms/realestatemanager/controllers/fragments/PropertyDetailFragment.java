@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -55,7 +56,6 @@ public class PropertyDetailFragment extends BaseFragment {
                 mNbrOfBedroom.setText(property.getNumberOfBedrooms());
                 mDescription.setText(property.getDescription());
                 //mAgentInCharge.setText();
-
             }
 
         }

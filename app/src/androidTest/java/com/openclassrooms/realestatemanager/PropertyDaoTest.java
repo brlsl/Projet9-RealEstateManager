@@ -123,4 +123,11 @@ public class PropertyDaoTest {
                 && propertyList.get(0).getPrice().equals("456"));
     }
 
+    @Test
+    public void insertImage(){
+        this.database.agentDao().createAgent(AGENT_DEMO);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO);
+
+    }
+
 }

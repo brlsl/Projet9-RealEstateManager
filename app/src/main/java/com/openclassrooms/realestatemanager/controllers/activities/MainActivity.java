@@ -16,6 +16,7 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
     FragmentManager mFragmentManager;
     private boolean isTwoPane;
+    //private REMViewModel mViewModel;
 
 
     // LIFE CYCLE
@@ -24,6 +25,8 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        // -----------------------
         mFragmentManager = getSupportFragmentManager();
 
         if (findViewById(R.id.detail_container) != null) {
@@ -44,10 +47,13 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
     public void onItemPropertySelected(Property property) {
         PropertyDetailFragment fragment = new PropertyDetailFragment();
 
+        mViewModelGlobal.getProperty(property.getId());
+
         // pass property object to detail fragment
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PROPERTY_OBJECT, property);
+        bundle.putParcelable(PROPERTY_OBJECT, property); // TODO: utiliser un viewmodel en passant ID
         fragment.setArguments(bundle);
+
 
         if(isTwoPane){
             this.getSupportFragmentManager()

@@ -16,10 +16,8 @@ import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Property;
 
 
-@Database(entities = {Agent.class, Property.class}, version = 1, exportSchema = false)
+@Database(entities = {Agent.class, Property.class}, version = 2, exportSchema = false)
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
-
-
     private static volatile RealEstateManagerDatabase INSTANCE;
 
     // --- DAO ---
@@ -33,6 +31,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RealEstateManagerDatabase.class, "MyDatabase.db")
+                            //.fallbackToDestructiveMigration()
                             .addCallback(prepopulateDatabase())
                             .build();
                 }
@@ -60,7 +59,6 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 property.put("city", "CityTest");
                 property.put("address","123 test street");
                 property.put("price", "123");
-
                 property.put("surface", "100");
                 property.put("numberOfRooms", "6");
                 property.put("numberOfBedrooms", "3");

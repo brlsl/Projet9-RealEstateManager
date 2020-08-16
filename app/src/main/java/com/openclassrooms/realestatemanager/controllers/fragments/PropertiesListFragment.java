@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,7 +36,6 @@ public class PropertiesListFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private PropertiesAdapter mAdapter;
     private List<Property> mPropertiesList = new ArrayList<>();
-    private REMViewModel mPropertyViewModel;
 
     // FOR UI
     private FloatingActionButton mFabAddProperty;
@@ -67,7 +66,6 @@ public class PropertiesListFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rv_properties_list,container,false);
 
-        configureViewModel();
         configureRecyclerView(view);
         configureOnClickRecyclerView();
 
@@ -91,12 +89,9 @@ public class PropertiesListFragment extends BaseFragment {
 
 
         // observe Room database changes(add, update) and updates it in rv
-        mPropertyViewModel.getPropertyList().observe(this, new Observer<List<Property>>() {
-            @Override
-            public void onChanged(List<Property> propertyList) {
-                mAdapter.updatePropertyList(propertyList);
-                mPropertiesList = propertyList;
-            }
+        mViewModel.getPropertyList().observe(this, propertyList -> {
+            mAdapter.updatePropertyList(propertyList);
+            mPropertiesList = propertyList;
         });
     }
 
@@ -109,11 +104,4 @@ public class PropertiesListFragment extends BaseFragment {
                     }
                 });
     }
-
-    private void configureViewModel() {
-        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(requireContext());
-        mPropertyViewModel = new ViewModelProvider(this, mViewModelFactory).get(REMViewModel.class);
-        //mPropertyViewModel.init();
-    }
-
 }
