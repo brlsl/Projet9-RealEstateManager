@@ -22,7 +22,7 @@ public class Agent {
         this.surname = surname;
     }
 
-    public Agent (String name, String surname){
+    public Agent(String name, String surname){
         this.name = name;
         this.surname = surname;
     }

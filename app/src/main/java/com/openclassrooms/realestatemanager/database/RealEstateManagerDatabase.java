@@ -11,18 +11,21 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.openclassrooms.realestatemanager.database.dao.AgentDao;
+import com.openclassrooms.realestatemanager.database.dao.ImageDao;
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.models.Agent;
+import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 
 
-@Database(entities = {Agent.class, Property.class}, version = 2, exportSchema = false)
+@Database(entities = {Agent.class, Property.class, Image.class}, version = 2, exportSchema = false)
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
     private static volatile RealEstateManagerDatabase INSTANCE;
 
     // --- DAO ---
     public abstract AgentDao agentDao();
     public abstract PropertyDao propertyDao();
+    public abstract ImageDao imageDao();
 
     // --- INSTANCE ---
     public static RealEstateManagerDatabase getInstance(Context context) {
@@ -31,7 +34,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RealEstateManagerDatabase.class, "MyDatabase.db")
-                            //.fallbackToDestructiveMigration()
+                            .fallbackToDestructiveMigration()
                             .addCallback(prepopulateDatabase())
                             .build();
                 }

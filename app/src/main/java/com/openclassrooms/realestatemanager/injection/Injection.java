@@ -26,6 +26,6 @@ public class Injection {
         AgentDataRepository dataSourceAgent = provideAgentDataSource(context);
         PropertyDataRepository dataSourceProperty = providePropertyDataSource(context);
         Executor executor = provideExecutor();
-        return new ViewModelFactory(dataSourceAgent,dataSourceProperty,executor);
+        return new ViewModelFactory(dataSourceAgent,dataSourceProperty, imageDataSource, executor);
     }
 }

@@ -9,6 +9,7 @@ import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.controllers.activities.AddPropertyActivityViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentDialogFragmentViewModel;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
+import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
 import java.util.concurrent.Executor;
@@ -17,11 +18,14 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final AgentDataRepository agentDataSource;
     private final PropertyDataRepository propertyDataSource;
+    private final ImageDataRepository imageDataSource;
     private final Executor executor;
 
-    public ViewModelFactory(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
+    public ViewModelFactory(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource,
+                            ImageDataRepository imageDataSource, Executor executor) {
         this.agentDataSource = agentDataSource;
         this.propertyDataSource = propertyDataSource;
+        this.imageDataSource = imageDataSource;
         this.executor = executor;
     }
 
@@ -30,7 +34,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(REMViewModel.class)) {
-            return (T) new REMViewModel(agentDataSource, propertyDataSource, executor);
+            return (T) new REMViewModel(agentDataSource, propertyDataSource, imageDataSource, executor);
         } else
         if (modelClass.isAssignableFrom(AddPropertyActivityViewModel.class)){
             return (T) new AddPropertyActivityViewModel(agentDataSource, propertyDataSource, executor);

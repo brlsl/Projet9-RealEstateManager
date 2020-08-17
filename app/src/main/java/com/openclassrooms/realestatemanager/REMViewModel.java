@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Agent;
+import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
+import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
 import java.util.List;
@@ -15,18 +17,20 @@ public class REMViewModel extends ViewModel {
 
     private final AgentDataRepository agentDataSource;
     private final PropertyDataRepository propertyDataSource;
+    private final ImageDataRepository imageDataSource;
     private final Executor executor; // permits to realize asynchronous requests
 
 
     private LiveData<List<Property>> mPropertyList;
 
 
-    public REMViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
+    public REMViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource,
+                        ImageDataRepository imageDataSource, Executor executor) {
         this.agentDataSource = agentDataSource;
         this.propertyDataSource = propertyDataSource;
+        this.imageDataSource = imageDataSource;
         this.executor = executor;
     }
-
 
     public void init(long agentId){
         if (mPropertyList == null){
@@ -84,4 +88,32 @@ public class REMViewModel extends ViewModel {
                 propertyDataSource.updateProperty(property));
     }
 
+
+    // ---------
+    // IMAGE
+    // --------
+
+    public void createImage(Image image){
+        executor.execute(() -> {
+            imageDataSource.createImage(image);
+        });
+    }
+
+    public LiveData<Image> getImage(long propertyId){
+        return imageDataSource.getImage(propertyId);
+    }
+
+    public LiveData<List<Image>> getImageList(){
+        return imageDataSource.getImageList();
+    }
+
+    public void updateImage(Image image){
+        executor.execute(() ->
+                imageDataSource.updateImage(image));
+    }
+
+    public void deleteImage(Image image){
+        executor.execute(() ->
+                imageDataSource.deleteImage(image));
+    }
 }

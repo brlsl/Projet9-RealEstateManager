@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
 import com.openclassrooms.realestatemanager.models.Agent;
+import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 
 import org.junit.After;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class PropertyDaoTest {
+public class DatabaseTests {
 
     // FOR DATA
     private RealEstateManagerDatabase database;
@@ -43,10 +44,15 @@ public class PropertyDaoTest {
     }
 
 
-    // DATA SET FOR TEST
+    // DATA SET FOR TESTS
     private static long AGENT_ID = 42;
     private static Agent AGENT_DEMO = new Agent(AGENT_ID,"ABC","Br");
+    private static long PROPERTY_ID = 456;
     private static Property PROPERTY_DEMO = new Property(AGENT_ID, "Paris", "123");
+    private static String IMAGE_PATH = "storage/fakePath/";
+    private static Image IMAGE_DEMO = new Image(1,PROPERTY_ID, IMAGE_PATH);
+
+    // ----- AGENT DAO TESTS -----
 
     @Test
     public void getAgentListWhenNoAgentInserted() throws InterruptedException {
@@ -73,7 +79,7 @@ public class PropertyDaoTest {
         Agent agent = LiveDataTestUtil.getValue(this.database.agentDao().getAgent(AGENT_ID));
         agent.setSurname("Bruno");
         this.database.agentDao().updateAgent(agent);
-        // Test
+        // TEST
         Agent agentUpdated = LiveDataTestUtil.getValue(database.agentDao().getAgent(AGENT_ID));
         assertEquals("Bruno", agentUpdated.getSurname());
     }
@@ -83,11 +89,13 @@ public class PropertyDaoTest {
         this.database.agentDao().createAgent(AGENT_DEMO);
         List<Agent> agentList = LiveDataTestUtil.getValue(this.database.agentDao().getAgentList());
         assertEquals(1, agentList.size());
+        // TEST
         this.database.agentDao().deleteAgent(AGENT_DEMO);
-
         agentList = LiveDataTestUtil.getValue(this.database.agentDao().getAgentList());
         assertTrue(agentList.isEmpty());
     }
+
+    // ----- PROPERTY DAO TESTS -----
 
     @Test
     public void getPropertyListWhenNoPropertyInserted() throws InterruptedException {
@@ -98,7 +106,7 @@ public class PropertyDaoTest {
     @Test
     public void insertAndGetProperty() throws InterruptedException{
         this.database.agentDao().createAgent(AGENT_DEMO);
-        this.database.propertyDao().createProperty(PROPERTY_DEMO);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO); // add property in DB
 
         Property property = LiveDataTestUtil.getValue(database.propertyDao().getProperty(AGENT_ID));
         List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
@@ -123,10 +131,50 @@ public class PropertyDaoTest {
                 && propertyList.get(0).getPrice().equals("456"));
     }
 
+
+
+    // ------ IMAGE TESTS -----
+
     @Test
-    public void insertImage(){
-        this.database.agentDao().createAgent(AGENT_DEMO);
-        this.database.propertyDao().createProperty(PROPERTY_DEMO);
+    public void getImageListWhenNoImageInserted() throws InterruptedException {
+        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        assertEquals(0, imageList.size());
+    }
+
+    @Test
+    public void insertAndGetImage() throws InterruptedException {
+
+        this.database.imageDao().createImage(IMAGE_DEMO);
+        Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(PROPERTY_ID));
+        assertEquals(IMAGE_PATH, image.getImagePath());
+    }
+
+
+    @Test
+    public void insertAndUpdateImage() throws InterruptedException {
+        this.database.imageDao().createImage(IMAGE_DEMO);
+
+        Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(PROPERTY_ID));
+        image.setImagePath("storage/pathUpdated");
+
+        this.database.imageDao().updateImage(image);
+
+        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        assertTrue(imageList.size() == 1
+                && imageList.get(0).getId() == image.getId()
+                && imageList.get(0).getImagePath().equals(image.getImagePath()));
+    }
+
+    @Test
+    public void insertAndDeleteImage() throws InterruptedException {
+        this.database.imageDao().createImage(IMAGE_DEMO);
+        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        assertEquals(1, imageList.size());
+
+        // TEST
+        this.database.imageDao().deleteImage(IMAGE_DEMO);
+        imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        assertEquals(0, imageList.size());
 
     }
 

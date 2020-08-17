@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.models.Agent;
 import java.util.List;
 
 public class AgentDataRepository {
-    AgentDao agentDao;
+    private AgentDao agentDao;
 
     public AgentDataRepository(AgentDao agentDao){
         this.agentDao = agentDao;

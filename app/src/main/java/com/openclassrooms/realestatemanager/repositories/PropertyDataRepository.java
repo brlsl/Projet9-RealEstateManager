@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.models.Property;
 import java.util.List;
 
 public class PropertyDataRepository {
-    PropertyDao propertyDao;
+    private PropertyDao propertyDao;
 
     public PropertyDataRepository(PropertyDao propertyDao){
         this.propertyDao = propertyDao;

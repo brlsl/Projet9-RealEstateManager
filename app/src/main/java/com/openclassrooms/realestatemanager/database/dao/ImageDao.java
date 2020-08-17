@@ -8,26 +8,26 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.openclassrooms.realestatemanager.models.Agent;
+import com.openclassrooms.realestatemanager.models.Image;
 
 import java.util.List;
 
 @Dao
-public interface AgentDao {
+public interface ImageDao {
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void createAgent(Agent agent);
+    void createImage(Image image);
 
-    @Query("SELECT * FROM agent_table")
-    LiveData<List<Agent>> getAgentList();
+    @Query("SELECT * FROM image_table")
+    LiveData<List<Image>> getImageList();
 
-    @Query("SELECT * FROM agent_table WHERE id = :id")
-    LiveData<Agent> getAgent(long id);
+    @Query("SELECT * FROM image_table WHERE propertyId = :propertyId")
+    LiveData<Image> getImage(long propertyId);
 
     @Update
-    void updateAgent(Agent agent);
+    void updateImage(Image image);
 
     @Delete
-    void deleteAgent(Agent agent);
+    void deleteImage(Image image);
 
 }
