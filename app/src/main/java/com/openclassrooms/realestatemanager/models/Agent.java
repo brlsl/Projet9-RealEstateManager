@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "agent_table")
@@ -13,12 +14,18 @@ public class Agent {
 
     private String surname;
 
+    // for database testing
+    @Ignore
     public Agent(long id, String name, String surname){
         this.id = id;
         this.name = name;
         this.surname = surname;
     }
 
+    public Agent (String name, String surname){
+        this.name = name;
+        this.surname = surname;
+    }
 
     // GETTERS
 

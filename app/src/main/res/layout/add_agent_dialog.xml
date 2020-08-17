@@ -3,16 +3,9 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <TextView
-        android:text="User informations"
-        android:textAlignment="center"
-        android:padding="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:contentDescription="@string/app_name" />
+
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/add_agent_dialog_agent_name"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,8 +14,9 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:hint="name" />
+
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/add_agent_dialog_agent_surname"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,4 +26,5 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
         android:hint="surname"/>
+
 </LinearLayout>
