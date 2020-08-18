@@ -36,6 +36,7 @@ public class PropertiesListFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private PropertiesAdapter mAdapter;
     private List<Property> mPropertiesList = new ArrayList<>();
+    private REMViewModel mViewModel;
 
     // FOR UI
     private FloatingActionButton mFabAddProperty;
@@ -66,11 +67,9 @@ public class PropertiesListFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rv_properties_list,container,false);
 
+        configureViewModel();
         configureRecyclerView(view);
         configureOnClickRecyclerView();
-
-
-
 
         mFabAddProperty = view.findViewById(R.id.add_property_fab);
         mFabAddProperty.setOnClickListener(v -> {
@@ -79,6 +78,11 @@ public class PropertiesListFragment extends BaseFragment {
         });
 
         return view;
+    }
+
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(requireActivity());
+        mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(REMViewModel.class);
     }
 
     private void configureRecyclerView(View view) {

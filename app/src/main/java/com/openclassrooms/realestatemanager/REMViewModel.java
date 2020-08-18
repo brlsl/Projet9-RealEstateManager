@@ -75,8 +75,8 @@ public class REMViewModel extends ViewModel {
                 propertyDataSource.createProperty(property));
     }
 
-    public void getProperty(long agentId){
-        propertyDataSource.getProperty(agentId);
+    public LiveData<Property> getProperty(long propertyId, long agentId){
+        return propertyDataSource.getProperty(propertyId, agentId);
     }
 
     public LiveData<List<Property>> getPropertyList(){
@@ -99,8 +99,8 @@ public class REMViewModel extends ViewModel {
         });
     }
 
-    public LiveData<Image> getImage(long propertyId){
-        return imageDataSource.getImage(propertyId);
+    public LiveData<Image> getImage(long imageId, long propertyId){
+        return imageDataSource.getImage(imageId, propertyId);
     }
 
     public LiveData<List<Image>> getImageList(){

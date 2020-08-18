@@ -14,8 +14,8 @@ public class PropertyDataRepository {
         this.propertyDao = propertyDao;
     }
 
-    public LiveData<Property> getProperty(long agentId){
-        return propertyDao.getProperty(agentId);
+    public LiveData<Property> getProperty( long propertyId,long agentId){
+        return propertyDao.getProperty(propertyId, agentId);
     }
 
     public LiveData<List<Property>> getPropertyList(){

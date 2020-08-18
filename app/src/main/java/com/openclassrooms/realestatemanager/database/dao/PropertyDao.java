@@ -15,11 +15,11 @@ import java.util.List;
 @Dao
 public interface PropertyDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void createProperty(Property property);
 
-    @Query("SELECT * FROM property_table WHERE agentId = :agentId")
-    LiveData<Property> getProperty(long agentId);
+    @Query("SELECT * FROM property_table WHERE agentId = :agentId AND id= :propertyId")
+    LiveData<Property> getProperty(long propertyId, long agentId);
 
     @Query("SELECT * FROM property_table")
     LiveData<List<Property>> getPropertyList();

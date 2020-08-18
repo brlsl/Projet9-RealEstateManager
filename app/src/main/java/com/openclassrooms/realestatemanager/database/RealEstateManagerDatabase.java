@@ -34,7 +34,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RealEstateManagerDatabase.class, "MyDatabase.db")
-                            .fallbackToDestructiveMigration()
+                            //.fallbackToDestructiveMigration()
                             .addCallback(prepopulateDatabase())
                             .build();
                 }

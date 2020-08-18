@@ -35,13 +35,16 @@ import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentBottom
 
 
 import com.openclassrooms.realestatemanager.models.Agent;
+import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -69,6 +72,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private boolean isAvailable = true;
     private LinearLayout linearLayoutTest;
     private ImageView mPhotoAdded;
+    private String mAgentNameSurname;
 
 
     // TODO: utiliser les enumérations pour gérer les différents cas de champs non remplis
@@ -239,19 +243,18 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             //String agentSelected = mTxtViewAgent.getText().toString().trim();
             String dateAvailable = mTxtViewAvailabilityDate.getText().toString().trim();
 /*
-            if (mAgentId ==  || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
+            if (mTxtViewAgent.getText().toString().trim().isEmpty() || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
                     mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
-                    mNumberOfPictureAdded == 0 || mTxtViewAgent.getText().length() == 0 || dateAvailable.isEmpty()
+                    mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || dateAvailable.isEmpty()
             )
+*/
 
- */
-            if (mTxtViewAgent.getText().length() == 0 || mAgentId != 0) {
-
-                Log.e("tag", "Value of agent txt avec erreur: "+ mTxtViewAgent.getText() ); // ok
+            if (mImagePathList.size() == 0 || mTxtViewAgent.getText().toString().trim().isEmpty()) {
 
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
             }
             else {
+
                 Property propertyAdded = new Property(mAgentId,
                         mCity,
                         mType,
@@ -263,10 +266,15 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         mNbrOfBathroom,
                         mDescription,
                         dateAvailable,
-                        isAvailable);
+                        mAgentNameSurname, isAvailable);
                 mViewModel.createProperty(propertyAdded);
+                for (int i = 0; i < mImagePathList.size() ; i++) {
+                    Image image = new Image(propertyAdded.getId(), mImagePathList.get(i));
+                    mViewModel.createImage(image);
+                }
+
                 finish();
-                Toast.makeText(AddPropertyActivity.this, "Property added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPropertyActivity.this, "Property added" + propertyAdded.getId() +" et" + propertyAdded.getAgentId(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -274,6 +282,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     @Override
     public void onClickAgentItem(Agent agent) {
+        mAgentNameSurname = agent.getName()+" "+agent.getSurname();
         mViewModel.getAgentSelected().setValue(agent.getName() +" " + agent.getSurname());
         mViewModel.getAgentIdSelected().setValue(agent.getId());
     }
@@ -305,8 +314,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     }
 
-    String currentPhotoPath;
-    String selectedImagePath;
+    String takePhotoPath;
+    String selectPhotoPath;
+    List<String> mImagePathList = new ArrayList<>();
 
 
     private void takePictureIntent() {
@@ -359,8 +369,10 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        Log.d(TAG, "Photo Path :" + currentPhotoPath);
+        takePhotoPath = image.getAbsolutePath();
+        Log.d(TAG, "Photo Path :" + takePhotoPath);
+
+        mImagePathList.add(takePhotoPath);
         return image;
     }
 
@@ -375,12 +387,12 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             if (resultCode == RESULT_OK && data != null){
                 try{
                     Uri uri = data.getData();
-                    //ImageView imageView = new ImageView(this);
-                    //imageView.setImageURI(uri);
-                    selectedImagePath = getPath(uri);
-                    setPicture(selectedImagePath); // and add to linear layout
+                    selectPhotoPath = getPath(uri);
+                    setPicture(selectPhotoPath); // and add to linear layout
 
-                    Log.e(TAG, "Selected picture path:" + selectedImagePath);
+                    mImagePathList.add(selectPhotoPath);
+
+                    Log.e(TAG, "Selected picture path:" + selectPhotoPath);
 
                     Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();}
                 catch (Exception e){
@@ -397,7 +409,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 if(Build.VERSION.SDK_INT < 29) {
                     addPhotoToGallery();
                 }
-                setPicture(currentPhotoPath);
+                setPicture(takePhotoPath);
 
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
 
@@ -409,7 +421,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     private void addPhotoToGallery() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
+        File f = new File(takePhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);

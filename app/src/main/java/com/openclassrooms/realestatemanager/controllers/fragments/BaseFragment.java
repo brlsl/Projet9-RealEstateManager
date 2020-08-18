@@ -14,13 +14,12 @@ import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 
 public abstract class BaseFragment extends Fragment {
 
-    REMViewModel mViewModel;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(requireActivity());
-        mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(REMViewModel.class);
+
     }
 
 }

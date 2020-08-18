@@ -12,7 +12,8 @@ import com.openclassrooms.realestatemanager.models.Property;
 public class MainActivity extends BaseActivity implements PropertiesListFragment.OnItemPropertyClickListener {
 
     // FOR DATA
-    public static final String PROPERTY_OBJECT = "PROPERTY_OBJECT";
+    public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
+    public static final String PROPERTY_AGENT_ID_KEY = "PROPERTY_AGENT_ID_KEY";
 
     FragmentManager mFragmentManager;
     private boolean isTwoPane;
@@ -47,11 +48,10 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
     public void onItemPropertySelected(Property property) {
         PropertyDetailFragment fragment = new PropertyDetailFragment();
 
-        mViewModelGlobal.getProperty(property.getId());
-
-        // pass property object to detail fragment
         Bundle bundle = new Bundle();
-        bundle.putParcelable(PROPERTY_OBJECT, property); // TODO: utiliser un viewmodel en passant ID
+
+        bundle.putLong(PROPERTY_ID_KEY, property.getAgentId());
+        bundle.putLong(PROPERTY_AGENT_ID_KEY, property.getId());
         fragment.setArguments(bundle);
 
 

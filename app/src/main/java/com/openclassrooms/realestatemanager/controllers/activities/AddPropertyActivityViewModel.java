@@ -6,16 +6,19 @@ import android.widget.LinearLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
+import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
 import java.util.concurrent.Executor;
 
 public class AddPropertyActivityViewModel extends ViewModel {
 
-    private final AgentDataRepository agentDataSource;
-    private final PropertyDataRepository propertyDataSource;
+    private final AgentDataRepository agentDataRepository;
+    private final PropertyDataRepository propertyDataRepository;
+    private final ImageDataRepository imageDataRepository;
     private final Executor executor; // permits to realize asynchronous requests
 
     private MutableLiveData<String> mAgentSelected, mDateSelected;
@@ -26,9 +29,10 @@ public class AddPropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<ImageView> mImagePhotoAdded;
 
-    public AddPropertyActivityViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
-        this.agentDataSource = agentDataSource;
-        this.propertyDataSource = propertyDataSource;
+    public AddPropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
+        this.agentDataRepository = agentDataRepository;
+        this.propertyDataRepository = propertyDataRepository;
+        this.imageDataRepository = imageDataRepository;
         this.executor = executor;
     }
 
@@ -38,7 +42,18 @@ public class AddPropertyActivityViewModel extends ViewModel {
 
     public void createProperty(Property property){
         executor.execute(()->
-                propertyDataSource.createProperty(property));
+                propertyDataRepository.createProperty(property));
+    }
+
+
+    // ---------
+    // IMAGE
+    // ---------
+
+    public void createImage(Image image){
+        executor.execute(() -> {
+            imageDataRepository.createImage(image);
+        });
     }
 
 

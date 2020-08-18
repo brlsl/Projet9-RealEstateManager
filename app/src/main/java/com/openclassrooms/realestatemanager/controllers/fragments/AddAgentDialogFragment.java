@@ -66,7 +66,7 @@ public class AddAgentDialogFragment extends DialogFragment {
                         String agentSurname = mAgentSurname.getText().toString();
 
                         if (!(agentName.isEmpty() || agentSurname.isEmpty())){
-                            Agent agent = new Agent(agentName,agentSurname);
+                            Agent agent = new Agent(agentName, agentSurname);
                             mViewModel.createAgent(agent);
                             dialog.dismiss();
                             Toast.makeText(requireContext(), "Agent added", Toast.LENGTH_SHORT).show();
@@ -79,8 +79,5 @@ public class AddAgentDialogFragment extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false);
 
     }
-
-
-
 
 }

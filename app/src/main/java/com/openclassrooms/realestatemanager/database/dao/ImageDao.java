@@ -21,8 +21,8 @@ public interface ImageDao {
     @Query("SELECT * FROM image_table")
     LiveData<List<Image>> getImageList();
 
-    @Query("SELECT * FROM image_table WHERE propertyId = :propertyId")
-    LiveData<Image> getImage(long propertyId);
+    @Query("SELECT * FROM image_table WHERE propertyId = :propertyId AND id = :imageId" )
+    LiveData<Image> getImage(long imageId, long propertyId);
 
     @Update
     void updateImage(Image image);

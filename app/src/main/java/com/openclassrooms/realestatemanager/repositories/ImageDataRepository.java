@@ -18,8 +18,8 @@ public class ImageDataRepository {
         return imageDao.getImageList();
     }
 
-    public LiveData<Image> getImage(long propertyId){
-        return imageDao.getImage(propertyId);
+    public LiveData<Image> getImage(long imageId, long propertyId){
+        return imageDao.getImage(imageId, propertyId);
     }
 
     public void createImage(Image image){

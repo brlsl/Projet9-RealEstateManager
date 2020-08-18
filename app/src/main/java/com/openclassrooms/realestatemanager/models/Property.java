@@ -1,8 +1,5 @@
 package com.openclassrooms.realestatemanager.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -15,7 +12,7 @@ import androidx.room.PrimaryKey;
         childColumns = "agentId"
         ))
 
-public class Property implements Parcelable {
+public class Property{
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -33,12 +30,14 @@ public class Property implements Parcelable {
     private String description;
     private String pointsOfInterest;
     private String dateAvailable;
+    private String agentNameSurname;
     private boolean isAvailable;
 
 
     // constructor for database testing
     @Ignore
-    public Property(long agentId, String city, String price){
+    public Property(long id, long agentId, String city, String price){
+        this.id = id;
         this.agentId = agentId;
         this.city = city;
         this.price = price;
@@ -46,7 +45,7 @@ public class Property implements Parcelable {
 
     public Property(long agentId, String city, String type, String address, String price, String surface,
                     String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                    String dateAvailable, boolean isAvailable) {
+                    String dateAvailable, String agentNameSurname, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
@@ -58,63 +57,10 @@ public class Property implements Parcelable {
         this.numberOfBathRooms = numberOfBathRooms;
         this.description = description;
         this.dateAvailable = dateAvailable;
+        this.agentNameSurname = agentNameSurname;
         this.isAvailable = isAvailable;
     }
 
-
-    // ----- PARCELABLE IMPLEMENTATION -----
-
-    protected Property(Parcel in) {
-        id = in.readLong();
-        agentId = in.readLong();
-        type = in.readString();
-        city = in.readString();
-        address = in.readString();
-        price = in.readString();
-        surface = in.readString();
-        numberOfRooms = in.readString();
-        numberOfBedrooms = in.readString();
-        numberOfBathRooms = in.readString();
-        description = in.readString();
-        pointsOfInterest = in.readString();
-        dateAvailable = in.readString();
-        isAvailable = in.readByte() != 0;
-    }
-
-    public static final Creator<Property> CREATOR = new Creator<Property>() {
-        @Override
-        public Property createFromParcel(Parcel in) {
-            return new Property(in);
-        }
-
-        @Override
-        public Property[] newArray(int size) {
-            return new Property[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeLong(agentId);
-        parcel.writeString(type);
-        parcel.writeString(city);
-        parcel.writeString(address);
-        parcel.writeString(price);
-        parcel.writeString(surface);
-        parcel.writeString(numberOfRooms);
-        parcel.writeString(numberOfBedrooms);
-        parcel.writeString(numberOfBathRooms);
-        parcel.writeString(description);
-        parcel.writeString(pointsOfInterest);
-        parcel.writeString(dateAvailable);
-        parcel.writeByte((byte) (isAvailable ? 1 : 0));
-    }
 
     // ----- GETTERS AND SETTERS -----
     public long getId() {
@@ -231,4 +177,11 @@ public class Property implements Parcelable {
     }
 
 
+    public String getAgentNameSurname() {
+        return agentNameSurname;
+    }
+
+    public void setAgentNameSurname(String agentNameSurname) {
+        this.agentNameSurname = agentNameSurname;
+    }
 }
