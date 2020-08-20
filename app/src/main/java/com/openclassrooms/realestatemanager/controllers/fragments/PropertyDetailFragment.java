@@ -22,7 +22,9 @@ import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
@@ -35,7 +37,7 @@ public class PropertyDetailFragment extends BaseFragment {
 
     // FOR UI
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
-            mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewAgentInCharge;
+            mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewAgentNameSurname;
 
     private ViewFlipper mViewFlipper;
 
@@ -64,11 +66,13 @@ public class PropertyDetailFragment extends BaseFragment {
                 mTxtViewNbrOfBedroom.setText(property.getNumberOfBedrooms());
                 mTxtViewNbrOfBathroom.setText(property.getNumberOfBathRooms());
                 mTxtViewDescription.setText(property.getDescription());
-                mTxtViewAgentInCharge.setText(property.getAgentNameSurname());
+                mTxtViewAgentNameSurname.setText(property.getAgentNameSurname());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                mTxtViewDateAvailable.setText(sdf.format(property.getDateAvailable()));
 
             });
 
-            /*
+
             LiveData<List<Image>> imageList = mViewModel.getImageListOneProperty(propertyId);
 
             imageList.observe(this, images -> {
@@ -78,14 +82,16 @@ public class PropertyDetailFragment extends BaseFragment {
                     if(imgFile.exists()){
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                        ImageView myImage = view.findViewById(R.id.);
+                        ImageView myImage = new ImageView(requireContext());
 
                         myImage.setImageBitmap(myBitmap);
+
+                        mViewFlipper.addView(myImage);
                     }
                 }
             });
 
-             */
+
         }
 
 
@@ -94,6 +100,8 @@ public class PropertyDetailFragment extends BaseFragment {
     }
 
     private void configureViews(View view) {
+        mViewFlipper = view.findViewById(R.id.detail_fragment_viewFlipper);
+
         mTxtViewCity = view.findViewById(R.id.detail_fragment_property_city);
         mTxtViewAddress = view.findViewById(R.id.detail_fragment_property_address);
         mTxtViewPrice = view.findViewById(R.id.detail_fragment_property_price);
@@ -103,7 +111,8 @@ public class PropertyDetailFragment extends BaseFragment {
         mTxtViewNbrOfBedroom = view.findViewById(R.id.detail_fragment_property_number_of_bedroom);
         mTxtViewNbrOfBathroom = view.findViewById(R.id.detail_fragment_property_number_of_bathroom);
         mTxtViewDescription = view.findViewById(R.id.detail_fragment_property_description);
-        mTxtViewAgentInCharge = view.findViewById(R.id.detail_fragment_property_agent);
+        mTxtViewDateAvailable = view.findViewById(R.id.detail_fragment_property_date_available);
+        mTxtViewAgentNameSurname = view.findViewById(R.id.detail_fragment_property_agent_name_surname);
 
     }
 

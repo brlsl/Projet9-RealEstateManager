@@ -5,6 +5,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 
 @Entity(tableName = "property_table",
         foreignKeys = @ForeignKey(entity = Agent.class,
@@ -29,7 +31,7 @@ public class Property{
     private String numberOfBathRooms;
     private String description;
     private String pointsOfInterest;
-    private String dateAvailable;
+    private Date dateAvailable;
     private String agentNameSurname;
     private boolean isAvailable;
 
@@ -45,7 +47,7 @@ public class Property{
 
     public Property(long agentId, String city, String type, String address, String price, String surface,
                     String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                    String dateAvailable, String agentNameSurname, boolean isAvailable) {
+                    Date dateAvailable, String agentNameSurname, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
@@ -151,11 +153,11 @@ public class Property{
         this.pointsOfInterest = pointsOfInterest;
     }
 
-    public String getDateAvailable() {
+    public Date getDateAvailable() {
         return dateAvailable;
     }
 
-    public void setDateAvailable(String dateAvailable) {
+    public void setDateAvailable(Date dateAvailable) {
         this.dateAvailable = dateAvailable;
     }
 

@@ -29,7 +29,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentBottomSheetFragment;
@@ -68,8 +67,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
     private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface,mEdtTxtNbrRoom,mEdtTxtNbrBedroom,mEdtTxtNbrBathroom, mEdtTxtDescription;
     private ImageButton mImgBtnSelectPhoto, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailabilityDate;
-    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewAvailabilityDate;
-    private int mNumberOfPictureAdded = 0;
+    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable;
+    private Date mDateAvailable;
+
     private long mAgentId;
     private boolean isAvailable = true;
     private String mAgentNameSurname;
@@ -79,9 +79,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     // TODO: utiliser les enumérations pour gérer les différents cas de champs non remplis
 
-    private LiveData<String> mAgentSelected, mDateSelected;
-    private LiveData<Long> mAgentIdSelectedVM;
-    private MutableLiveData<List<Bitmap>> bitmapLiveData;
+    private LiveData<Date> mDateSelected;
+    private LiveData<List<Bitmap>> bitmapLiveData;
+    private LiveData<Agent> mAgent;
 
     // ----- LIFECYCLE -----
 
@@ -107,26 +107,28 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
 
     private void configureLiveData() {
-        mAgentSelected = mViewModel.getAgentSelected();
+
         mDateSelected = mViewModel.getDateSelected();
-        mAgentIdSelectedVM = mViewModel.getAgentIdSelected();
         bitmapLiveData = mViewModel.getBitmapList();
+        mAgent = mViewModel.getAgent();
 
 
-        mAgentSelected.observe(this, s -> {
-            mTxtViewAgent.setText(s);
-            Log.e(TAG, "Value of agent txt at beginning: " +s );
+        mAgent.observe(this, agent -> {
+            mAgentNameSurname = agent.getName()+" "+agent.getSurname();
+            mTxtViewAgent.setText(mAgentNameSurname);
+            mAgentId = agent.getId();
+            Log.e(TAG, "LiveData name value: " +mAgentNameSurname + ", TextView name value: "+ mTxtViewAgent.getText().toString() + ", agent Id value: " + mAgentId );
         });
 
-        mDateSelected.observe(this, s -> {
-            mTxtViewAvailabilityDate.setText(s);
-            Log.e(TAG, "Value of date txt at beginning: " +s );
+
+        mDateSelected.observe(this, date -> {
+            mDateAvailable = date;
+            String pattern = "dd/MM/yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.ENGLISH);
+            mTxtViewDateAvailable.setText(sdf.format(mDateAvailable));
+            Log.e(TAG, "LiveData date value: " + mDateAvailable + " LiveData TextView date value: "+ mTxtViewDateAvailable.getText().toString());
         });
 
-        mAgentIdSelectedVM.observe(this, aLong -> {
-            mAgentId = aLong;
-            Log.e(TAG, "Value of agent txt at beginning: " +aLong );
-        });
 
         bitmapLiveData.observe(this, bitmapList -> {
             mLinearLayout.removeAllViews();
@@ -137,7 +139,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 mLinearLayout.addView(imageView);
                 Log.e(TAG, "Number of photo in linearlayout: " + mLinearLayout.getChildCount() );
             }
-
         });
 
     }
@@ -168,7 +169,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         mTxtViewAgent = findViewById(R.id.agent_chosen_add_property_activity);
         mTxtViewDescriptionTitle = findViewById(R.id.textview_description_add_activity);
-        mTxtViewAvailabilityDate = findViewById(R.id.textView__avaibility_date_add_property_activity);
+        mTxtViewDateAvailable = findViewById(R.id.textView__avaibility_date_add_property_activity);
         mLinearLayout = findViewById(R.id.linear_layout_photo_add_activity);
 
         descriptionTitleLengthListener();
@@ -186,9 +187,8 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             DatePickerDialog datePickerDialog = new DatePickerDialog(AddPropertyActivity.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                    String pattern = "dd/MM/yyyy";
-                    SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.ENGLISH);
-                    mTxtViewAvailabilityDate.setText(sdf.format(calendar.getTime()));
+                    mViewModel.getDateSelected().setValue(calendar.getTime());
+
 
                 }
             }, currentYear, currentMonth, currentDayOfMonth);
@@ -225,7 +225,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     private void onClickAddProperty() {
         mAddPropertyButton.setOnClickListener(view -> {
-
             mType = mTypeSpinner.getSelectedItem().toString();
             mPrice = mEdtTxtPrice.getText().toString().trim();
             mAddress = mEdtTxtAddress.getText().toString().trim();
@@ -236,17 +235,14 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
             mDescription = mEdtTxtDescription.getText().toString();
 
-            //String agentSelected = mTxtViewAgent.getText().toString().trim();
-            String dateAvailable = mTxtViewAvailabilityDate.getText().toString().trim();
-
+/*
             if (mTxtViewAgent.getText().toString().trim().isEmpty() || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
                     mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
-                    mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || dateAvailable.isEmpty()
+                    mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || mDateAvailable.toString().isEmpty()
             )
-
-            //if (mImagePathList.size() == 0 || mTxtViewAgent.getText().toString().trim().isEmpty())
+*/
+            if (mDateAvailable.toString().isEmpty() || mTxtViewAgent.getText().toString().trim().isEmpty())
             {
-
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
             }
             else {
@@ -261,7 +257,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         mNbrOfBedroom,
                         mNbrOfBathroom,
                         mDescription,
-                        dateAvailable,
+                        mDateAvailable,
                         mAgentNameSurname, isAvailable);
                 mViewModel.createProperty(propertyAdded);
 
@@ -272,7 +268,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 }
 
                 finish();
-                Toast.makeText(AddPropertyActivity.this, "Property added" + propertyAdded.getId() +" et" + propertyAdded.getAgentId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPropertyActivity.this, "Property added date" + mAgentId +" et" + mAgentNameSurname, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -280,9 +276,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     @Override
     public void onClickAgentItem(Agent agent) {
-        mAgentNameSurname = agent.getName()+" "+agent.getSurname();
-        mViewModel.getAgentSelected().setValue(agent.getName() +" " + agent.getSurname());
-        mViewModel.getAgentIdSelected().setValue(agent.getId());
+        mViewModel.getAgent().setValue(agent);
     }
 
 
@@ -325,10 +319,10 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                Log.d(TAG, "Create File" + photoFile.toString());
+                Log.e(TAG, "Create File" + photoFile.toString());
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                Log.d(TAG, "Error while creating the File", ex);
+                Log.e(TAG, "Error while creating the File", ex);
             }
 
             // Continue only if the File was successfully created
@@ -349,7 +343,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     }
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
 
         File storageDir;
@@ -368,7 +362,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         // Save a file: path for use with ACTION_VIEW intents
         takePhotoPath = image.getAbsolutePath();
-        Log.d(TAG, "Photo Path :" + takePhotoPath);
+        Log.e(TAG, "Photo Path :" + takePhotoPath);
 
         mImagePathList.add(takePhotoPath);
         return image;
@@ -472,25 +466,23 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mLinearLayout.addView(imageView);
 
         Log.e(TAG, "Number of picture in Linear Layout : " + mLinearLayout.getChildCount());
-        mNumberOfPictureAdded = mLinearLayout.getChildCount();
     }
 
     //helper to retrieve the path of an image URI
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+
         if(cursor!=null)
         {
             cursor.moveToFirst();
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
             return cursor.getString(column_index);
         }
         else{
             return uri.getPath();
         }
-
     }
 
 }

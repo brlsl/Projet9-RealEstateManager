@@ -7,12 +7,14 @@ import android.widget.LinearLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -23,17 +25,13 @@ public class AddPropertyActivityViewModel extends ViewModel {
     private final ImageDataRepository imageDataRepository;
     private final Executor executor; // permits to realize asynchronous requests
 
-    private MutableLiveData<String> mAgentSelected, mDateSelected;
-    private MutableLiveData<Long> mAgentIdSelected;
+    private MutableLiveData<Date> mDateSelected;
 
-
-
-    private MutableLiveData<Bitmap> mBitmap;
     private MutableLiveData<List<Bitmap>> mBitmapList;
 
+    private MutableLiveData<Agent> mAgent;
 
 
-    private MutableLiveData<ImageView> mImagePhotoAdded;
 
     public AddPropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
         this.agentDataRepository = agentDataRepository;
@@ -63,36 +61,27 @@ public class AddPropertyActivityViewModel extends ViewModel {
     }
 
     // -------------------
-    public MutableLiveData<String> getAgentSelected(){
-        if (mAgentSelected == null) {
-            mAgentSelected = new MutableLiveData<>();
-            mAgentSelected.setValue("");
+
+    public MutableLiveData<Agent> getAgent(){
+        if (mAgent == null) {
+            mAgent = new MutableLiveData<>();
         }
-        return mAgentSelected;
+        return mAgent;
     }
 
-    public MutableLiveData<String> getDateSelected(){
+
+    public MutableLiveData<Date> getDateSelected(){
         if (mDateSelected == null) {
             mDateSelected = new MutableLiveData<>();
-            mDateSelected.setValue("");
         }
         return mDateSelected;
     }
 
-    public MutableLiveData<Long> getAgentIdSelected(){
-        if (mAgentIdSelected == null){
-            mAgentIdSelected = new MutableLiveData<>();
-            mAgentIdSelected.setValue(0L);
-        }
-        return mAgentIdSelected;
-    }
 
     public MutableLiveData<List<Bitmap>> getBitmapList() {
         if (mBitmapList == null){
             mBitmapList = new MutableLiveData<>();
-            mBitmap = new MutableLiveData<>();
         }
         return mBitmapList;
     }
-
 }

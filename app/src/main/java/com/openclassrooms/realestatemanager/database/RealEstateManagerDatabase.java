@@ -8,6 +8,7 @@ import androidx.room.Database;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.openclassrooms.realestatemanager.database.dao.AgentDao;
@@ -19,6 +20,7 @@ import com.openclassrooms.realestatemanager.models.Property;
 
 
 @Database(entities = {Agent.class, Property.class, Image.class}, version = 2, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
     private static volatile RealEstateManagerDatabase INSTANCE;
 
@@ -69,6 +71,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 property.put("description", "Nice apartment, well located");
                 property.put("dateAvailable", "01/01/2021");
                 property.put("pointsOfInterest", "School");
+                property.put("agentNameSurname", "REM Agency");
                 property.put("isAvailable",  true);
 
                 db.insert("property_table", OnConflictStrategy.IGNORE, property);
