@@ -14,8 +14,12 @@ public class ImageDataRepository {
         this.imageDao = imageDao;
     }
 
-    public LiveData<List<Image>> getImageList(){
-        return imageDao.getImageList();
+    public LiveData<List<Image>> getImageListAllProperties(){
+        return imageDao.getImageListAllProperties();
+    }
+
+    public LiveData<List<Image>> getImageListOneProperty(long propertyId){
+        return imageDao.getImageListOfOneProperty(propertyId);
     }
 
     public LiveData<Image> getImage(long imageId, long propertyId){

@@ -103,8 +103,12 @@ public class REMViewModel extends ViewModel {
         return imageDataSource.getImage(imageId, propertyId);
     }
 
-    public LiveData<List<Image>> getImageList(){
-        return imageDataSource.getImageList();
+    public LiveData<List<Image>> getImageListAllProperties(){
+        return imageDataSource.getImageListAllProperties();
+    }
+
+    public LiveData<List<Image>> getImageListOneProperty(long propertyId){
+        return imageDataSource.getImageListOneProperty(propertyId);
     }
 
     public void updateImage(Image image){

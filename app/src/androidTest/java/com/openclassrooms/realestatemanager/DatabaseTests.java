@@ -148,7 +148,7 @@ public class DatabaseTests {
 
     @Test
     public void getImageListWhenNoImageInserted() throws InterruptedException {
-        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
         assertEquals(0, imageList.size());
     }
 
@@ -158,10 +158,12 @@ public class DatabaseTests {
         this.database.imageDao().createImage(IMAGE_DEMO_2);
         //TEST
         Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_2, PROPERTY_ID_2));
-        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        List<Image> imageListAllProperties = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
+        List<Image> imageListProperty2 = LiveDataTestUtil.getValue(this.database.imageDao().getImageListOfOneProperty(PROPERTY_ID_2));
         assertTrue(IMAGE_DEMO_2.getImagePath().equals(image.getImagePath())
                 && IMAGE_DEMO_2.getId() == image.getId()
-                && imageList.size() == 2);
+                && imageListAllProperties.size() == 2
+                && imageListProperty2.size() == 1);
     }
 
     @Test
@@ -179,11 +181,11 @@ public class DatabaseTests {
     @Test
     public void insertAndDeleteImage() throws InterruptedException {
         this.database.imageDao().createImage(IMAGE_DEMO_1);
-        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
         assertEquals(1, imageList.size());
         // TEST
         this.database.imageDao().deleteImage(IMAGE_DEMO_1);
-        imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageList());
+        imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
         assertEquals(0, imageList.size());
     }
 }

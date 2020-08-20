@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -12,6 +13,7 @@ import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class AddPropertyActivityViewModel extends ViewModel {
@@ -23,7 +25,11 @@ public class AddPropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<String> mAgentSelected, mDateSelected;
     private MutableLiveData<Long> mAgentIdSelected;
-    private MutableLiveData<LinearLayout> mLinearLayout;
+
+
+
+    private MutableLiveData<Bitmap> mBitmap;
+    private MutableLiveData<List<Bitmap>> mBitmapList;
 
 
 
@@ -56,7 +62,6 @@ public class AddPropertyActivityViewModel extends ViewModel {
         });
     }
 
-
     // -------------------
     public MutableLiveData<String> getAgentSelected(){
         if (mAgentSelected == null) {
@@ -82,18 +87,12 @@ public class AddPropertyActivityViewModel extends ViewModel {
         return mAgentIdSelected;
     }
 
-    public MutableLiveData<LinearLayout> getLinearLayout(){
-        if (mLinearLayout == null){
-            mLinearLayout = new MutableLiveData<>();
+    public MutableLiveData<List<Bitmap>> getBitmapList() {
+        if (mBitmapList == null){
+            mBitmapList = new MutableLiveData<>();
+            mBitmap = new MutableLiveData<>();
         }
-        return mLinearLayout;
-    }
-
-    public MutableLiveData<ImageView> getImagePhotoAdded() {
-        if(mImagePhotoAdded == null){
-            mImagePhotoAdded = new MutableLiveData<>();
-        }
-        return mImagePhotoAdded;
+        return mBitmapList;
     }
 
 }

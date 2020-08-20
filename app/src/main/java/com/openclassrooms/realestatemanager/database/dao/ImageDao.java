@@ -19,7 +19,10 @@ public interface ImageDao {
     void createImage(Image image);
 
     @Query("SELECT * FROM image_table")
-    LiveData<List<Image>> getImageList();
+    LiveData<List<Image>> getImageListAllProperties();
+
+    @Query("SELECT * FROM image_table WHERE propertyId = :propertyId")
+    LiveData<List<Image>> getImageListOfOneProperty(long propertyId);
 
     @Query("SELECT * FROM image_table WHERE propertyId = :propertyId AND id = :imageId" )
     LiveData<Image> getImage(long imageId, long propertyId);

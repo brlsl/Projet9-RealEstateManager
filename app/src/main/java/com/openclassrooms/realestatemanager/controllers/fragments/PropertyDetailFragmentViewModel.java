@@ -40,8 +40,8 @@ public class PropertyDetailFragmentViewModel extends ViewModel {
         return propertyDataSource.getProperty(propertyId, agentId);
     }
 
-    public LiveData<List<Image>> getImageList(){
-        return imageDataSource.getImageList();
+    public LiveData<List<Image>> getImageListOneProperty(long propertyId){
+        return imageDataSource.getImageListOneProperty(propertyId);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -19,6 +20,7 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
     private boolean isTwoPane;
     //private REMViewModel mViewModel;
 
+    PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
 
     // LIFE CYCLE
     @Override
@@ -26,22 +28,28 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        View detailView = findViewById(R.id.detail_container);
 
         // -----------------------
         mFragmentManager = getSupportFragmentManager();
 
-        if (findViewById(R.id.detail_container) != null) {
-            isTwoPane = true;
-        }
-        else{
-            isTwoPane = false;
-        }
+        isTwoPane = findViewById(R.id.detail_container) != null && detailView.getVisibility() == View.VISIBLE;
+
 
         if (savedInstanceState == null) { // add fragment only once
             mFragmentManager.beginTransaction()
                     .add(R.id.container, new PropertiesListFragment())
                     .commit();
         }
+
+        if (isTwoPane){
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container, new PropertiesListFragment())
+                    .replace(R.id.detail_container, mPropertyDetailFragment).hide(mPropertyDetailFragment)
+                    .commit();
+        }
+
+
     }
 
     @Override
@@ -56,13 +64,13 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
 
         if(isTwoPane){
-            this.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.detail_container, fragment)
-                .commit();
+            mFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.detail_container, fragment)
+                    .commit();
         }
         else{
-            this.getSupportFragmentManager()
+            mFragmentManager
                     .beginTransaction()
                     .replace(R.id.container, fragment)
                     .addToBackStack(null)

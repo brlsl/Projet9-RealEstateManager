@@ -1,10 +1,14 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
+import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
+
+import java.io.File;
+import java.util.List;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
@@ -28,6 +36,8 @@ public class PropertyDetailFragment extends BaseFragment {
     // FOR UI
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
             mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewAgentInCharge;
+
+    private ViewFlipper mViewFlipper;
 
     @Nullable
     @Override
@@ -58,7 +68,27 @@ public class PropertyDetailFragment extends BaseFragment {
 
             });
 
+            /*
+            LiveData<List<Image>> imageList = mViewModel.getImageListOneProperty(propertyId);
+
+            imageList.observe(this, images -> {
+                for (int i = 0; i <images.size() ; i++) {
+                    File imgFile = new File(images.get(i).getImagePath());
+
+                    if(imgFile.exists()){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+                        ImageView myImage = view.findViewById(R.id.);
+
+                        myImage.setImageBitmap(myBitmap);
+                    }
+                }
+            });
+
+             */
         }
+
+
 
         return view;
     }
