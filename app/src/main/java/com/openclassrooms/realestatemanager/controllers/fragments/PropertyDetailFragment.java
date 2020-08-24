@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,9 @@ public class PropertyDetailFragment extends BaseFragment {
             long propertyId = bundle.getLong(PROPERTY_ID_KEY);
             long agentId = bundle.getLong(PROPERTY_AGENT_ID_KEY);
 
-            LiveData<Property> propertyDetail = mViewModel.getProperty(agentId, propertyId);
+            System.out.println("Valeur de  property ID = " + propertyId);
+
+            LiveData<Property> propertyDetail = mViewModel.getProperty(propertyId, agentId);
             propertyDetail.observe(this, property ->{
                 mTxtViewCity.setText(property.getCity());
                 mTxtViewAddress.setText(property.getAddress());
@@ -76,6 +79,7 @@ public class PropertyDetailFragment extends BaseFragment {
             LiveData<List<Image>> imageList = mViewModel.getImageListOneProperty(propertyId);
 
             imageList.observe(this, images -> {
+                Log.e("Tag", "Image list: "+ images.size());
                 for (int i = 0; i <images.size() ; i++) {
                     File imgFile = new File(images.get(i).getImagePath());
 
@@ -85,6 +89,7 @@ public class PropertyDetailFragment extends BaseFragment {
                         ImageView myImage = new ImageView(requireContext());
 
                         myImage.setImageBitmap(myBitmap);
+                        myImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                         mViewFlipper.addView(myImage);
                     }

@@ -58,8 +58,8 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
         Bundle bundle = new Bundle();
 
-        bundle.putLong(PROPERTY_ID_KEY, property.getAgentId());
-        bundle.putLong(PROPERTY_AGENT_ID_KEY, property.getId());
+        bundle.putLong(PROPERTY_ID_KEY, property.getId());
+        bundle.putLong(PROPERTY_AGENT_ID_KEY, property.getAgentId());
         fragment.setArguments(bundle);
 
 

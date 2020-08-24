@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -32,6 +33,8 @@ public class AddPropertyActivityViewModel extends ViewModel {
     private MutableLiveData<Agent> mAgent;
 
 
+    private MutableLiveData<List<String>> mPathList;
+
 
     public AddPropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
         this.agentDataRepository = agentDataRepository;
@@ -49,6 +52,9 @@ public class AddPropertyActivityViewModel extends ViewModel {
                 propertyDataRepository.createProperty(property));
     }
 
+    public LiveData<List<Property>> getPropertyList(){
+        return propertyDataRepository.getPropertyList();
+    }
 
     // ---------
     // IMAGE
@@ -84,4 +90,13 @@ public class AddPropertyActivityViewModel extends ViewModel {
         }
         return mBitmapList;
     }
+
+    public MutableLiveData<List<String>> getPathList() {
+        if (mPathList == null){
+            mPathList = new MutableLiveData<>();
+        }
+
+        return mPathList;
+    }
+
 }

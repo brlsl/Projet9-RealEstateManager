@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,7 +56,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     // ----- FOR DATA -----
 
     private static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private static final String WRITE_EXT_STORAGE_PERMS = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private static final String CAMERA_PERMS = Manifest.permission.CAMERA;
     private static final int RC_CHOOSE_PHOTO = 100;
     public static final int RC_TAKE_PHOTO = 200;
@@ -82,6 +82,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private LiveData<Date> mDateSelected;
     private LiveData<List<Bitmap>> bitmapLiveData;
     private LiveData<Agent> mAgent;
+    private LiveData<List<String>> mPathListLiveData;
+
+    List<String> mImagePathList = new ArrayList<>();
 
     // ----- LIFECYCLE -----
 
@@ -96,7 +99,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         configureViews();
 
-        onClickAddPicture();
+        onClickChoosePicture();
         onClickAddProperty();
         onClickTakePicture();
         onClickChooseAgent();
@@ -111,6 +114,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mDateSelected = mViewModel.getDateSelected();
         bitmapLiveData = mViewModel.getBitmapList();
         mAgent = mViewModel.getAgent();
+        mPathListLiveData = mViewModel.getPathList();
 
 
         mAgent.observe(this, agent -> {
@@ -133,12 +137,20 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         bitmapLiveData.observe(this, bitmapList -> {
             mLinearLayout.removeAllViews();
             for (int i = 0; i < bitmapList.size() ; i++) {
+                Log.e(TAG, "Number in bitmap List: " + mBitmapList );
                 mBitmapList = bitmapList;
                 ImageView imageView = new ImageView(this);
                 imageView.setImageBitmap(bitmapList.get(i));
                 mLinearLayout.addView(imageView);
+                Log.e(TAG, "Number in bitmap List: " + mBitmapList );
                 Log.e(TAG, "Number of photo in linearlayout: " + mLinearLayout.getChildCount() );
             }
+        });
+
+        mPathListLiveData.observe(this, strings -> {
+
+            mImagePathList = strings;
+            Log.e(TAG, "Number in path List data: " + mImagePathList.size() );
         });
 
     }
@@ -238,15 +250,14 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 /*
             if (mTxtViewAgent.getText().toString().trim().isEmpty() || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
                     mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
-                    mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || mDateAvailable.toString().isEmpty()
+                    mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || mDateAvailable == null
             )
 */
-            if (mDateAvailable.toString().isEmpty() || mTxtViewAgent.getText().toString().trim().isEmpty())
+            if (mDateAvailable == null || mTxtViewAgent.getText().toString().trim().isEmpty())
             {
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
             }
             else {
-
                 Property propertyAdded = new Property(mAgentId,
                         mCity,
                         mType,
@@ -261,14 +272,28 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         mAgentNameSurname, isAvailable);
                 mViewModel.createProperty(propertyAdded);
 
-                // write image path in DB
-                for (int i = 0; i < mImagePathList.size() ; i++) {
-                    Image image = new Image(propertyAdded.getId(), mImagePathList.get(i));
-                    mViewModel.createImage(image);
+                // wait between property creation and get all properties from database
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
+                mViewModel.getPropertyList().observe(this, properties -> {
+                    long id = properties.get(properties.size() -1).getId();
+
+                    // write image path in DB
+                    for (int i = 0; i < mImagePathList.size() ; i++) {
+                        Image image = new Image(id, mImagePathList.get(i));
+                        mViewModel.createImage(image);
+                        Log.e(TAG,"contenu de la liste: " + mImagePathList.get(i) + " " + id);
+
+                    }
+                });
+
+                Log.e(TAG, "Contenu de Image List: " + mImagePathList);
                 finish();
-                Toast.makeText(AddPropertyActivity.this, "Property added date" + mAgentId +" et" + mAgentNameSurname, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPropertyActivity.this, "Property added date" + mDateAvailable +" et" + mAgentNameSurname, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -281,7 +306,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
 
     @AfterPermissionGranted(RC_CHOOSE_PHOTO)
-    private void onClickAddPicture() {
+    private void onClickChoosePicture() {
         mImgBtnSelectPhoto.setOnClickListener(view ->{
             if (!EasyPermissions.hasPermissions(this, READ_EXT_STORAGE_PERMS))
             {
@@ -297,8 +322,8 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     @AfterPermissionGranted(RC_TAKE_PHOTO)
     private void onClickTakePicture(){
         mImgBtnTakePhoto.setOnClickListener(view ->{
-            if(!EasyPermissions.hasPermissions(this, CAMERA_PERMS, WRITE_EXT_STORAGE_PERMS)){
-                EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS, WRITE_EXT_STORAGE_PERMS);
+            if(!EasyPermissions.hasPermissions(this, CAMERA_PERMS)){
+                EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS);
                 return;
             }
             takePictureIntent();
@@ -308,12 +333,35 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     String takePhotoPath;
     String selectPhotoPath;
-    List<String> mImagePathList = new ArrayList<>();
 
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        takePhotoPath = image.getAbsolutePath();
+        Log.e(TAG, "Photo Path :" + takePhotoPath);
+
+        return image;
+    }
 
     private void takePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+
+
 
             // Create the File where the photo should go
             File photoFile = null;
@@ -327,48 +375,15 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                try {
-                    Uri photoURI = FileProvider.getUriForFile(this,
-                            "com.openclassrooms.realestatemanager.fileprovider",
-                            photoFile);
+                Uri photoUri = FileProvider.getUriForFile(this,
+                        "com.openclassrooms.realestatemanager.fileprovider",
+                        photoFile);
 
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(takePictureIntent, RC_TAKE_PHOTO);
-
-                } catch (Exception e){
-                    Log.e(TAG,"File path exception:" + e);
-                }
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, RC_TAKE_PHOTO);
             }
         }
     }
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        File storageDir;
-        if(Build.VERSION.SDK_INT < 29) {
-             storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        } else
-        {
-            storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        }
-
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        takePhotoPath = image.getAbsolutePath();
-        Log.e(TAG, "Photo Path :" + takePhotoPath);
-
-        mImagePathList.add(takePhotoPath);
-        return image;
-    }
-
-
 
     // ----- ON ACTIVITY RESULT -----
 
@@ -382,11 +397,12 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                     selectPhotoPath = getPath(uri);
                     setPicture(selectPhotoPath); // and add to linear layout
 
-                    mImagePathList.add(selectPhotoPath);
+
 
                     Log.e(TAG, "Selected picture path:" + selectPhotoPath);
 
-                    Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();}
+                    Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
+                }
                 catch (Exception e){
                     Log.e(TAG,"Exception photo choose: "+ e);
                 }
@@ -398,14 +414,38 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
         if(requestCode == RC_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
-                if(Build.VERSION.SDK_INT < 29) {
-                    addPhotoToGallery();
+
+                /*
+                // TODO: ok jusqu'ici, il faut réduire le bitmap, ajouter dans la view et ajouter en db
+                File f = new File(takePhotoPath);
+                Uri contentUri = Uri.fromFile(f);
+                try {
+                    if (Build.VERSION.SDK_INT <= 28) {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                        new ImageSaver(this)
+                                .setFileName("nameTest")
+                                .setDirectoryName("directoryTest")
+                                .save(bitmap);
+
+
+                        //ImageUtils.saveToInternalStorage(bitmap, getApplicationContext());
+                    } else {
+                        ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), contentUri);
+                        Bitmap bitmap = ImageDecoder.decodeBitmap(source);
+                        //ImageUtils.saveToInternalStorage(bitmap, getApplicationContext());
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
                 }
+                */
+
                 setPicture(takePhotoPath);
 
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
 
-            } else {
+
+
+            } else if (resultCode == RESULT_CANCELED){
                 Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
             }
         }
@@ -442,14 +482,19 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
+
         mBitmapList.add(bitmap);
         mViewModel.getBitmapList().setValue(mBitmapList);
+
+        Log.e(TAG, "Bitmap List after add :" +mBitmapList.size() + mBitmapList);
 
         Log.e(TAG, "Image décodée 2");
         //ImageView imageView = new ImageView(this);
 
         //imageView.setImageBitmap(bitmap);
 
+        mImagePathList.add(photoPath);
+        mViewModel.getPathList().setValue(mImagePathList);
 
         Log.e("Tag", "Image set bitmap  ");
         //addPhotoToLinearLayout(imageView);
