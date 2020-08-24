@@ -1,28 +1,28 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.views.ImageSlider.ImageSliderAdapter;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +40,8 @@ public class PropertyDetailFragment extends BaseFragment {
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
             mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewAgentNameSurname;
 
-    private ViewFlipper mViewFlipper;
+    private ViewPager2 mViewPager2;
+    private TabLayout mTabLayout;
 
     @Nullable
     @Override
@@ -76,36 +77,33 @@ public class PropertyDetailFragment extends BaseFragment {
             });
 
 
+
             LiveData<List<Image>> imageList = mViewModel.getImageListOneProperty(propertyId);
 
             imageList.observe(this, images -> {
+                mViewPager2.setAdapter(new ImageSliderAdapter(images, mViewPager2));
                 Log.e("Tag", "Image list: "+ images.size());
-                for (int i = 0; i <images.size() ; i++) {
-                    File imgFile = new File(images.get(i).getImagePath());
 
-                    if(imgFile.exists()){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                        ImageView myImage = new ImageView(requireContext());
-
-                        myImage.setImageBitmap(myBitmap);
-                        myImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                        mViewFlipper.addView(myImage);
+                // method for dots indicator in viewpager2
+                new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy(){
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                     }
-                }
+                }).attach();
+
             });
 
 
+
         }
-
-
 
         return view;
     }
 
     private void configureViews(View view) {
-        mViewFlipper = view.findViewById(R.id.detail_fragment_viewFlipper);
+        mViewPager2 = view.findViewById(R.id.detail_fragment_viewpager2_image_slider);
+        mTabLayout = view.findViewById(R.id.detail_fragment_tab_layout);
 
         mTxtViewCity = view.findViewById(R.id.detail_fragment_property_city);
         mTxtViewAddress = view.findViewById(R.id.detail_fragment_property_address);
