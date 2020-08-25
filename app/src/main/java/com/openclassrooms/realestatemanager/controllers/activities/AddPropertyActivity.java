@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -53,6 +51,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 
 public class AddPropertyActivity extends BaseActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener {
+
     // ----- FOR DATA -----
 
     private static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -269,7 +268,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         mNbrOfBathroom,
                         mDescription,
                         mDateAvailable,
-                        mAgentNameSurname, isAvailable);
+                        mAgentNameSurname,
+                        mImagePathList.get(0),
+                        isAvailable);
                 mViewModel.createProperty(propertyAdded);
 
                 // wait between property creation and get all properties from database
@@ -334,8 +335,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     String takePhotoPath;
     String selectPhotoPath;
 
-
-
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
@@ -359,9 +358,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private void takePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-
-
 
             // Create the File where the photo should go
             File photoFile = null;
@@ -394,7 +390,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             if (resultCode == RESULT_OK && data != null){
                 try{
                     Uri uri = data.getData();
-                    selectPhotoPath = getPath(uri);
+                    selectPhotoPath = getRealPathFromUri(uri);
                     setPicture(selectPhotoPath); // and add to linear layout
 
 
@@ -514,7 +510,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     }
 
     //helper to retrieve the path of an image URI
-    public String getPath(Uri uri) {
+    public String getRealPathFromUri(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 

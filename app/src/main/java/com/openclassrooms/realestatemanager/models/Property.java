@@ -33,6 +33,7 @@ public class Property{
     private String pointsOfInterest;
     private Date dateAvailable;
     private String agentNameSurname;
+    private String imagePath;
     private boolean isAvailable;
 
 
@@ -47,7 +48,7 @@ public class Property{
 
     public Property(long agentId, String city, String type, String address, String price, String surface,
                     String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                    Date dateAvailable, String agentNameSurname, boolean isAvailable) {
+                    Date dateAvailable, String agentNameSurname, String imagePath, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
@@ -60,6 +61,7 @@ public class Property{
         this.description = description;
         this.dateAvailable = dateAvailable;
         this.agentNameSurname = agentNameSurname;
+        this.imagePath = imagePath;
         this.isAvailable = isAvailable;
     }
 
@@ -185,5 +187,13 @@ public class Property{
 
     public void setAgentNameSurname(String agentNameSurname) {
         this.agentNameSurname = agentNameSurname;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

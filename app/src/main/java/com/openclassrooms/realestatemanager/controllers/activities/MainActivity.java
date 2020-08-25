@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -76,5 +77,16 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isTwoPane) {
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        } else
+            super.onBackPressed();
     }
 }

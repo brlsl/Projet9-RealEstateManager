@@ -1,7 +1,8 @@
 package com.openclassrooms.realestatemanager.views.PropertyList;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import com.openclassrooms.realestatemanager.R;
 
 import com.openclassrooms.realestatemanager.models.Property;
 
+import java.io.File;
+
 public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 
     // FOR DATA
@@ -21,7 +24,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 
     // FOR UI
     private TextView mPropertyPrice, mPropertyCity, mPropertyType;
-    private ImageView mPropertyPhoto;
+    private ImageView mPropertyImageView;
 
     public PropertiesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -30,7 +33,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
         mPropertyPrice = itemView.findViewById(R.id.property_price);
         mPropertyCity = itemView.findViewById(R.id.property_city);
         mPropertyType = itemView.findViewById(R.id.property_type);
-        mPropertyPhoto = itemView.findViewById(R.id.property_photo);
+        mPropertyImageView = itemView.findViewById(R.id.properties_list_property_imageview);
     }
 
     public void displayData(final Property property) {
@@ -39,9 +42,21 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
         mPropertyType.setText(property.getType());
 
 
-        Glide.with(mContext)
-                .load(R.drawable.ic_launcher_background)
-                .centerCrop()
-                .into(mPropertyPhoto);
+        File file = new File(property.getImagePath());
+        if (file.exists()) {
+            //Bitmap bitmap = BitmapFactory.decodeFile(property.getImagePath());
+            //mPropertyImageView.setImageBitmap(bitmap);
+
+            Glide.with(mContext)
+                    .load(file)
+                    .centerCrop()
+                    .into(mPropertyImageView);
+        }
+        else {
+            Glide.with(mContext)
+                    .load(R.drawable.ic_launcher_background)
+                    .centerCrop()
+                    .into(mPropertyImageView);
+        }
     }
 }
