@@ -31,7 +31,8 @@
         </provider>
 
         <!--Main Activity -->
-        <activity android:name="com.openclassrooms.realestatemanager.controllers.activities.MainActivity">
+        <activity
+            android:name="com.openclassrooms.realestatemanager.controllers.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

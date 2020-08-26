@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import com.openclassrooms.realestatemanager.R;
@@ -20,8 +22,11 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
     FragmentManager mFragmentManager;
     private boolean isTwoPane;
     //private REMViewModel mViewModel;
-
     PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
+
+    // FOR UI
+    private androidx.appcompat.widget.Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
 
     // LIFE CYCLE
     @Override
@@ -29,6 +34,22 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        configureToolBar();
+        configureDrawerLayout();
+        configureDualPaneLayout(savedInstanceState);
+
+
+    }
+
+    private void configureDrawerLayout() {
+        mDrawerLayout = findViewById(R.id.drawer_layout_main_activity);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    private void configureDualPaneLayout(Bundle savedInstanceState) {
         View detailView = findViewById(R.id.detail_container);
 
         // -----------------------
@@ -49,9 +70,8 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
                     .replace(R.id.detail_container, mPropertyDetailFragment).hide(mPropertyDetailFragment)
                     .commit();
         }
-
-
     }
+
 
     @Override
     public void onItemPropertySelected(Property property) {
@@ -88,5 +108,10 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
             startActivity(a);
         } else
             super.onBackPressed();
+    }
+
+    private void configureToolBar() {
+        this.mToolbar = findViewById(R.id.toolbar_main_activity);
+        setSupportActionBar(mToolbar);
     }
 }

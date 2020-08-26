@@ -76,8 +76,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private LinearLayout mLinearLayout;
     private List<Bitmap> mBitmapList = new ArrayList<>();
 
-    // TODO: utiliser les enumérations pour gérer les différents cas de champs non remplis
-
     private LiveData<Date> mDateSelected;
     private LiveData<List<Bitmap>> bitmapLiveData;
     private LiveData<Agent> mAgent;
@@ -246,13 +244,11 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
             mDescription = mEdtTxtDescription.getText().toString();
 
-/*
+
             if (mTxtViewAgent.getText().toString().trim().isEmpty() || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
                     mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
                     mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || mDateAvailable == null
             )
-*/
-            if (mDateAvailable == null || mTxtViewAgent.getText().toString().trim().isEmpty())
             {
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
             }
