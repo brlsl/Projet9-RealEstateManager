@@ -9,15 +9,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
 import com.openclassrooms.realestatemanager.models.Property;
 
-public class MainActivity extends BaseActivity implements PropertiesListFragment.OnItemPropertyClickListener {
+public class MainActivity extends BaseActivity implements PropertiesListFragment.OnItemPropertyClickListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     // FOR DATA
     public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
@@ -33,7 +36,8 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
     private androidx.appcompat.widget.Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
 
-    // LIFE CYCLE
+    // ------ LIFE CYCLE ------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +45,22 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
         configureToolBar();
         configureDrawerLayout();
+        configureNavigationViewListener();
         configureDualPaneLayout(savedInstanceState);
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu); // make toolbar menu item appear
+    public boolean onCreateOptionsMenu(Menu menu) { // make toolbar menu item appears
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    // ------ CONFIGURATION ------
+
+    private void configureToolBar() {
+        this.mToolbar = findViewById(R.id.toolbar_main_activity);
+        setSupportActionBar(mToolbar);
     }
 
     private void configureDrawerLayout() {
@@ -80,6 +92,14 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
                         .commit();
         }
     }
+
+    private void configureNavigationViewListener() {
+        NavigationView navigationView = findViewById(R.id.navigation_view_main_activity);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+
+    // ------ LISTENERS ------
 
     @Override
     public void onItemPropertySelected(Property property) {
@@ -123,14 +143,9 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
             super.onBackPressed();
     }
 
-    private void configureToolBar() {
-        this.mToolbar = findViewById(R.id.toolbar_main_activity);
-        setSupportActionBar(mToolbar);
-    }
-
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { // toolbar item
         int id = item.getItemId();
         switch (id){
             case R.id.search_property_toolbar:
@@ -140,4 +155,24 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
         return true;
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) { // menu drawer
+        int id = item.getItemId();
+        switch (id){
+            case R.id.activity_main_drawer_loan:
+                Intent loanIntent = new Intent(this, LoanSimulationActivity.class);
+                startActivity(loanIntent);
+                Toast.makeText(this, "Open loan activity", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.activity_main_drawer_settings:
+                Intent SettingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(SettingsIntent);
+                Toast.makeText(this, "Open settings", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);  //close navigation drawer after choice
+        return true;
+    }
+
 }
