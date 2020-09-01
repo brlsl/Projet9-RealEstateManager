@@ -154,7 +154,8 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     private void configureSpinnerType() {
         mTypeSpinner = findViewById(R.id.add_activity_spinner_type);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_type,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.add_property_activity_spinner_type,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTypeSpinner.setAdapter(adapter);
     }
