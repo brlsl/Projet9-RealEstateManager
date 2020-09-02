@@ -1,5 +1,8 @@
 package com.openclassrooms.realestatemanager.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -14,7 +17,7 @@ import java.util.Date;
         childColumns = "agentId"
         ))
 
-public class Property{
+public class Property implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -65,6 +68,36 @@ public class Property{
         this.isAvailable = isAvailable;
     }
 
+
+    protected Property(Parcel in) {
+        id = in.readLong();
+        agentId = in.readLong();
+        type = in.readString();
+        city = in.readString();
+        address = in.readString();
+        price = in.readString();
+        surface = in.readString();
+        numberOfRooms = in.readString();
+        numberOfBedrooms = in.readString();
+        numberOfBathRooms = in.readString();
+        description = in.readString();
+        pointsOfInterest = in.readString();
+        agentNameSurname = in.readString();
+        imagePath = in.readString();
+        isAvailable = in.readByte() != 0;
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     // ----- GETTERS AND SETTERS -----
     public long getId() {
@@ -195,5 +228,29 @@ public class Property{
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeLong(agentId);
+        parcel.writeString(type);
+        parcel.writeString(city);
+        parcel.writeString(address);
+        parcel.writeString(price);
+        parcel.writeString(surface);
+        parcel.writeString(numberOfRooms);
+        parcel.writeString(numberOfBedrooms);
+        parcel.writeString(numberOfBathRooms);
+        parcel.writeString(description);
+        parcel.writeString(pointsOfInterest);
+        parcel.writeString(agentNameSurname);
+        parcel.writeString(imagePath);
+        parcel.writeByte((byte) (isAvailable ? 1 : 0));
     }
 }

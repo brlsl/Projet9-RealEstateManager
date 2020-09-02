@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.REMViewModel;
 
 import com.openclassrooms.realestatemanager.controllers.activities.AddPropertyActivityViewModel;
+import com.openclassrooms.realestatemanager.controllers.activities.EditPropertyActivityViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentDialogFragmentViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragmentViewModel;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
@@ -38,13 +39,17 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new REMViewModel(agentDataSource, propertyDataSource, imageDataSource, executor);
         }
         if (modelClass.isAssignableFrom(AddPropertyActivityViewModel.class)){
-            return (T) new AddPropertyActivityViewModel(agentDataSource, propertyDataSource, imageDataSource, executor);
+            return (T) new AddPropertyActivityViewModel(propertyDataSource, imageDataSource, executor);
         }
         if (modelClass.isAssignableFrom(AddAgentDialogFragmentViewModel.class)){
             return (T) new AddAgentDialogFragmentViewModel(agentDataSource,executor);
         }
         if (modelClass.isAssignableFrom(PropertyDetailFragmentViewModel.class)){
-            return (T) new PropertyDetailFragmentViewModel(agentDataSource, propertyDataSource, imageDataSource, executor);
+            return (T) new PropertyDetailFragmentViewModel( propertyDataSource, imageDataSource);
+        }
+
+        if (modelClass.isAssignableFrom(EditPropertyActivityViewModel.class)){
+            return (T) new EditPropertyActivityViewModel(propertyDataSource, imageDataSource, executor);
         }
 
         throw  new IllegalArgumentException("Unknown ViewModel Class");

@@ -2,7 +2,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
@@ -11,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/editText_number_of_room_add_activity"
+            android:id="@+id/editText_number_of_room_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -22,8 +21,8 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
-            app:layout_constraintStart_toStartOf="@+id/editText_surface_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_surface_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_surface_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_surface_edit_activity" />
 
         <TextView
             android:id="@+id/textView5"
@@ -31,13 +30,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Room(s)"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_number_of_room_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_add_activity"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_number_of_room_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_edit_activity"
             app:layout_constraintVertical_bias="0.406" />
 
         <Spinner
-            android:id="@+id/add_activity_spinner_type"
+            android:id="@+id/edit_activity_spinner_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -46,7 +45,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText_price_add_activity"
+            android:id="@+id/editText_price_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
@@ -60,7 +59,7 @@
             android:textAlignment="viewEnd"
             android:textSize="15dp"
             android:maxLength="10"
-            app:layout_constraintStart_toEndOf="@+id/add_activity_spinner_type"
+            app:layout_constraintStart_toEndOf="@+id/edit_activity_spinner_type"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -70,12 +69,12 @@
             android:layout_marginStart="8dp"
             android:text="€"
             android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_price_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_price_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_price_add_activity" />
+            app:layout_constraintBottom_toBottomOf="@+id/editText_price_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_price_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_price_edit_activity" />
 
         <EditText
-            android:id="@+id/editText_address_add_activity"
+            android:id="@+id/editText_address_edit_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -95,7 +94,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText_city_add_activity"
+            android:id="@+id/editText_city_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -107,11 +106,11 @@
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="@+id/editText_address_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_address_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_address_edit_activity" />
 
         <EditText
-            android:id="@+id/editText_number_of_bedroom_add_activity"
+            android:id="@+id/editText_number_of_bedroom_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -124,8 +123,8 @@
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="@+id/editText_city_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_city_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_city_edit_activity" />
 
         <TextView
             android:id="@+id/textView3"
@@ -134,12 +133,12 @@
             android:layout_marginStart="8dp"
             android:text="Bedroom(s)"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bedroom_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_number_of_bedroom_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_number_of_bedroom_add_activity" />
+            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bedroom_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_number_of_bedroom_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_number_of_bedroom_edit_activity" />
 
         <EditText
-            android:id="@+id/editText_number_of_bathroom_add_activity"
+            android:id="@+id/editText_number_of_bathroom_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -151,8 +150,8 @@
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bedroom_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bedroom_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_edit_activity" />
 
         <TextView
             android:id="@+id/textView4"
@@ -161,13 +160,13 @@
             android:layout_marginStart="8dp"
             android:text="Bathroom(s)"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bathroom_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_number_of_bathroom_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_number_of_bathroom_add_activity"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bathroom_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_number_of_bathroom_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_number_of_bathroom_edit_activity"
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
-            android:id="@+id/editText_surface_add_activity"
+            android:id="@+id/editText_surface_edit_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -179,8 +178,8 @@
             android:textAlignment="viewEnd"
             android:textSize="15dp"
             android:maxLength="5"
-            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bathroom_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bathroom_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bathroom_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bathroom_edit_activity" />
 
         <TextView
             android:id="@+id/textView"
@@ -188,44 +187,44 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="m²"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_surface_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_surface_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_surface_add_activity" />
+            app:layout_constraintBottom_toBottomOf="@+id/editText_surface_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_surface_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_surface_edit_activity" />
 
         <Button
-            android:id="@+id/activity_add_property_button"
+            android:id="@+id/activity_edit_property_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
-            android:text="Add Property"
+            android:text="Edit Property"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
 
         <ImageButton
-            android:id="@+id/button_select_picture_add_activity"
+            android:id="@+id/button_select_picture_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_take_picture_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/button_take_picture_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/button_take_picture_add_activity"
+            app:layout_constraintBottom_toBottomOf="@+id/button_take_picture_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/button_take_picture_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/button_take_picture_edit_activity"
             app:srcCompat="@drawable/ic_picture_from_files" />
 
         <ImageButton
-            android:id="@+id/button_take_picture_add_activity"
+            android:id="@+id/button_take_picture_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_availability_date_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/button_availability_date_edit_activity"
             app:srcCompat="@drawable/ic_take_picture" />
 
         <ImageButton
-            android:id="@+id/choose_agent_button_add_activity"
+            android:id="@+id/choose_agent_button_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -234,13 +233,13 @@
             app:srcCompat="@drawable/ic_agent" />
 
         <TextView
-            android:id="@+id/agent_chosen_add_property_activity"
+            android:id="@+id/agent_chosen_edit_property_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_edit_activity" />
 
         <HorizontalScrollView
             android:id="@+id/horizontal_scroll_view"
@@ -249,14 +248,14 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="2dp"
             android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/activity_add_property_button"
+            app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity">
+            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_edit_activity">
 
             <LinearLayout
-                android:id="@+id/linear_layout_photo_add_activity"
+                android:id="@+id/linear_layout_photo_edit_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
@@ -264,7 +263,7 @@
         </HorizontalScrollView>
 
         <EditText
-            android:id="@+id/editText_description_add_activity"
+            android:id="@+id/editText_description_edit_activity"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginStart="24dp"
@@ -282,19 +281,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/editText_address_edit_activity" />
 
         <TextView
-            android:id="@+id/textview_description_add_activity"
+            android:id="@+id/textview_description_edit_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Description (300/300)"
-            app:layout_constraintBottom_toTopOf="@+id/editText_description_add_activity"
-            app:layout_constraintEnd_toEndOf="@+id/editText_description_add_activity"
-            app:layout_constraintStart_toStartOf="@+id/editText_description_add_activity" />
+            app:layout_constraintBottom_toTopOf="@+id/editText_description_edit_activity"
+            app:layout_constraintEnd_toEndOf="@+id/editText_description_edit_activity"
+            app:layout_constraintStart_toStartOf="@+id/editText_description_edit_activity" />
 
         <ImageButton
-            android:id="@+id/button_availability_date_add_activity"
+            android:id="@+id/button_availability_date_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -303,13 +302,13 @@
             app:srcCompat="@drawable/ic_calendar" />
 
         <TextView
-            android:id="@+id/textView__avaibility_date_add_property_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/textView__avaibility_date_edit_property_activity"
+            android:layout_width="3dp"
+            android:layout_height="13dp"
             android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/button_availability_date_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/button_availability_date_add_activity" />
+            app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/button_availability_date_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/button_availability_date_edit_activity" />
 
         <TextView
             android:id="@+id/textView6"
@@ -317,10 +316,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Choose agent"
-            app:layout_constraintEnd_toEndOf="@+id/choose_agent_button_add_activity"
+            app:layout_constraintEnd_toEndOf="@+id/choose_agent_button_edit_activity"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/choose_agent_button_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_description_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/choose_agent_button_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_description_edit_activity" />
 
         <TextView
             android:id="@+id/textView8"
@@ -328,8 +327,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
             android:text="Choose  availability date"
-            app:layout_constraintStart_toStartOf="@+id/button_availability_date_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/agent_chosen_add_property_activity" />
+            app:layout_constraintStart_toStartOf="@+id/button_availability_date_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/agent_chosen_edit_property_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

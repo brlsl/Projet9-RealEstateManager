@@ -12,14 +12,6 @@
         <item>Manor</item>
         <item>Loft</item>
     </string-array>
-    
-    <string-array name="loan_simulation_activity_spinner_periodicity_due">
-        <item> </item>
-        <item>Monthly </item>
-        <item>Three-Monthly </item>
-        <item>Bi-annual </item>
-        <item>Annual </item>
-    </string-array>
 
     <string name="title_activity_settings">SettingsActivity</string>
 

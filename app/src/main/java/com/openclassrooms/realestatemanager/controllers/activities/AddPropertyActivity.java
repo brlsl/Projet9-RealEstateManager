@@ -59,12 +59,14 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private static final int RC_CHOOSE_PHOTO = 100;
     public static final int RC_TAKE_PHOTO = 200;
     private static final String TAG = "AddPropertyActivity";
+    private List<Bitmap> mBitmapList = new ArrayList<>();
+    private List<String> mImagePathList = new ArrayList<>();
 
     // ----- FOR UI -----
     private Button mAddPropertyButton;
     private Spinner mTypeSpinner;
-    private String  mType, mCity, mPrice, mAddress, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
-    private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface,mEdtTxtNbrRoom,mEdtTxtNbrBedroom,mEdtTxtNbrBathroom, mEdtTxtDescription;
+    private String  mType, mPrice, mAddress, mCity, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
+    private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface, mEdtTxtNbrRoom, mEdtTxtNbrBedroom, mEdtTxtNbrBathroom, mEdtTxtDescription;
     private ImageButton mImgBtnSelectPhoto, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailabilityDate;
     private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable;
     private Date mDateAvailable;
@@ -74,14 +76,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
     private String mAgentNameSurname;
 
     private LinearLayout mLinearLayout;
-    private List<Bitmap> mBitmapList = new ArrayList<>();
 
-    private LiveData<Date> mDateSelected;
-    private LiveData<List<Bitmap>> bitmapLiveData;
-    private LiveData<Agent> mAgent;
-    private LiveData<List<String>> mPathListLiveData;
-
-    List<String> mImagePathList = new ArrayList<>();
 
     // ----- LIFECYCLE -----
 
@@ -105,14 +100,11 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     // ----- CONFIGURATION METHODS -----
 
-
     private void configureLiveData() {
-
-        mDateSelected = mViewModel.getDateSelected();
-        bitmapLiveData = mViewModel.getBitmapList();
-        mAgent = mViewModel.getAgent();
-        mPathListLiveData = mViewModel.getPathList();
-
+        LiveData<Date> mDateSelected = mAddPropertyViewModel.getDateSelected();
+        LiveData<List<Bitmap>> bitmapLiveData = mAddPropertyViewModel.getBitmapList();
+        LiveData<Agent> mAgent = mAddPropertyViewModel.getAgent();
+        LiveData<List<String>> mPathListLiveData = mAddPropertyViewModel.getPathList();
 
         mAgent.observe(this, agent -> {
             mAgentNameSurname = agent.getName()+" "+agent.getSurname();
@@ -121,7 +113,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             Log.e(TAG, "LiveData name value: " +mAgentNameSurname + ", TextView name value: "+ mTxtViewAgent.getText().toString() + ", agent Id value: " + mAgentId );
         });
 
-
         mDateSelected.observe(this, date -> {
             mDateAvailable = date;
             String pattern = "dd/MM/yyyy";
@@ -129,7 +120,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             mTxtViewDateAvailable.setText(sdf.format(mDateAvailable));
             Log.e(TAG, "LiveData date value: " + mDateAvailable + " LiveData TextView date value: "+ mTxtViewDateAvailable.getText().toString());
         });
-
 
         bitmapLiveData.observe(this, bitmapList -> {
             mLinearLayout.removeAllViews();
@@ -145,11 +135,9 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         });
 
         mPathListLiveData.observe(this, strings -> {
-
             mImagePathList = strings;
             Log.e(TAG, "Number in path List data: " + mImagePathList.size() );
         });
-
     }
 
     private void configureSpinnerType() {
@@ -175,14 +163,14 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         mImgBtnSelectPhoto = findViewById(R.id.button_select_picture_add_activity);
         mImgBtnTakePhoto = findViewById(R.id.button_take_picture_add_activity);
         mImgBtnChooseAgent = findViewById(R.id.choose_agent_button_add_activity);
-        mImgBtnAvailabilityDate = findViewById(R.id.button_avaibility_date_add_activity);
+        mImgBtnAvailabilityDate = findViewById(R.id.button_availability_date_add_activity);
 
         mTxtViewAgent = findViewById(R.id.agent_chosen_add_property_activity);
         mTxtViewDescriptionTitle = findViewById(R.id.textview_description_add_activity);
         mTxtViewDateAvailable = findViewById(R.id.textView__avaibility_date_add_property_activity);
         mLinearLayout = findViewById(R.id.linear_layout_photo_add_activity);
 
-        descriptionTitleLengthListener();
+        descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
         setDatePickerDialog();
     }
 
@@ -197,32 +185,13 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             DatePickerDialog datePickerDialog = new DatePickerDialog(AddPropertyActivity.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                    mViewModel.getDateSelected().setValue(calendar.getTime());
-
-
+                    mAddPropertyViewModel.getDateSelected().setValue(calendar.getTime());
                 }
             }, currentYear, currentMonth, currentDayOfMonth);
             datePickerDialog.show();
         });
     }
 
-    private void descriptionTitleLengthListener() {
-        mEdtTxtDescription.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int maxLength = 300;
-                mTxtViewDescriptionTitle.setText("Description (" + (maxLength - mEdtTxtDescription.length()) + "/300)" );
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-    }
 
     // ----- ON CLICK LISTENER -----
 
@@ -246,9 +215,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
             mDescription = mEdtTxtDescription.getText().toString();
 
 
-            if (mTxtViewAgent.getText().toString().trim().isEmpty() || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
-                    mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
-                    mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || mDateAvailable == null
+            if (!isPossibleToSave()
             )
             {
                 Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
@@ -268,22 +235,22 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                         mAgentNameSurname,
                         mImagePathList.get(0),
                         isAvailable);
-                mViewModel.createProperty(propertyAdded);
+                mAddPropertyViewModel.createProperty(propertyAdded);
 
                 // wait between property creation and get all properties from database
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                mViewModel.getPropertyList().observe(this, properties -> {
+                mAddPropertyViewModel.getPropertyList().observe(this, properties -> {
                     long id = properties.get(properties.size() -1).getId();
 
                     // write image path in DB
                     for (int i = 0; i < mImagePathList.size() ; i++) {
                         Image image = new Image(id, mImagePathList.get(i));
-                        mViewModel.createImage(image);
+                        mAddPropertyViewModel.createImage(image);
                         Log.e(TAG,"contenu de la liste: " + mImagePathList.get(i) + " " + id);
 
                     }
@@ -299,7 +266,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
 
     @Override
     public void onClickAgentItem(Agent agent) {
-        mViewModel.getAgent().setValue(agent);
+        mAddPropertyViewModel.getAgent().setValue(agent);
     }
 
 
@@ -390,8 +357,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                     selectPhotoPath = getRealPathFromUri(uri);
                     setPicture(selectPhotoPath); // and add to linear layout
 
-
-
                     Log.e(TAG, "Selected picture path:" + selectPhotoPath);
 
                     Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
@@ -408,30 +373,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         if(requestCode == RC_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
 
-                /*
-                // TODO: ok jusqu'ici, il faut réduire le bitmap, ajouter dans la view et ajouter en db
-                File f = new File(takePhotoPath);
-                Uri contentUri = Uri.fromFile(f);
-                try {
-                    if (Build.VERSION.SDK_INT <= 28) {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        new ImageSaver(this)
-                                .setFileName("nameTest")
-                                .setDirectoryName("directoryTest")
-                                .save(bitmap);
-
-
-                        //ImageUtils.saveToInternalStorage(bitmap, getApplicationContext());
-                    } else {
-                        ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), contentUri);
-                        Bitmap bitmap = ImageDecoder.decodeBitmap(source);
-                        //ImageUtils.saveToInternalStorage(bitmap, getApplicationContext());
-                    }
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-                */
-
                 setPicture(takePhotoPath);
 
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
@@ -442,14 +383,6 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
                 Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void addPhotoToGallery() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(takePhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
     }
 
     private void setPicture(String photoPath) {
@@ -477,7 +410,7 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 
         mBitmapList.add(bitmap);
-        mViewModel.getBitmapList().setValue(mBitmapList);
+        mAddPropertyViewModel.getBitmapList().setValue(mBitmapList);
 
         Log.e(TAG, "Bitmap List after add :" +mBitmapList.size() + mBitmapList);
 
@@ -487,23 +420,12 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         //imageView.setImageBitmap(bitmap);
 
         mImagePathList.add(photoPath);
-        mViewModel.getPathList().setValue(mImagePathList);
+        mAddPropertyViewModel.getPathList().setValue(mImagePathList);
 
         Log.e("Tag", "Image set bitmap  ");
         //addPhotoToLinearLayout(imageView);
 
         Log.e("Tag", "Image décodée ");
-    }
-
-    private void addPhotoToLinearLayout(ImageView imageView) {
-
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setPadding(5,5,5,5);
-
-
-        mLinearLayout.addView(imageView);
-
-        Log.e(TAG, "Number of picture in Linear Layout : " + mLinearLayout.getChildCount());
     }
 
     //helper to retrieve the path of an image URI
@@ -523,4 +445,13 @@ public class AddPropertyActivity extends BaseActivity implements AddAgentBottomS
         }
     }
 
+    private boolean isPossibleToSave(){
+        if (mTxtViewAgent.getText().toString().trim().isEmpty() || mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
+                mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
+                mImagePathList.size() == 0 || mTxtViewAgent.getText().length() == 0 || mDateAvailable == null) {
+            return false;
+        }
+        else return true;
+
+    }
 }

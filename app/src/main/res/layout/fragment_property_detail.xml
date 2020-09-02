@@ -136,7 +136,7 @@
             android:layout_marginEnd="32dp"
             android:text="avaibility date"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/floatingActionButton" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_fragment_fab_edit_property" />
 
         <TextView
             android:id="@+id/detail_fragment_property_agent_name_surname"
@@ -160,12 +160,11 @@
             app:layout_constraintTop_toBottomOf="@+id/detail_fragment_property_price" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/detail_fragment_fab_edit_property"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:clickable="true"
-
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="@+id/detail_fragment_viewpager2_image_slider"
             app:layout_constraintEnd_toEndOf="parent"

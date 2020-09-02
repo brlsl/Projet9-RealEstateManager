@@ -21,7 +21,6 @@ import java.util.concurrent.Executor;
 
 public class AddPropertyActivityViewModel extends ViewModel {
 
-    private final AgentDataRepository agentDataRepository;
     private final PropertyDataRepository propertyDataRepository;
     private final ImageDataRepository imageDataRepository;
     private final Executor executor; // permits to realize asynchronous requests
@@ -36,8 +35,8 @@ public class AddPropertyActivityViewModel extends ViewModel {
     private MutableLiveData<List<String>> mPathList;
 
 
-    public AddPropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
-        this.agentDataRepository = agentDataRepository;
+    public AddPropertyActivityViewModel(PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
+
         this.propertyDataRepository = propertyDataRepository;
         this.imageDataRepository = imageDataRepository;
         this.executor = executor;

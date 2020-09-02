@@ -1,6 +1,10 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -10,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 
-import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 
@@ -18,8 +21,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    REMViewModel mViewModelGlobal;
-    AddPropertyActivityViewModel mViewModel;
+    AddPropertyActivityViewModel mAddPropertyViewModel;
+    EditPropertyActivityViewModel mEditPropertyViewModel;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -32,9 +35,33 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
-        mViewModelGlobal = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
 
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(AddPropertyActivityViewModel.class);
+        mAddPropertyViewModel = new ViewModelProvider(this, viewModelFactory).get(AddPropertyActivityViewModel.class);
+        mEditPropertyViewModel = new ViewModelProvider(this, viewModelFactory).get(EditPropertyActivityViewModel.class);
+
+    }
+
+
+
+    void descriptionTitleLengthListener(EditText editText, TextView textView) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int maxLength = 300;
+                textView.setText("Description (" + (maxLength - editText.length()) + "/300)");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
 }

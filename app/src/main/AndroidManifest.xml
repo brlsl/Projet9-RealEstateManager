@@ -17,8 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
+        <activity android:name=".controllers.activities.EditPropertyActivity"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -28,27 +27,19 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-        <!-- Main Activity -->
+        </provider> <!-- Main Activity -->
         <activity android:name=".controllers.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Add Property Activity -->
-        <activity android:name=".controllers.activities.AddPropertyActivity" />
-
-        <!--Loan Activity -->
-        <activity android:name=".controllers.activities.LoanSimulationActivity" />
-
-        <!-- Settings Activity -->
+        </activity> <!-- Add Property Activity -->
+        <activity android:name=".controllers.activities.AddPropertyActivity" /> <!-- Loan Activity -->
+        <activity android:name=".controllers.activities.LoanSimulationActivity" /> <!-- Settings Activity -->
         <activity
             android:name=".controllers.activities.SettingsActivity"
-            android:label="@string/title_activity_settings"/>
-
+            android:label="@string/title_activity_settings" />
     </application>
 
 </manifest>
