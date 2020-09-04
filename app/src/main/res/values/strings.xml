@@ -5,7 +5,7 @@
     <string name="settings">Settings</string>
     <string name="loan_simulation">Loan simulation</string>
 
-    <string-array name="add_property_activity_spinner_type">
+    <string-array name="property_activity_spinner_type">
         <item> </item>
         <item>House</item>
         <item>Apartment</item>

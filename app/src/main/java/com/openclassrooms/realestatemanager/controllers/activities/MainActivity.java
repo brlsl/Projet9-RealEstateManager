@@ -9,8 +9,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
@@ -19,14 +21,17 @@ import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesList
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
 import com.openclassrooms.realestatemanager.models.Property;
 
-public class MainActivity extends BaseActivity implements PropertiesListFragment.OnItemPropertyClickListener,
+import java.util.Objects;
+
+public class MainActivity extends AppCompatActivity implements PropertiesListFragment.OnItemPropertyClickListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     // FOR DATA
     public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
     public static final String PROPERTY_AGENT_ID_KEY = "PROPERTY_AGENT_ID_KEY";
+    private static final String DETAIL_FRAGMENT_KEY = "DETAIL_FRAGMENT_KEY";
 
-    FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;
     private boolean isTwoPane;
     //private REMViewModel mViewModel;
     PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
@@ -89,6 +94,8 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
         if (isTwoPane){
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, new PropertiesListFragment())
+                        .replace(R.id.detail_container, new Fragment())
+                        .addToBackStack(null)
                         .commit();
         }
     }
@@ -103,32 +110,37 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
 
     @Override
     public void onItemPropertySelected(Property property) {
-        if (mPropertyId != property.getId() || mAgentId != property.getAgentId()) { // prevent fragment recreation
+        Bundle bundle = new Bundle();
+        PropertyDetailFragment detailFragment = new PropertyDetailFragment();
+        if (!isTwoPane){
+            bundle.putLong(PROPERTY_ID_KEY, property.getId());
+            bundle.putLong(PROPERTY_AGENT_ID_KEY, property.getAgentId());
+            detailFragment.setArguments(bundle);
+
+            mFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, detailFragment, DETAIL_FRAGMENT_KEY)
+                    .addToBackStack(null)
+                    .commit();
+        }
+        else if (mPropertyId != property.getId() || mAgentId != property.getAgentId()) { // prevent fragment recreation
             mPropertyId = property.getId();
             mAgentId = property.getAgentId();
 
-            Bundle bundle = new Bundle();
             bundle.putLong(PROPERTY_ID_KEY, mPropertyId);
             bundle.putLong(PROPERTY_AGENT_ID_KEY, mAgentId);
-            PropertyDetailFragment fragment = new PropertyDetailFragment();
-            fragment.setArguments(bundle);
+            detailFragment.setArguments(bundle);
 
-            if(isTwoPane){
-                if (fragment != mPropertyDetailFragment) {
-                    mPropertyDetailFragment = fragment;
+                if (detailFragment != mPropertyDetailFragment) {
+                    mPropertyDetailFragment = detailFragment;
                     mFragmentManager
                             .beginTransaction()
-                            .replace(R.id.detail_container, fragment)
+                            .replace(R.id.detail_container, detailFragment)
+                            .addToBackStack(null)
                             .commit();
                 }
-            }
-            else{
-                mFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.container, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+
+
         }
     }
 
@@ -139,7 +151,13 @@ public class MainActivity extends BaseActivity implements PropertiesListFragment
             a.addCategory(Intent.CATEGORY_HOME);
             a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(a);
-        } else
+        }
+        // after multiple rotation, fragment are added to backstack, if > 1 and detail not visible, finish activity in portrait
+       else if (mFragmentManager.getBackStackEntryCount() > 1 &&
+                !Objects.requireNonNull(mFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_KEY)).isVisible()){
+            finish();
+        }
+        else
             super.onBackPressed();
     }
 

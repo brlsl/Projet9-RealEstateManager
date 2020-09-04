@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class AddPropertyActivityViewModel extends ViewModel {
+public class BasePropertyActivityViewModel extends ViewModel {
 
     private final PropertyDataRepository propertyDataRepository;
     private final ImageDataRepository imageDataRepository;
@@ -34,8 +34,10 @@ public class AddPropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<List<String>> mPathList;
 
+    private MutableLiveData<String> mAgentNameSurname;
 
-    public AddPropertyActivityViewModel(PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
+
+    public BasePropertyActivityViewModel(PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
 
         this.propertyDataRepository = propertyDataRepository;
         this.imageDataRepository = imageDataRepository;
@@ -55,6 +57,15 @@ public class AddPropertyActivityViewModel extends ViewModel {
         return propertyDataRepository.getPropertyList();
     }
 
+    public LiveData<Property> getProperty(long propertyId, long agentId){
+        return propertyDataRepository.getProperty(propertyId, agentId);
+    }
+
+    public void updateProperty(Property property){
+        executor.execute(()->
+                propertyDataRepository.updateProperty(property));
+    }
+
     // ---------
     // IMAGE
     // ---------
@@ -63,6 +74,15 @@ public class AddPropertyActivityViewModel extends ViewModel {
         executor.execute(() -> {
             imageDataRepository.createImage(image);
         });
+    }
+
+    public LiveData<List<Image>> getImageListOneProperty(long propertyId){
+        return imageDataRepository.getImageListOneProperty(propertyId);
+    }
+
+    public void updateImage(Image image){
+        executor.execute(() ->
+                imageDataRepository.updateImage(image));
     }
 
     // -------------------
@@ -98,4 +118,11 @@ public class AddPropertyActivityViewModel extends ViewModel {
         return mPathList;
     }
 
+
+    public MutableLiveData<String> getAgentNameSurname(){
+        if (mAgentNameSurname == null) {
+            mAgentNameSurname = new MutableLiveData<>();
+        }
+        return mAgentNameSurname;
+    }
 }

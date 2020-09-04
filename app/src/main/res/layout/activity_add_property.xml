@@ -205,7 +205,7 @@
             app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
 
         <ImageButton
-            android:id="@+id/button_select_picture_add_activity"
+            android:id="@+id/button_choose_picture_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -237,15 +237,17 @@
             android:id="@+id/agent_chosen_add_property_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/choose_agent_button_add_activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/choose_agent_button_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <HorizontalScrollView
             android:id="@+id/horizontal_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="2dp"
             android:background="@color/colorPrimary"
@@ -258,8 +260,9 @@
             <LinearLayout
                 android:id="@+id/linear_layout_photo_add_activity"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:layout_height="200dp"
+                android:orientation="horizontal"
+                />
 
         </HorizontalScrollView>
 
@@ -303,10 +306,10 @@
             app:srcCompat="@drawable/ic_calendar" />
 
         <TextView
-            android:id="@+id/textView__avaibility_date_add_property_activity"
+            android:id="@+id/textView_availability_date_add_property_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_add_activity"
             app:layout_constraintStart_toEndOf="@+id/button_availability_date_add_activity"
             app:layout_constraintTop_toTopOf="@+id/button_availability_date_add_activity" />
@@ -329,7 +332,7 @@
             android:layout_marginTop="24dp"
             android:text="Choose  availability date"
             app:layout_constraintStart_toStartOf="@+id/button_availability_date_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/agent_chosen_add_property_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

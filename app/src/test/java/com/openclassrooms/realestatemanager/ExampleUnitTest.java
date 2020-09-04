@@ -1,6 +1,6 @@
 package com.openclassrooms.realestatemanager;
 
-import com.openclassrooms.realestatemanager.utils.Utils;
+import com.openclassrooms.realestatemanager.utils.ExamUtils;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void convertEuroToDollar_isCorrect(){
-        float oneDollar = Utils.convertEuroToDollar(100);
+        float oneDollar = ExamUtils.convertEuroToDollar(100);
         assertEquals(123, oneDollar, 0.0);
     }
 }

@@ -204,7 +204,7 @@
             app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
 
         <ImageButton
-            android:id="@+id/button_select_picture_edit_activity"
+            android:id="@+id/button_choose_picture_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -302,9 +302,9 @@
             app:srcCompat="@drawable/ic_calendar" />
 
         <TextView
-            android:id="@+id/textView__avaibility_date_edit_property_activity"
-            android:layout_width="3dp"
-            android:layout_height="13dp"
+            android:id="@+id/textView_availability_date_edit_property_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_edit_activity"
             app:layout_constraintStart_toEndOf="@+id/button_availability_date_edit_activity"

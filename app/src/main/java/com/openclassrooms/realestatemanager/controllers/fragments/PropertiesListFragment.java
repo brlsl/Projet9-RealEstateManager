@@ -106,4 +106,9 @@ public class PropertiesListFragment extends BaseFragment {
                     }
                 });
     }
+
+    public void onBackPressed(){
+        requireActivity().finish();
+    }
+
 }
