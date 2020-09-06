@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,26 +55,28 @@ public class EditPropertyActivity extends BasePropertyActivity {
     private LiveData<Agent> liveDataAgent;
     private LiveData<Property> liveDataProperty;
     private LiveData<List<Image>> liveDataImageList;
-    private Date mDateAvailable;
+    private Date mDateAvailable, mDateSold;
     private ArrayAdapter<CharSequence> mTypeArrayAdapter, mIsAvailableArrayAdapter;
     private static final String TAG = "EditPropertyActivity";
     private List<Bitmap> mBitmapList = new ArrayList<>();
     private List<String> mImagePathList = new ArrayList<>();
 
-    private long mAgentId;
+    private long mAgentId, mPropertyId;
     private boolean isAvailable = true;
+    private String  mType, mPrice, mAddress, mCity, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
     private String mAgentNameSurname;
 
     // FOR UI
 
-    private EditText mEdtTxtPrice, mEdtTxtAddress, mEdtTxtCity, mEdtTxtSurface, mEdtTxtNbrOfRoom, mEdtTxtNbrOfBedroom,
-            mEdtTxtNbrOfBathroom, mEdtTxtDescription;
+    private EditText mEdtTxtPrice, mEdtTxtAddress, mEdtTxtCity, mEdtTxtSurface, mEdtTxtNbrRoom, mEdtTxtNbrBedroom,
+            mEdtTxtNbrBathroom, mEdtTxtDescription;
     private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewAvailableDate, mTxtViewSoldDate, mTxtViewChooseDateTitle;
     private Spinner mTypeSpinner, mIsAvailableSpinner;
 
     private LinearLayout mLinearLayout;
 
     private ImageButton mImgBtnChoosePicture, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailableDate, mImgBtnSoldDate;
+    private Button mEditPropertyButton;
 
 
     @Override
@@ -104,6 +106,8 @@ public class EditPropertyActivity extends BasePropertyActivity {
         if (bundle != null) {
             long propertyId = bundle.getLong(PROPERTY_ID_KEY);
             long agentId = bundle.getLong(PROPERTY_AGENT_ID_KEY);
+
+            mPropertyId = propertyId;
 
             System.out.println("EditActivity propertyId: " + propertyId + " + agentId :" + agentId);
 
@@ -141,9 +145,9 @@ public class EditPropertyActivity extends BasePropertyActivity {
                     mEdtTxtAddress.setText(property.getAddress());
                     mEdtTxtCity.setText(property.getCity());
                     mEdtTxtSurface.setText(property.getSurface());
-                    mEdtTxtNbrOfRoom.setText(property.getNumberOfRooms());
-                    mEdtTxtNbrOfBedroom.setText(property.getNumberOfBedrooms());
-                    mEdtTxtNbrOfBathroom.setText(property.getNumberOfBathRooms());
+                    mEdtTxtNbrRoom.setText(property.getNumberOfRooms());
+                    mEdtTxtNbrBedroom.setText(property.getNumberOfBedrooms());
+                    mEdtTxtNbrBathroom.setText(property.getNumberOfBathRooms());
                     mEdtTxtDescription.setText(property.getDescription());
 
                     mPropertyActivityViewModel.getDateAvailable().setValue(property.getDateAvailable());
@@ -249,6 +253,27 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
 
     private void onClickEditProperty() {
+        mEditPropertyButton.setOnClickListener(view -> {
+            if (!isPossibleToEditProperty()){
+                Toast.makeText(EditPropertyActivity.this, "Missing a value", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(EditPropertyActivity.this, "Property Edited", Toast.LENGTH_SHORT).show();
+
+                mPropertyActivityViewModel.updateProperty(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
+                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mImagePathList.get(0), isAvailable, mPropertyId);
+
+
+                mPropertyActivityViewModel.deleteImagesOneProperty(mPropertyId);
+                for (int i = 0; i <mImagePathList.size() ; i++) {
+                    Image image = new Image(mPropertyId, mImagePathList.get(i));
+                    mPropertyActivityViewModel.createImage(image);
+                }
+                finish();
+            }
+
+        });
+
 
     }
 
@@ -266,6 +291,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
         });
 
         dateSoldLiveData.observe(this, date -> {
+            mDateSold = date;
             mTxtViewSoldDate.setText(Utils.formatDateToString(date));
             if (mDateAvailable.after(date)){
                 mTxtViewSoldDate.setText("");
@@ -322,9 +348,9 @@ public class EditPropertyActivity extends BasePropertyActivity {
         mEdtTxtAddress = findViewById(R.id.editText_address_edit_activity);
         mEdtTxtCity = findViewById(R.id.editText_city_edit_activity);
         mEdtTxtSurface = findViewById(R.id.editText_surface_edit_activity);
-        mEdtTxtNbrOfRoom = findViewById(R.id.editText_number_of_room_edit_activity);
-        mEdtTxtNbrOfBedroom = findViewById(R.id.editText_number_of_bedroom_edit_activity);
-        mEdtTxtNbrOfBathroom = findViewById(R.id.editText_number_of_bathroom_edit_activity);
+        mEdtTxtNbrRoom = findViewById(R.id.editText_number_of_room_edit_activity);
+        mEdtTxtNbrBedroom = findViewById(R.id.editText_number_of_bedroom_edit_activity);
+        mEdtTxtNbrBathroom = findViewById(R.id.editText_number_of_bathroom_edit_activity);
         mEdtTxtDescription = findViewById(R.id.editText_description_edit_activity);
 
         mTxtViewDescriptionTitle = findViewById(R.id.textview_description_edit_activity);
@@ -338,6 +364,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
         mImgBtnChooseAgent = findViewById(R.id.image_button_choose_agent_edit_activity);
         mImgBtnAvailableDate = findViewById(R.id.image_button_availability_date_edit_activity);
         mImgBtnSoldDate = findViewById(R.id.imageButton_sold_date_edit_activity);
+        mEditPropertyButton = findViewById(R.id.activity_edit_property_button);
 
         mLinearLayout = findViewById(R.id.linear_layout_photo_edit_activity);
 
@@ -419,6 +446,37 @@ public class EditPropertyActivity extends BasePropertyActivity {
                 Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    private boolean isDateSaved(){
+        switch (mIsAvailableSpinner.getSelectedItemPosition()){
+            case 0:
+                return mTxtViewAvailableDate.getText().length() != 0;
+
+            case 1:
+                return mTxtViewSoldDate.getText().length() != 0;
+        }
+        return false;
+    }
+
+    private boolean isPossibleToEditProperty(){
+        mType = mTypeSpinner.getSelectedItem().toString();
+        mPrice = mEdtTxtPrice.getText().toString().trim();
+        mAddress = mEdtTxtAddress.getText().toString().trim();
+        mCity = mEdtTxtCity.getText().toString().trim();
+        mSurface = mEdtTxtSurface.getText().toString().trim();
+        mNbrOfRoom = mEdtTxtNbrRoom.getText().toString().trim();
+        mNbrOfBedroom = mEdtTxtNbrBedroom.getText().toString().trim();
+        mNbrOfBathroom = mEdtTxtNbrBathroom.getText().toString().trim();
+        mDescription = mEdtTxtDescription.getText().toString();
+
+        if (mType.isEmpty() || mPrice.isEmpty() || mAddress.isEmpty() || mCity.isEmpty() ||
+                mSurface.isEmpty() || mNbrOfRoom.isEmpty() || mNbrOfBedroom.isEmpty() || mNbrOfBathroom.isEmpty() || mDescription.isEmpty() ||
+                mBitmapList.size() == 0 || mTxtViewAgent.getText().length() == 0  || !isDateSaved()) {
+            return false;
+        }
+        else return true;
     }
 
 

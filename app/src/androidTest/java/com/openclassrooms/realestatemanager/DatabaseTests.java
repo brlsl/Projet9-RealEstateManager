@@ -128,12 +128,14 @@ public class DatabaseTests {
                 && propertyList.size() == 2);
 
     }
-
+/*
     @Test
     public void insertAndUpdateProperty() throws InterruptedException{
         this.database.agentDao().createAgent(AGENT_DEMO_1);
         this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_2);
         Property property = LiveDataTestUtil.getValue(database.propertyDao().getProperty(PROPERTY_ID_1, AGENT_ID_1));
+        Property property2 = LiveDataTestUtil.getValue(database.propertyDao().getProperty(PROPERTY_ID_2, AGENT_ID_1));
         property.setCity("Marseille");
         property.setPrice("789");
         // TEST
@@ -143,6 +145,27 @@ public class DatabaseTests {
                 && propertyList.get(0).getCity().equals("Marseille")
                 && propertyList.get(0).getPrice().equals("789"));
     }
+
+ */
+
+    @Test
+    public void insertAndUpdateProperty() throws InterruptedException{
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
+
+        List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());;
+        assertTrue( propertyList.size() == 1
+                && propertyList.get(0).getCity().equals("Paris")
+                && propertyList.get(0).getPrice().equals("123"));
+        //TEST
+        this.database.propertyDao().updatePropertyTest("St-Louis", "444" , PROPERTY_ID_1);
+        propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
+        assertTrue( propertyList.size() == 1
+                && propertyList.get(0).getCity().equals("St-Louis")
+                && propertyList.get(0).getPrice().equals("444"));
+
+    }
+
 
     // ------ IMAGE TESTS -----
 
@@ -159,33 +182,36 @@ public class DatabaseTests {
         //TEST
         Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_2, PROPERTY_ID_2));
         List<Image> imageListAllProperties = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
-        List<Image> imageListProperty2 = LiveDataTestUtil.getValue(this.database.imageDao().getImageListOfOneProperty(PROPERTY_ID_2));
+        List<Image> imageListProperty = LiveDataTestUtil.getValue(this.database.imageDao().getImageListOfOneProperty(PROPERTY_ID_2));
         assertTrue(IMAGE_DEMO_2.getImagePath().equals(image.getImagePath())
                 && IMAGE_DEMO_2.getId() == image.getId()
                 && imageListAllProperties.size() == 2
-                && imageListProperty2.size() == 1);
+                && imageListProperty.size() == 1);
     }
 
     @Test
     public void insertAndUpdateImage() throws InterruptedException {
         this.database.imageDao().createImage(IMAGE_DEMO_1);
         Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
-        image.setImagePath("storage/pathUpdated");
+        image.setImagePath("storage/originalPath");
         // TEST
-        this.database.imageDao().updateImage(image);
+        this.database.imageDao().updateImage("storage/updatedPath", IMAGE_ID_1);
         Image imageUpdated = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
-        assertTrue(imageUpdated.getId() == image.getId()
-                && imageUpdated.getImagePath().equals(image.getImagePath()));
+        assertTrue(imageUpdated.getId() == IMAGE_ID_1
+                && imageUpdated.getImagePath().equals("storage/updatedPath"));
     }
 
     @Test
     public void insertAndDeleteImage() throws InterruptedException {
         this.database.imageDao().createImage(IMAGE_DEMO_1);
+        this.database.imageDao().createImage(IMAGE_DEMO_2);
+        Image image = new Image(3, PROPERTY_ID_1, IMAGE_PATH_1);
+        this.database.imageDao().createImage(image);
         List<Image> imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
-        assertEquals(1, imageList.size());
+        assertEquals(3, imageList.size());
         // TEST
-        this.database.imageDao().deleteImage(IMAGE_DEMO_1);
+        this.database.imageDao().deleteImagesOneProperty(PROPERTY_ID_1);
         imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
-        assertEquals(0, imageList.size());
+        assertEquals(1, imageList.size());
     }
 }

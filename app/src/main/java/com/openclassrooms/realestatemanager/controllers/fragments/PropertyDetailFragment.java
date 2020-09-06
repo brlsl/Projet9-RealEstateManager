@@ -62,7 +62,7 @@ public class PropertyDetailFragment extends BaseFragment {
 
             onClickEditProperty(propertyId,agentId);
 
-            System.out.println("Valeur de  property ID = " + propertyId);
+            System.out.println("Valeur de  property ID = " + propertyId + "Valeur de agentId = " + agentId);
 
             LiveData<Property> propertyDetail = mViewModel.getProperty(propertyId, agentId);
             propertyDetail.observe(this, property ->{

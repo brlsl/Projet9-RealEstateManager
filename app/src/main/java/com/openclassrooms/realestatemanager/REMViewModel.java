@@ -83,10 +83,13 @@ public class REMViewModel extends ViewModel {
         return propertyDataSource.getPropertyList();
     }
 
+    /*
     public void updateProperty(Property property){
         executor.execute(()->
                 propertyDataSource.updateProperty(property));
     }
+
+     */
 
 
     // ---------
@@ -111,13 +114,5 @@ public class REMViewModel extends ViewModel {
         return imageDataSource.getImageListOneProperty(propertyId);
     }
 
-    public void updateImage(Image image){
-        executor.execute(() ->
-                imageDataSource.updateImage(image));
-    }
 
-    public void deleteImage(Image image){
-        executor.execute(() ->
-                imageDataSource.deleteImage(image));
-    }
 }

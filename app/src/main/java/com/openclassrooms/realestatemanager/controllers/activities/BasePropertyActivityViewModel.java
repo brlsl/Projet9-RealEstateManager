@@ -71,9 +71,13 @@ public class BasePropertyActivityViewModel extends ViewModel {
         return propertyDataRepository.getProperty(propertyId, agentId);
     }
 
-    public void updateProperty(Property property){
+    public void updateProperty(long agentId, String city, String type, String address, String price, String surface,
+                               String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
+                               Date dateAvailable, Date dateSold, String agentNameSurname, String imagePath, boolean isAvailable,
+                               long propertyId){
         executor.execute(()->
-                propertyDataRepository.updateProperty(property));
+                propertyDataRepository.updateProperty(agentId, city, type, address, price, surface, numberOfRooms, numberOfBedrooms, numberOfBathRooms,
+                        description, dateAvailable, dateSold, agentNameSurname, imagePath, isAvailable, propertyId));
     }
 
     // ---------
@@ -90,9 +94,14 @@ public class BasePropertyActivityViewModel extends ViewModel {
         return imageDataRepository.getImageListOneProperty(propertyId);
     }
 
-    public void updateImage(Image image){
+    public void updateImage(String imagePath, long imageId){
         executor.execute(() ->
-                imageDataRepository.updateImage(image));
+                imageDataRepository.updateImage(imagePath, imageId));
+    }
+
+    public void deleteImagesOneProperty(long propertyId){
+        executor.execute(() ->
+                imageDataRepository.deleteImagesOneProperty(propertyId));
     }
 
     // -------------------

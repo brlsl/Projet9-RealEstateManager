@@ -27,10 +27,10 @@ public interface ImageDao {
     @Query("SELECT * FROM image_table WHERE propertyId = :propertyId AND id = :imageId" )
     LiveData<Image> getImage(long imageId, long propertyId);
 
-    @Update
-    void updateImage(Image image);
+    @Query("UPDATE image_table SET imagePath = :imagePath  WHERE id=:imageId")
+    int updateImage(String imagePath, long imageId);
 
-    @Delete
-    void deleteImage(Image image);
+    @Query("DELETE FROM image_table WHERE propertyId =:propertyId")
+    int deleteImagesOneProperty(long propertyId);
 
 }

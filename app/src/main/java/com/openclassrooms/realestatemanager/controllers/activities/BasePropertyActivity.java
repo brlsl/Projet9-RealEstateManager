@@ -117,9 +117,10 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
                     calendar.set(Calendar.MONTH, month);
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     viewModel.getDateAvailable().setValue(calendar.getTime());
-                    if (calendar.getTime().after(viewModel.getDateSold().getValue())){
+                    // avoid a sold date before available date
+                    if (viewModel.getDateSold().getValue() != null && calendar.getTime().after(viewModel.getDateSold().getValue())){
                         viewModel.getDateSold().setValue(calendar.getTime());
-                    };
+                    }
                 }
             }, currentYear, currentMonth, currentDayOfMonth);
             datePickerDialog.show();

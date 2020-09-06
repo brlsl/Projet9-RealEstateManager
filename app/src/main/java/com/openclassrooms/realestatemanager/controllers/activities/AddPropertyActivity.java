@@ -229,14 +229,14 @@ public class AddPropertyActivity extends BasePropertyActivity {
                     e.printStackTrace();
                 }
 
-                mPropertyActivityViewModel.getPropertyList().observe(this, properties -> {
-                    long id = properties.get(properties.size() -1).getId();
+                mPropertyActivityViewModel.getPropertyList().observe(AddPropertyActivity.this, properties -> {
+                    long propertyId = properties.get(properties.size() -1).getId();
 
                     // write image path in DB
                     for (int i = 0; i < mImagePathList.size() ; i++) {
-                        Image image = new Image(id, mImagePathList.get(i));
+                        Image image = new Image(propertyId, mImagePathList.get(i));
                         mPropertyActivityViewModel.createImage(image);
-                        Log.e(TAG,"contenu de la liste: " + mImagePathList.get(i) + " " + id);
+                        Log.e(TAG,"contenu de la liste: " + mImagePathList.get(i) + " " + propertyId);
 
                     }
                 });
@@ -385,6 +385,5 @@ public class AddPropertyActivity extends BasePropertyActivity {
             return false;
         }
         else return true;
-
     }
 }
