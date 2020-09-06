@@ -10,6 +10,87 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <Spinner
+            android:id="@+id/add_activity_spinner_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText_price_add_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="8"
+            android:hint="Price "
+            android:inputType="number"
+            android:maxLength="10"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/add_activity_spinner_type"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="€"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_price_add_activity"
+            app:layout_constraintStart_toEndOf="@+id/editText_price_add_activity"
+            app:layout_constraintTop_toTopOf="@+id/editText_price_add_activity" />
+
+
+        <EditText
+            android:id="@+id/editText_address_add_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="104dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="8"
+            android:hint="Address"
+            android:inputType="textNoSuggestions"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <EditText
+            android:id="@+id/editText_city_add_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="8"
+            android:hint="City"
+            android:inputType="textNoSuggestions"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="@+id/editText_address_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
+
+
         <EditText
             android:id="@+id/editText_number_of_room_add_activity"
             android:layout_width="wrap_content"
@@ -36,79 +117,9 @@
             app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_add_activity"
             app:layout_constraintVertical_bias="0.406" />
 
-        <Spinner
-            android:id="@+id/add_activity_spinner_type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editText_price_add_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Price "
-            android:inputType="number"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textAlignment="viewEnd"
-            android:textSize="15dp"
-            android:maxLength="10"
-            app:layout_constraintStart_toEndOf="@+id/add_activity_spinner_type"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="€"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_price_add_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_price_add_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_price_add_activity" />
 
-        <EditText
-            android:id="@+id/editText_address_add_activity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="104dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Address"
-            android:inputType="textNoSuggestions"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textAlignment="viewEnd"
-            android:textSize="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editText_city_add_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="City"
-            android:inputType="textNoSuggestions"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textAlignment="viewEnd"
-            android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="@+id/editText_address_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
 
         <EditText
             android:id="@+id/editText_number_of_bedroom_add_activity"
@@ -120,12 +131,11 @@
             android:inputType="number"
             android:maxLength="2"
             android:paddingStart="5dp"
-
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
             android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="@+id/editText_city_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_number_of_room_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room_add_activity" />
 
         <TextView
             android:id="@+id/textView3"
@@ -170,17 +180,18 @@
             android:id="@+id/editText_surface_add_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="80dp"
             android:background="@drawable/edit_text_border"
             android:hint="Surface "
             android:inputType="number"
+            android:maxLength="5"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
             android:textSize="15dp"
-            android:maxLength="5"
-            app:layout_constraintStart_toStartOf="@+id/editText_number_of_bathroom_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bathroom_add_activity" />
+            app:layout_constraintStart_toStartOf="@+id/editText_city_add_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity" />
 
         <TextView
             android:id="@+id/textView"
@@ -230,7 +241,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/textView_choose_agent_edit_property_activity"
             app:srcCompat="@drawable/ic_agent" />
 
         <TextView
@@ -242,7 +253,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/choose_agent_button_add_activity"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_choose_agent_edit_property_activity" />
 
         <HorizontalScrollView
             android:id="@+id/horizontal_scroll_view"
@@ -302,20 +313,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/textView_availability_date_edit_activity"
             app:srcCompat="@drawable/ic_calendar" />
 
         <TextView
             android:id="@+id/textView_availability_date_add_property_activity"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_add_activity"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_availability_date_add_activity"
             app:layout_constraintTop_toTopOf="@+id/button_availability_date_add_activity" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/textView_choose_agent_edit_property_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -326,11 +339,11 @@
             app:layout_constraintTop_toBottomOf="@+id/editText_description_add_activity" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/textView_availability_date_edit_activity"
             android:layout_width="155dp"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
-            android:text="Choose  availability date"
+            android:text="Choose availability date"
             app:layout_constraintStart_toStartOf="@+id/button_availability_date_add_activity"
             app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity" />
 

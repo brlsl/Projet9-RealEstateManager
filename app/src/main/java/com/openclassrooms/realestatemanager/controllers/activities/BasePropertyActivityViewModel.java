@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,11 +19,13 @@ import java.util.concurrent.Executor;
 
 public class BasePropertyActivityViewModel extends ViewModel {
 
+    private final AgentDataRepository agentDataRepository;
     private final PropertyDataRepository propertyDataRepository;
     private final ImageDataRepository imageDataRepository;
     private final Executor executor; // permits to realize asynchronous requests
 
-    private MutableLiveData<Date> mDateSelected;
+    private MutableLiveData<Date> mDateAvailable;
+    private MutableLiveData<Date> mDateSold;
 
     private MutableLiveData<List<Bitmap>> mBitmapList;
 
@@ -37,11 +37,21 @@ public class BasePropertyActivityViewModel extends ViewModel {
     private MutableLiveData<String> mAgentNameSurname;
 
 
-    public BasePropertyActivityViewModel(PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
-
+    public BasePropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
+        this.agentDataRepository = agentDataRepository;
         this.propertyDataRepository = propertyDataRepository;
         this.imageDataRepository = imageDataRepository;
         this.executor = executor;
+    }
+
+
+
+    // ------
+    // AGENT
+    // ------
+
+    public LiveData<Agent> getAgent(long id){
+        return agentDataRepository.getAgent(id);
     }
 
     // ---------
@@ -87,7 +97,7 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     // -------------------
 
-    public MutableLiveData<Agent> getAgent(){
+    public MutableLiveData<Agent> getAgentMutableLiveData(){
         if (mAgent == null) {
             mAgent = new MutableLiveData<>();
         }
@@ -95,11 +105,11 @@ public class BasePropertyActivityViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<Date> getDateSelected(){
-        if (mDateSelected == null) {
-            mDateSelected = new MutableLiveData<>();
+    public MutableLiveData<Date> getDateAvailable(){
+        if (mDateAvailable == null) {
+            mDateAvailable = new MutableLiveData<>();
         }
-        return mDateSelected;
+        return mDateAvailable;
     }
 
 
@@ -124,5 +134,12 @@ public class BasePropertyActivityViewModel extends ViewModel {
             mAgentNameSurname = new MutableLiveData<>();
         }
         return mAgentNameSurname;
+    }
+
+    public MutableLiveData<Date> getDateSold() {
+        if (mDateSold == null) {
+            mDateSold = new MutableLiveData<>();
+        }
+        return mDateSold;
     }
 }

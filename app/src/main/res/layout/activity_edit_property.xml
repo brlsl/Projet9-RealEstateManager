@@ -2,12 +2,56 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/edit_activity_spinner_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+            android:id="@+id/editText_price_edit_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="8"
+            android:hint="Price "
+            android:inputType="number"
+            android:maxLength="10"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/currency"
+            app:layout_constraintStart_toEndOf="@+id/edit_activity_spinner_type"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="€"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_price_edit_activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editText_price_edit_activity" />
+
 
         <EditText
             android:id="@+id/editText_number_of_room_edit_activity"
@@ -35,43 +79,8 @@
             app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_edit_activity"
             app:layout_constraintVertical_bias="0.406" />
 
-        <Spinner
-            android:id="@+id/edit_activity_spinner_type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editText_price_edit_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="8"
-            android:hint="Price "
-            android:inputType="number"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textAlignment="viewEnd"
-            android:textSize="15dp"
-            android:maxLength="10"
-            app:layout_constraintStart_toEndOf="@+id/edit_activity_spinner_type"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="€"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_price_edit_activity"
-            app:layout_constraintStart_toEndOf="@+id/editText_price_edit_activity"
-            app:layout_constraintTop_toTopOf="@+id/editText_price_edit_activity" />
 
         <EditText
             android:id="@+id/editText_address_edit_activity"
@@ -119,7 +128,6 @@
             android:inputType="number"
             android:maxLength="2"
             android:paddingStart="5dp"
-
             android:paddingEnd="5dp"
             android:textAlignment="viewEnd"
             android:textSize="15dp"
@@ -191,76 +199,46 @@
             app:layout_constraintStart_toEndOf="@+id/editText_surface_edit_activity"
             app:layout_constraintTop_toTopOf="@+id/editText_surface_edit_activity" />
 
-        <Button
-            android:id="@+id/activity_edit_property_button"
+
+        <TextView
+            android:id="@+id/textView_choose_agent_edit_property_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:text="Edit Property"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
+            android:layout_marginTop="16dp"
+            android:text="Choose agent"
+            app:layout_constraintEnd_toEndOf="@+id/image_button_choose_agent_edit_activity"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/image_button_choose_agent_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/editText_description_edit_activity" />
 
         <ImageButton
-            android:id="@+id/button_choose_picture_edit_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_take_picture_edit_activity"
-            app:layout_constraintStart_toEndOf="@+id/button_take_picture_edit_activity"
-            app:layout_constraintTop_toTopOf="@+id/button_take_picture_edit_activity"
-            app:srcCompat="@drawable/ic_picture_from_files" />
-
-        <ImageButton
-            android:id="@+id/button_take_picture_edit_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_availability_date_edit_activity"
-            app:srcCompat="@drawable/ic_take_picture" />
-
-        <ImageButton
-            android:id="@+id/choose_agent_button_edit_activity"
+            android:id="@+id/image_button_choose_agent_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/textView_choose_agent_edit_property_activity"
             app:srcCompat="@drawable/ic_agent" />
 
         <TextView
             android:id="@+id/agent_chosen_edit_property_activity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_edit_activity" />
-
-        <HorizontalScrollView
-            android:id="@+id/horizontal_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="2dp"
-            android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/image_button_choose_agent_edit_activity"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/image_button_choose_agent_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/textView_choose_agent_edit_property_activity" />
+
+        <Spinner
+            android:id="@+id/spinner_availability_edit_property_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_edit_activity">
-
-            <LinearLayout
-                android:id="@+id/linear_layout_photo_edit_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-
-        </HorizontalScrollView>
+            app:layout_constraintTop_toBottomOf="@+id/image_button_choose_agent_edit_activity" />
 
         <EditText
             android:id="@+id/editText_description_edit_activity"
@@ -292,43 +270,122 @@
             app:layout_constraintEnd_toEndOf="@+id/editText_description_edit_activity"
             app:layout_constraintStart_toStartOf="@+id/editText_description_edit_activity" />
 
+        <TextView
+            android:id="@+id/textView_availability_date_edit_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:text="Choose availability date"
+            app:layout_constraintStart_toStartOf="@+id/image_button_availability_date_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_availability_edit_property_activity" />
+
         <ImageButton
-            android:id="@+id/button_availability_date_edit_activity"
+            android:id="@+id/image_button_availability_date_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/textView_availability_date_edit_activity"
             app:srcCompat="@drawable/ic_calendar" />
 
         <TextView
             android:id="@+id/textView_availability_date_edit_property_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/image_button_availability_date_edit_activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_button_availability_date_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/image_button_availability_date_edit_activity" />
+
+
+        <TextView
+            android:id="@+id/textView_choose_sold_date_edit_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:text="Choose sold date"
+            app:layout_constraintStart_toStartOf="@+id/image_button_availability_date_edit_activity"
+            app:layout_constraintTop_toBottomOf="@+id/image_button_availability_date_edit_activity" />
+
+        <ImageButton
+            android:id="@+id/imageButton_sold_date_edit_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_choose_sold_date_edit_activity"
+            app:srcCompat="@drawable/ic_calendar" />
+
+        <TextView
+            android:id="@+id/textView_sold_date_edit_property_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/imageButton_sold_date_edit_activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageButton_sold_date_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/imageButton_sold_date_edit_activity" />
+
+
+        <ImageButton
+            android:id="@+id/image_button_take_picture_edit_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton_sold_date_edit_activity"
+            app:srcCompat="@drawable/ic_take_picture" />
+
+        <ImageButton
+            android:id="@+id/image_button_choose_picture_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_edit_activity"
-            app:layout_constraintStart_toEndOf="@+id/button_availability_date_edit_activity"
-            app:layout_constraintTop_toTopOf="@+id/button_availability_date_edit_activity" />
+            app:layout_constraintBottom_toBottomOf="@+id/image_button_take_picture_edit_activity"
+            app:layout_constraintStart_toEndOf="@+id/image_button_take_picture_edit_activity"
+            app:layout_constraintTop_toTopOf="@+id/image_button_take_picture_edit_activity"
+            app:srcCompat="@drawable/ic_picture_from_files" />
 
-        <TextView
-            android:id="@+id/textView6"
+        <HorizontalScrollView
+            android:id="@+id/horizontal_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="2dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_button_take_picture_edit_activity">
+
+            <LinearLayout
+                android:id="@+id/linear_layout_photo_edit_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/activity_edit_property_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Choose agent"
-            app:layout_constraintEnd_toEndOf="@+id/choose_agent_button_edit_activity"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/choose_agent_button_edit_activity"
-            app:layout_constraintTop_toBottomOf="@+id/editText_description_edit_activity" />
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:text="Edit Property"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="155dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="24dp"
-            android:text="Choose  availability date"
-            app:layout_constraintStart_toStartOf="@+id/button_availability_date_edit_activity"
-            app:layout_constraintTop_toBottomOf="@+id/agent_chosen_edit_property_activity" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

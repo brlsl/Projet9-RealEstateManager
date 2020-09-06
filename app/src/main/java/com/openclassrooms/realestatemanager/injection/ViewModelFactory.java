@@ -37,7 +37,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new REMViewModel(agentDataSource, propertyDataSource, imageDataSource, executor);
         }
         if (modelClass.isAssignableFrom(BasePropertyActivityViewModel.class)){
-            return (T) new BasePropertyActivityViewModel(propertyDataSource, imageDataSource, executor);
+            return (T) new BasePropertyActivityViewModel(agentDataSource,propertyDataSource, imageDataSource, executor);
         }
         if (modelClass.isAssignableFrom(AddAgentDialogFragmentViewModel.class)){
             return (T) new AddAgentDialogFragmentViewModel(agentDataSource,executor);

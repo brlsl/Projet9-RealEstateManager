@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -42,20 +41,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public abstract class BasePropertyActivity extends AppCompatActivity {
+public abstract class BasePropertyActivity extends AppCompatActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener{
 
     // ----- FOR DATA -----
 
     BasePropertyActivityViewModel mPropertyActivityViewModel;
-    private static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
-
-    private static final String CAMERA_PERMS = Manifest.permission.CAMERA;
+    static final String READ_EXT_STORAGE_PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
+    static final String CAMERA_PERMS = Manifest.permission.CAMERA;
     static final int RC_CHOOSE_PHOTO = 100;
-    public static final int RC_TAKE_PHOTO = 200;
-    private static final String TAG = "TAG";
+    static final int RC_TAKE_PHOTO = 200;
+    private static final String TAG = "BasePropertyActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,33 +101,8 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
         });
     }
 
-    @AfterPermissionGranted(RC_CHOOSE_PHOTO)
-    void onClickChoosePicture(ImageButton imageButton) {
-        imageButton.setOnClickListener(view ->{
-            if (!EasyPermissions.hasPermissions(this, READ_EXT_STORAGE_PERMS))
-            {
-                EasyPermissions.requestPermissions(this,"Real Estate Manager needs to access your photo storage",RC_CHOOSE_PHOTO, READ_EXT_STORAGE_PERMS);
-                return;
-            }
-            // Intent for Selection Image Activity
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RC_CHOOSE_PHOTO);
-        });
-    }
 
-    @AfterPermissionGranted(RC_TAKE_PHOTO)
-    void onClickTakePicture(ImageButton imageButton){
-        imageButton.setOnClickListener(view ->{
-            if(!EasyPermissions.hasPermissions(this, CAMERA_PERMS)){
-                EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS);
-                return;
-            }
-            takePictureIntent();
-        });
-
-    }
-
-    void onClickDatePicker(ImageButton imageButton, BasePropertyActivityViewModel viewModel){
+    void onClickAvailableDatePicker(ImageButton imageButton, BasePropertyActivityViewModel viewModel){
         imageButton.setOnClickListener(view -> {
             int currentYear, currentMonth, currentDayOfMonth ;
             Calendar calendar = Calendar.getInstance();
@@ -144,7 +116,10 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    viewModel.getDateSelected().setValue(calendar.getTime());
+                    viewModel.getDateAvailable().setValue(calendar.getTime());
+                    if (calendar.getTime().after(viewModel.getDateSold().getValue())){
+                        viewModel.getDateSold().setValue(calendar.getTime());
+                    };
                 }
             }, currentYear, currentMonth, currentDayOfMonth);
             datePickerDialog.show();
@@ -153,7 +128,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
 
     // PHOTO METHODS
 
-    private void takePictureIntent() {
+    void takePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
