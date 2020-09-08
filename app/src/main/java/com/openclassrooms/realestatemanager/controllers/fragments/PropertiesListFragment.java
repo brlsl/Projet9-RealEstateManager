@@ -48,7 +48,6 @@ public class PropertiesListFragment extends BaseFragment {
 
     // LIFECYCLE
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -78,6 +77,8 @@ public class PropertiesListFragment extends BaseFragment {
         return view;
     }
 
+    // ------ CONFIGURATION METHODS ------
+
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(requireActivity());
         mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(REMViewModel.class);
@@ -88,7 +89,6 @@ public class PropertiesListFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new PropertiesAdapter(mPropertiesList);
         mRecyclerView.setAdapter(mAdapter);
-
 
         // observe Room database changes(add, update) and updates it in rv
         mViewModel.getPropertyList().observe(this, propertyList -> {
@@ -106,9 +106,4 @@ public class PropertiesListFragment extends BaseFragment {
                     }
                 });
     }
-
-    public void onBackPressed(){
-        requireActivity().finish();
-    }
-
 }

@@ -44,7 +44,6 @@ public class LoanSimulationActivity extends AppCompatActivity {
 
     // ------ METHODS CONFIGURATION ------
 
-
     private void configureViews() {
         mConstraintLayout = findViewById(R.id.loan_activity_constraint);
         mRadioGroup = findViewById(R.id.loan_activity_radioGroup_simulation_type);

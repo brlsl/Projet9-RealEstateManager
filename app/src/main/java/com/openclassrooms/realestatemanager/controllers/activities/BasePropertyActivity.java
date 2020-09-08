@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -132,7 +133,6 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
     void takePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -155,8 +155,8 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         }
     }
 
-    String takePhotoPath;
-    String selectPhotoPath;
+    String mTakenPhotoPath;
+    String mSelectPhotoPath;
 
     File createImageFile() throws IOException {
         // Create an image file name
@@ -172,14 +172,14 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        takePhotoPath = image.getAbsolutePath();
-        Log.e(TAG, "Photo Path :" + takePhotoPath);
+        mTakenPhotoPath = image.getAbsolutePath();
+        Log.e(TAG, "Photo Path :" + mTakenPhotoPath);
 
         return image;
     }
 
 
-    void createFileFromBitmap(File destinationFile, Bitmap bitmap) throws IOException {
+    void createBitmapAtFilePath(File destinationFile, Bitmap bitmap) throws IOException {
         //create a file to write bitmap data
         //destinationFile.createNewFile();
 
@@ -195,7 +195,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         fos.close();
     }
 
-    void setPictureFromPath(String photoPath, List<Bitmap> bitmapList, List<String> imagePathList) {
+    void setPictureFromPath(String photoPath, List<Bitmap> bitmapList, List<String> imagePathList) throws IOException {
         // Get the dimensions of the View
         int targetW = 400;
         int targetH = 400;
@@ -218,6 +218,15 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
+
+        // create an internal bitmap copy in case picture is moved or deleted
+        Bitmap bitmapCopy = Bitmap.createBitmap(bitmap);
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File selectedImgFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), imageFileName);
+
+        createBitmapAtFilePath(selectedImgFile, bitmapCopy);
 
         bitmapList.add(bitmap);
         mPropertyActivityViewModel.getBitmapList().setValue(bitmapList);
@@ -245,6 +254,15 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         else{
             return uri.getPath();
         }
+    }
+
+    Bitmap resizeBitmapForLinearLayout(Bitmap bitmap, LinearLayout linearLayout){
+        //resize original bitmap for linear layout
+        float aspectRatio = bitmap.getWidth() / (float) bitmap.getHeight();
+        int height = linearLayout.getHeight();
+        int width = Math.round(height * aspectRatio);
+
+        return Bitmap.createScaledBitmap(bitmap, width, height,false);
     }
 
 }

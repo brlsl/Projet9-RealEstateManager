@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.views.PropertyList;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +40,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
         mPropertyType.setText(property.getType());
 
 
-        File file = new File(property.getImagePath());
+        File file = new File(property.getMainImagePath());
         if (file.exists()) {
             //Bitmap bitmap = BitmapFactory.decodeFile(property.getImagePath());
             //mPropertyImageView.setImageBitmap(bitmap);

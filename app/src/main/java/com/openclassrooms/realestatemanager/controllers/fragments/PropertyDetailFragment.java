@@ -87,7 +87,7 @@ public class PropertyDetailFragment extends BaseFragment {
 
             imageList.observe(this, images -> {
                 mViewPager2.setAdapter(new ImageSliderAdapter(images, mViewPager2));
-                Log.e("Tag", "Image list: "+ images.size());
+                Log.e("PropertyDetailFragment", "Image list: "+ images.size());
 
                 // method for dots indicator in viewpager2
                 new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy(){

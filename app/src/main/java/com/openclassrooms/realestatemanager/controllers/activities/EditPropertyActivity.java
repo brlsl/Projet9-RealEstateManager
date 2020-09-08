@@ -49,17 +49,11 @@ import static com.openclassrooms.realestatemanager.controllers.activities.MainAc
 
 public class EditPropertyActivity extends BasePropertyActivity {
 
-
-    // FOR DATA
-    private Property mProperty;
-    private LiveData<Agent> liveDataAgent;
-    private LiveData<Property> liveDataProperty;
-    private LiveData<List<Image>> liveDataImageList;
     private Date mDateAvailable, mDateSold;
-    private ArrayAdapter<CharSequence> mTypeArrayAdapter, mIsAvailableArrayAdapter;
+    private ArrayAdapter<CharSequence> mTypeArrayAdapter;
     private static final String TAG = "EditPropertyActivity";
     private List<Bitmap> mBitmapList = new ArrayList<>();
-    private List<String> mImagePathList = new ArrayList<>();
+    private List<String> mImagePathList = new ArrayList<>(), mPointsOfInterest = new ArrayList<>();
 
     private long mAgentId, mPropertyId;
     private boolean isAvailable = true;
@@ -88,7 +82,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
         configureLiveData();
         descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
         configureSpinnerType();
-        configureSpinnerIsAvailable();
+        configureSpinnerPropertyStatus();
 
         onClickTakePicture();
         onClickChoosePicture();
@@ -97,7 +91,6 @@ public class EditPropertyActivity extends BasePropertyActivity {
         onClickSoldDatePicker();
 
         onSelectedStatusPropertySpinner();
-
 
         onClickEditProperty();
 
@@ -112,7 +105,8 @@ public class EditPropertyActivity extends BasePropertyActivity {
             System.out.println("EditActivity propertyId: " + propertyId + " + agentId :" + agentId);
 
             if (savedInstanceState == null){ //get data from database once and if screen rotation, don't fetch data again
-                liveDataAgent = mPropertyActivityViewModel.getAgent(agentId);
+                // FOR DATA
+                LiveData<Agent> liveDataAgent = mPropertyActivityViewModel.getAgent(agentId);
 
                 liveDataAgent.observe(this, agent -> {
                     mPropertyActivityViewModel.getAgentMutableLiveData().setValue(agent);
@@ -120,7 +114,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
                     mTxtViewAgent.setText(mAgentNameSurname);
                 });
 
-                liveDataProperty = mPropertyActivityViewModel.getProperty(propertyId, agentId);
+                LiveData<Property> liveDataProperty = mPropertyActivityViewModel.getProperty(propertyId, agentId);
                 liveDataProperty.observe(this, property -> {
 
                     for (int i = 0; i < mTypeArrayAdapter.getCount() ; i++) {
@@ -155,20 +149,22 @@ public class EditPropertyActivity extends BasePropertyActivity {
                     //mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));
                     //mTxtViewAgent.setText(property.getAgentNameSurname());
 
-                    mProperty = property;
 
                     System.out.println("TEST onCreate :" + property.getDateAvailable().toString());
                 });
 
-                liveDataImageList = mPropertyActivityViewModel.getImageListOneProperty(propertyId);
+                LiveData<List<Image>> liveDataImageList = mPropertyActivityViewModel.getImageListOneProperty(propertyId);
                 liveDataImageList.observe(this, imageList -> {
                     for (int i = 0; i <imageList.size() ; i++) {
-                        setPictureFromPath(imageList.get(i).getImagePath(), mBitmapList, mImagePathList);
+                        try {
+                            setPictureFromPath(imageList.get(i).getImagePath(), mBitmapList, mImagePathList);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
         }
-
     }
 
     private void onClickSoldDatePicker(){
@@ -248,7 +244,6 @@ public class EditPropertyActivity extends BasePropertyActivity {
             }
             takePictureIntent();
         });
-
     }
 
 
@@ -261,8 +256,8 @@ public class EditPropertyActivity extends BasePropertyActivity {
                 Toast.makeText(EditPropertyActivity.this, "Property Edited", Toast.LENGTH_SHORT).show();
 
                 mPropertyActivityViewModel.updateProperty(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
-                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mImagePathList.get(0), isAvailable, mPropertyId);
-
+                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterest,
+                        mImagePathList.get(0), isAvailable, mPropertyId);
 
                 mPropertyActivityViewModel.deleteImagesOneProperty(mPropertyId);
                 for (int i = 0; i <mImagePathList.size() ; i++) {
@@ -334,14 +329,13 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
     }
 
-    private void configureSpinnerIsAvailable() {
+    private void configureSpinnerPropertyStatus() {
         mIsAvailableSpinner = findViewById(R.id.spinner_availability_edit_property_activity);
-        mIsAvailableArrayAdapter = ArrayAdapter.createFromResource(this, R.array.property_activity_array_is_available,
+        ArrayAdapter<CharSequence> propertyStatusArrayAdapter = ArrayAdapter.createFromResource(this, R.array.property_activity_array_is_available,
                 android.R.layout.simple_spinner_item);
-        mIsAvailableArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mIsAvailableSpinner.setAdapter(mIsAvailableArrayAdapter);
+        propertyStatusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mIsAvailableSpinner.setAdapter(propertyStatusArrayAdapter);
     }
-
 
     private void configureViews() {
         mEdtTxtPrice = findViewById(R.id.editText_price_edit_activity);
@@ -378,48 +372,34 @@ public class EditPropertyActivity extends BasePropertyActivity {
         if (requestCode == RC_CHOOSE_PHOTO){
             if (resultCode == RESULT_OK && data != null && data.getData() != null){
                 try {
-
-                    if (Build.VERSION.SDK_INT >= 29) {
+                    if (Build.VERSION.SDK_INT >= 28) {
                         try {
                             ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), data.getData());
-                            Bitmap bitmap = ImageDecoder.decodeBitmap(source);
+                            Bitmap originalBitmap = ImageDecoder.decodeBitmap(source);
 
-                            //resize bitmap
-                            float aspectRatio = bitmap.getWidth() / (float) bitmap.getHeight();
-                            int height = mLinearLayout.getHeight();
-                            int width = Math.round(height * aspectRatio);
-
-
-                            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, width, height,false);
-
+                            //resize original bitmap for linear layout
+                            Bitmap resizedBitmap = resizeBitmapForLinearLayout(originalBitmap, mLinearLayout);
 
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
-                            String imageFileName = "JPEG_" + timeStamp + "_";
-                            File selectedImgFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), timeStamp + imageFileName);
+                            File selectedImgFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"JPEG_" + timeStamp + "_");
 
-                            createFileFromBitmap(selectedImgFile, resizedBitmap);
-                            //setPicture(selectedImgFile.getAbsolutePath());
+                            createBitmapAtFilePath(selectedImgFile, resizedBitmap);
 
                             mBitmapList.add(resizedBitmap);
                             mPropertyActivityViewModel.getBitmapList().setValue(mBitmapList);
 
-                            Log.e(TAG, "Bitmap List after add :" +mBitmapList.size() + mBitmapList);
-
-
                             mImagePathList.add(selectedImgFile.getAbsolutePath());
                             mPropertyActivityViewModel.getPathList().setValue(mImagePathList);
-
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     } else
                     {
                         Uri uri = data.getData();
-                        selectPhotoPath = getRealPathFromUri(uri);
-                        setPictureFromPath(selectPhotoPath, mBitmapList, mImagePathList); // and add to linear layout
+                        mSelectPhotoPath = getRealPathFromUri(uri);
+                        setPictureFromPath(mSelectPhotoPath, mBitmapList, mImagePathList); // and add to linear layout
 
-                        Log.e(TAG, "Selected picture path:" + selectPhotoPath);
+                        Log.e(TAG, "Selected picture path:" + mSelectPhotoPath);
 
                         Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
                     }
@@ -436,11 +416,13 @@ public class EditPropertyActivity extends BasePropertyActivity {
         if(requestCode == RC_TAKE_PHOTO){
             if (resultCode == RESULT_OK) {
 
-                setPictureFromPath(takePhotoPath, mBitmapList, mImagePathList);
+                try {
+                    setPictureFromPath(mTakenPhotoPath, mBitmapList, mImagePathList);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
-
-
 
             } else if (resultCode == RESULT_CANCELED){
                 Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
@@ -478,6 +460,5 @@ public class EditPropertyActivity extends BasePropertyActivity {
         }
         else return true;
     }
-
 
 }

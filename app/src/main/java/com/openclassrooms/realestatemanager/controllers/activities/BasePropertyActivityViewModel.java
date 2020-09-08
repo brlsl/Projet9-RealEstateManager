@@ -31,8 +31,7 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<Agent> mAgent;
 
-
-    private MutableLiveData<List<String>> mPathList;
+    private MutableLiveData<List<String>> mPathList, mPointsOfInterestList;
 
     private MutableLiveData<String> mAgentNameSurname;
 
@@ -73,11 +72,11 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     public void updateProperty(long agentId, String city, String type, String address, String price, String surface,
                                String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                               Date dateAvailable, Date dateSold, String agentNameSurname, String imagePath, boolean isAvailable,
-                               long propertyId){
+                               Date dateAvailable, Date dateSold, String agentNameSurname,
+                               List<String> pointOfInterest, String imagePath, boolean isAvailable, long propertyId){
         executor.execute(()->
                 propertyDataRepository.updateProperty(agentId, city, type, address, price, surface, numberOfRooms, numberOfBedrooms, numberOfBathRooms,
-                        description, dateAvailable, dateSold, agentNameSurname, imagePath, isAvailable, propertyId));
+                        description, dateAvailable, dateSold, agentNameSurname, pointOfInterest,imagePath, isAvailable, propertyId));
     }
 
     // ---------
@@ -150,5 +149,12 @@ public class BasePropertyActivityViewModel extends ViewModel {
             mDateSold = new MutableLiveData<>();
         }
         return mDateSold;
+    }
+
+    public MutableLiveData<List<String>> getPointsOfInterestList() {
+        if (mPointsOfInterestList == null){
+            mPointsOfInterestList = new MutableLiveData<>();
+        }
+        return mPointsOfInterestList;
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Entity(tableName = "property_table",
@@ -29,11 +30,11 @@ public class Property{
     private String numberOfBedrooms;
     private String numberOfBathRooms;
     private String description;
-    private String pointsOfInterest;
+    private List<String> pointsOfInterest;
     private Date dateAvailable;
     private Date dateSold;
     private String agentNameSurname;
-    private String imagePath;
+    private String mainImagePath;
     private boolean isAvailable;
 
 
@@ -48,7 +49,7 @@ public class Property{
 
     public Property(long agentId, String city, String type, String address, String price, String surface,
                     String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                    Date dateAvailable, Date dateSold, String agentNameSurname, String imagePath, boolean isAvailable) {
+                    Date dateAvailable, Date dateSold, String agentNameSurname, List<String> pointsOfInterest, String mainImagePath, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
@@ -62,7 +63,8 @@ public class Property{
         this.dateAvailable = dateAvailable;
         this.dateSold = dateSold;
         this.agentNameSurname = agentNameSurname;
-        this.imagePath = imagePath;
+        this.pointsOfInterest = pointsOfInterest;
+        this.mainImagePath = mainImagePath;
         this.isAvailable = isAvailable;
     }
 
@@ -148,11 +150,11 @@ public class Property{
         this.description = description;
     }
 
-    public String getPointsOfInterest() {
+    public List<String> getPointsOfInterest() {
         return pointsOfInterest;
     }
 
-    public void setPointsOfInterest(String pointsOfInterest) {
+    public void setPointsOfInterest(List<String> pointsOfInterest) {
         this.pointsOfInterest = pointsOfInterest;
     }
 
@@ -190,12 +192,12 @@ public class Property{
         this.agentNameSurname = agentNameSurname;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getMainImagePath() {
+        return mainImagePath;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setMainImagePath(String mainImagePath) {
+        this.mainImagePath = mainImagePath;
     }
 
 

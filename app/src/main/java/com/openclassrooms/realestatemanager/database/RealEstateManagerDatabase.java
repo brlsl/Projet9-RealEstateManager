@@ -37,7 +37,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RealEstateManagerDatabase.class, "MyDatabase.db")
                             //.fallbackToDestructiveMigration()
-                            .addCallback(prepopulateDatabase())
+                            //.addCallback(prepopulateDatabase())
                             .build();
                 }
             }
@@ -72,7 +72,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 property.put("dateAvailable", "01/01/2021");
                 property.put("pointsOfInterest", "School");
                 property.put("agentNameSurname", "REM Agency");
-                property.put("imagePath", "fakePath/");
+                property.put("mainImagePath", "fakePath/");
                 property.put("isAvailable",  true);
 
                 db.insert("property_table", OnConflictStrategy.IGNORE, property);
