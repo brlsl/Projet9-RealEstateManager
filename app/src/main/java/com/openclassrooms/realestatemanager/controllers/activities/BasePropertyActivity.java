@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,7 +25,9 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -55,10 +58,23 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
     static final int RC_TAKE_PHOTO = 200;
     private static final String TAG = "BasePropertyActivity";
 
+    String mChosenPhotoPath;
+    String mTakenPhotoPath;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configureViewModel();
+
+        LiveData<String> chosenPhotoLiveData = mPropertyActivityViewModel.getChosenPhotoPath();
+        chosenPhotoLiveData.observe(this, s -> {
+            mChosenPhotoPath = s;
+        });
+
+        LiveData<String> photoPathLiveData = mPropertyActivityViewModel.getTakenPhotoPath();
+        photoPathLiveData.observe(this, s ->{
+            mTakenPhotoPath = s;
+        });
     }
 
     @Override
@@ -102,6 +118,59 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         });
     }
 
+    void onClickCheckBoxes(CheckBox cckBoxSchool, CheckBox cckBoxHospital, CheckBox cckBoxRestaurant,
+                                   CheckBox cckBoxMall, CheckBox cckBoxCinema, CheckBox cckBoxPark,
+                                   List<String> pointsOfInterestList, BasePropertyActivityViewModel viewModel
+    ) {
+        cckBoxSchool.setOnClickListener(view -> {
+            if (cckBoxSchool.isChecked())
+                pointsOfInterestList.add(cckBoxSchool.getText().toString());
+            else
+                pointsOfInterestList.remove(cckBoxSchool.getText().toString());
+            viewModel.getPointsOfInterestList().setValue(pointsOfInterestList);
+        });
+
+        cckBoxHospital.setOnClickListener(view -> {
+            if (cckBoxHospital.isChecked())
+                pointsOfInterestList.add(cckBoxHospital.getText().toString());
+            else
+                pointsOfInterestList.remove(cckBoxHospital.getText().toString());
+            viewModel.getPointsOfInterestList().setValue(pointsOfInterestList);
+        });
+
+        cckBoxRestaurant.setOnClickListener(view -> {
+            if (cckBoxRestaurant.isChecked())
+                pointsOfInterestList.add(cckBoxRestaurant.getText().toString());
+            else
+                pointsOfInterestList.remove(cckBoxRestaurant.getText().toString());
+            viewModel.getPointsOfInterestList().setValue(pointsOfInterestList);
+        });
+
+        cckBoxMall.setOnClickListener(view -> {
+            if (cckBoxMall.isChecked())
+                pointsOfInterestList.add(cckBoxMall.getText().toString());
+            else
+                pointsOfInterestList.remove(cckBoxMall.getText().toString());
+            viewModel.getPointsOfInterestList().setValue(pointsOfInterestList);
+        });
+
+        cckBoxCinema.setOnClickListener(view -> {
+            if (cckBoxCinema.isChecked())
+                pointsOfInterestList.add(cckBoxCinema.getText().toString());
+            else
+                pointsOfInterestList.remove(cckBoxCinema.getText().toString());
+            viewModel.getPointsOfInterestList().setValue(pointsOfInterestList);
+        });
+
+        cckBoxPark.setOnClickListener(view -> {
+            if (cckBoxPark.isChecked())
+                pointsOfInterestList.add(cckBoxPark.getText().toString());
+            else
+                pointsOfInterestList.remove(cckBoxPark.getText().toString());
+            viewModel.getPointsOfInterestList().setValue(pointsOfInterestList);
+        });
+
+    }
 
     void onClickAvailableDatePicker(ImageButton imageButton, BasePropertyActivityViewModel viewModel){
         imageButton.setOnClickListener(view -> {
@@ -155,8 +224,8 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         }
     }
 
-    String mTakenPhotoPath;
-    String mSelectPhotoPath;
+
+
 
     File createImageFile() throws IOException {
         // Create an image file name
@@ -173,6 +242,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
 
         // Save a file: path for use with ACTION_VIEW intents
         mTakenPhotoPath = image.getAbsolutePath();
+        mPropertyActivityViewModel.getTakenPhotoPath().setValue(image.getAbsolutePath());
         Log.e(TAG, "Photo Path :" + mTakenPhotoPath);
 
         return image;
@@ -219,6 +289,8 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 
+        Log.e(TAG, "String photo path :" + photoPath);
+
         // create an internal bitmap copy in case picture is moved or deleted
         Bitmap bitmapCopy = Bitmap.createBitmap(bitmap);
 
@@ -256,13 +328,12 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         }
     }
 
-    Bitmap resizeBitmapForLinearLayout(Bitmap bitmap, LinearLayout linearLayout){
+    Bitmap resizeBitmapForLinearLayout(Bitmap bitmap, LinearLayout linearLayoutt){
         //resize original bitmap for linear layout
         float aspectRatio = bitmap.getWidth() / (float) bitmap.getHeight();
-        int height = linearLayout.getHeight();
+        int height = linearLayoutt.getHeight();
         int width = Math.round(height * aspectRatio);
 
         return Bitmap.createScaledBitmap(bitmap, width, height,false);
     }
-
 }

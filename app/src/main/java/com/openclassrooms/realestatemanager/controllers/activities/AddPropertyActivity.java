@@ -1,7 +1,10 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
@@ -11,26 +14,27 @@ import android.os.Environment;
 
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
+
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
 
-import com.openclassrooms.realestatemanager.injection.Injection;
-import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -50,12 +54,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class AddPropertyActivity extends BasePropertyActivity {
 
-
     // FOR DATA
-
     private static final String TAG = "AddPropertyActivity";
     private List<Bitmap> mBitmapList = new ArrayList<>();
-    private List<String> mImagePathList = new ArrayList<>(), mPointOfInterestList = new ArrayList<>();
+    private List<String> mImagePathList = new ArrayList<>(), mPointsOfInterestList = new ArrayList<>();
     private long mAgentId;
     private boolean isAvailable = true;
     private String mAgentNameSurname;
@@ -68,10 +70,8 @@ public class AddPropertyActivity extends BasePropertyActivity {
     private ImageButton mImgBtnChoosePicture, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailableDate;
     private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable;
     private Date mDateAvailable, mDateSold = new Date();
-    private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark, checkBoxTest;
-
+    private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
     private LinearLayout mLinearLayout;
-
 
     // ----- LIFECYCLE -----
 
@@ -84,70 +84,15 @@ public class AddPropertyActivity extends BasePropertyActivity {
         configureLiveData();
         descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
         configureSpinnerType();
-        configureViewModel();
 
-
-        onClickCheckBoxes();
+        onClickCheckBoxes(mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant,mCckBoxMall, mCckBoxCinema,
+                mCckBoxPark, mPointsOfInterestList, mPropertyActivityViewModel);
         onClickAddProperty();
 
         onClickChooseAgent(mImgBtnChooseAgent);
         onClickTakePicture();
         onClickChoosePicture();
         onClickAvailableDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
-
-    }
-
-    private void onClickCheckBoxes() {
-        mCckBoxSchool.setOnClickListener(view -> {
-            if (mCckBoxSchool.isChecked())
-                mPointOfInterestList.add(mCckBoxSchool.getText().toString());
-            else
-                mPointOfInterestList.remove(mCckBoxSchool.getText().toString());
-            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointOfInterestList);
-        });
-
-        mCckBoxHospital.setOnClickListener(view -> {
-            if (mCckBoxHospital.isChecked()){
-                mPointOfInterestList.add(mCckBoxHospital.getText().toString());
-            } else{
-                mPointOfInterestList.remove(mCckBoxHospital.getText().toString());
-            }
-            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointOfInterestList);
-        });
-
-        mCckBoxRestaurant.setOnClickListener(view -> {
-            if (mCckBoxRestaurant.isChecked()){
-                mPointOfInterestList.add(mCckBoxRestaurant.getText().toString());
-            } else{
-                mPointOfInterestList.remove(mCckBoxRestaurant.getText().toString());
-            }
-            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointOfInterestList);
-        });
-
-        mCckBoxMall.setOnClickListener(view -> {
-           if (mCckBoxMall.isChecked())
-               mPointOfInterestList.add(mCckBoxMall.getText().toString());
-           else
-               mPointOfInterestList.remove(mCckBoxMall.getText().toString());
-            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointOfInterestList);
-        });
-
-        mCckBoxCinema.setOnClickListener(view -> {
-            if (mCckBoxCinema.isChecked())
-                mPointOfInterestList.add(mCckBoxCinema.getText().toString());
-            else
-                mPointOfInterestList.remove(mCckBoxCinema.getText().toString());
-            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointOfInterestList);
-        });
-
-        mCckBoxPark.setOnClickListener(view -> {
-            if (mCckBoxPark.isChecked())
-                mPointOfInterestList.add(mCckBoxPark.getText().toString());
-            else
-                mPointOfInterestList.remove(mCckBoxPark.getText().toString());
-            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointOfInterestList);
-        });
-
     }
 
     @AfterPermissionGranted(RC_CHOOSE_PHOTO)
@@ -176,13 +121,9 @@ public class AddPropertyActivity extends BasePropertyActivity {
 
     }
 
-    private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
-        mPropertyActivityViewModel = new ViewModelProvider(this, viewModelFactory).get(BasePropertyActivityViewModel.class);
-    }
-
     // ----- CONFIGURATION METHODS -----
 
+    @SuppressLint("ResourceType")
     private void configureLiveData() {
         LiveData<Date> dateLiveData = mPropertyActivityViewModel.getDateAvailable();
         LiveData<List<Bitmap>> bitmapLiveData = mPropertyActivityViewModel.getBitmapList();
@@ -210,10 +151,36 @@ public class AddPropertyActivity extends BasePropertyActivity {
                 ImageView imageView = new ImageView(this);
                 imageView.setImageBitmap(bitmapList.get(i));
                 imageView.setPadding(5,20,5,20);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.gravity = Gravity.CENTER;
+                imageView.setLayoutParams(params);
+
+                ImageButton deleteButton = new ImageButton(this);
+                deleteButton.setImageResource(R.drawable.ic_baseline_delete_24);
+                deleteButton.setBackgroundColor(Color.TRANSPARENT);
+
+                imageView.setId(i+1); // avoid id = 0
+                deleteButton.setId(i+1);
+                mLinearLayout.addView(deleteButton, i);
                 mLinearLayout.addView(imageView);
+                deleteButton.setX(-100);
+                deleteButton.bringToFront();
+
+                deleteButton.setOnClickListener(view -> {
+                    mLinearLayout.removeView(view);
+                    mLinearLayout.removeView(imageView);
+                    mBitmapList.remove(imageView.getId()-1);
+                    mPropertyActivityViewModel.getBitmapList().setValue(mBitmapList);
+                    mImagePathList.remove(imageView.getId()-1);
+                    mPropertyActivityViewModel.getPathList().setValue(mImagePathList);
+                });
+
+                Log.e(TAG, "image id: " + imageView.getId() );
                 Log.e(TAG, "Number in bitmap List: " + mBitmapList.size() );
                 Log.e(TAG, "Number of photo in linearlayout: " + mLinearLayout.getChildCount() );
             }
+
         });
 
         pathListLiveData.observe(this, strings -> {
@@ -222,8 +189,8 @@ public class AddPropertyActivity extends BasePropertyActivity {
         });
 
         pointOfInterestLiveData.observe(this, strings -> {
-            mPointOfInterestList = strings;
-            System.out.println(TAG + "point of Interest list " + mPointOfInterestList.size());
+            mPointsOfInterestList = strings;
+            System.out.println(TAG + "point of Interest list " + mPointsOfInterestList.size());
         } );
     }
 
@@ -262,11 +229,9 @@ public class AddPropertyActivity extends BasePropertyActivity {
         mCckBoxRestaurant = findViewById(R.id.checkBox_restaurant_add_activity);
         mCckBoxMall = findViewById(R.id.checkBox_mall_add_activity);
         mCckBoxCinema = findViewById(R.id.checkBox_cinema_add_activity);
-        mCckBoxPark = findViewById(R.id.checkBox_park_edit_activity);
+        mCckBoxPark = findViewById(R.id.checkBox_park_add_activity);
 
     }
-
-
 
 
     // ----- ON CLICK LISTENER -----
@@ -286,7 +251,7 @@ public class AddPropertyActivity extends BasePropertyActivity {
             }
             else {
                 Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
-                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointOfInterestList,mImagePathList.get(0), isAvailable);
+                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable);
                 mPropertyActivityViewModel.createProperty(propertyAdded);
 
                 // wait between property creation and get all properties from database
@@ -314,8 +279,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
             }
         });
     }
-
-
 
     // ----- ON ACTIVITY RESULT -----
 
@@ -349,10 +312,12 @@ public class AddPropertyActivity extends BasePropertyActivity {
                     } else
                     {
                         Uri uri = data.getData();
-                        mSelectPhotoPath = getRealPathFromUri(uri);
-                        setPictureFromPath(mSelectPhotoPath, mBitmapList, mImagePathList); // and add to linear layout
 
-                        Log.e(TAG, "Selected picture path:" + mSelectPhotoPath);
+                        mChosenPhotoPath = getRealPathFromUri(uri);
+                        mPropertyActivityViewModel.getChosenPhotoPath().setValue(mChosenPhotoPath);
+                        setPictureFromPath(mChosenPhotoPath, mBitmapList, mImagePathList); // and add to linear layout
+
+                        Log.e(TAG, "Selected picture path:" + mChosenPhotoPath);
 
                         Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
                     }
@@ -379,7 +344,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
             }
         }
     }
-
 
     private boolean isPossibleToAddProperty(){
         mType = mTypeSpinner.getSelectedItem().toString();

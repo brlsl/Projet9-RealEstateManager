@@ -34,15 +34,14 @@ public interface PropertyDao {
 
     @Query("UPDATE property_table SET price =:price, city =:city WHERE id =:propertyId")
     int updatePropertyTest(String city, String price, long propertyId);
-
-    @Query("UPDATE property_table SET city = :city, agentId =:agentId , type =:type, city=:city, address = :address, price = :price, surface = :surface, " +
-            " numberOfRooms =:numberOfRooms, numberOfBedrooms = :numberOfBedrooms, numberOfBathRooms =:numberOfBathRooms, description=:description, " +
-            " dateAvailable =:dateAvailable, dateSold=:dateSold, agentNameSurname=:agentNameSurname, pointsOfInterest=:pointOfInterest," +
-            "mainImagePath=:imagePath, isAvailable=:isAvailable " +
-            "WHERE id =:propertyId")
+/*
+    @Query("UPDATE property_table SET agentId =:agentId, type =:type, city=:city, address = :address, price = :price, surface = :surface, numberOfRooms =:numberOfRooms, numberOfBedrooms = :numberOfBedrooms, numberOfBathRooms =:numberOfBathRooms, description=:description,dateAvailable =:dateAvailable, dateSold=:dateSold, agentNameSurname=:agentNameSurname, pointsOfInterest=:pointOfInterest, mainImagePath=:mainImagePath, isAvailable=:isAvailable WHERE id =:propertyId")
     int updateProperty(long agentId, String city, String type, String address, String price, String surface,
                        String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
                        Date dateAvailable, Date dateSold, String agentNameSurname,
-                       List<String> pointOfInterest, String imagePath, boolean isAvailable, long propertyId);
+                       List<String> pointOfInterest, String mainImagePath, boolean isAvailable, long propertyId);
+*/
+    @Update(entity = Property.class)
+    public void updateProperty(Property property);
 
 }

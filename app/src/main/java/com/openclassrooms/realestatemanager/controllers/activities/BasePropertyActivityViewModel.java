@@ -33,7 +33,8 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<List<String>> mPathList, mPointsOfInterestList;
 
-    private MutableLiveData<String> mAgentNameSurname;
+    private MutableLiveData<String> mTakenPhotoPath;
+    private MutableLiveData<String> mChosenPhotoPath;
 
 
     public BasePropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
@@ -69,7 +70,7 @@ public class BasePropertyActivityViewModel extends ViewModel {
     public LiveData<Property> getProperty(long propertyId, long agentId){
         return propertyDataRepository.getProperty(propertyId, agentId);
     }
-
+/*
     public void updateProperty(long agentId, String city, String type, String address, String price, String surface,
                                String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
                                Date dateAvailable, Date dateSold, String agentNameSurname,
@@ -77,6 +78,13 @@ public class BasePropertyActivityViewModel extends ViewModel {
         executor.execute(()->
                 propertyDataRepository.updateProperty(agentId, city, type, address, price, surface, numberOfRooms, numberOfBedrooms, numberOfBathRooms,
                         description, dateAvailable, dateSold, agentNameSurname, pointOfInterest,imagePath, isAvailable, propertyId));
+    }
+
+ */
+
+    public void updateProperty(Property property){
+        executor.execute(()->
+                propertyDataRepository.updateProperty(property));
     }
 
     // ---------
@@ -137,13 +145,6 @@ public class BasePropertyActivityViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<String> getAgentNameSurname(){
-        if (mAgentNameSurname == null) {
-            mAgentNameSurname = new MutableLiveData<>();
-        }
-        return mAgentNameSurname;
-    }
-
     public MutableLiveData<Date> getDateSold() {
         if (mDateSold == null) {
             mDateSold = new MutableLiveData<>();
@@ -156,5 +157,20 @@ public class BasePropertyActivityViewModel extends ViewModel {
             mPointsOfInterestList = new MutableLiveData<>();
         }
         return mPointsOfInterestList;
+    }
+
+
+    public MutableLiveData<String> getChosenPhotoPath() {
+        if (mChosenPhotoPath == null) {
+            mChosenPhotoPath = new MutableLiveData<>();
+        }
+        return mChosenPhotoPath;
+    }
+
+    public MutableLiveData<String> getTakenPhotoPath(){
+        if (mTakenPhotoPath == null) {
+            mTakenPhotoPath = new MutableLiveData<>();
+        }
+        return mTakenPhotoPath;
     }
 }
