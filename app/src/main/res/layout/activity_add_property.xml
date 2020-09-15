@@ -47,7 +47,7 @@
                     android:ems="8"
                     android:hint="Price "
                     android:inputType="number"
-                    android:maxLength="10"
+                    android:maxLength="9"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
@@ -107,16 +107,24 @@
                     app:layout_constraintStart_toStartOf="@+id/editText_address_add_activity"
                     app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Points of interest nearby"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/editText_city_add_activity"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity" />
+
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/radioGroup_add_property"
+                    android:id="@+id/cardView_add_property_poi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity">
+                    app:layout_constraintStart_toStartOf="@+id/textView2"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -197,7 +205,7 @@
                     android:textSize="15dp"
                     android:ems="3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radioGroup_add_property" />
+                    app:layout_constraintTop_toBottomOf="@+id/cardView_add_property_poi" />
 
                 <EditText
                     android:id="@+id/editText_number_of_room_add_activity"
@@ -411,27 +419,18 @@
             app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity"
             app:srcCompat="@drawable/ic_take_picture" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontal_scroll_view"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_photo_add_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="2dp"
             android:background="@color/colorPrimary"
+            tools:listitem="@layout/rv_property_photo_list"
             app:layout_constraintBottom_toTopOf="@+id/activity_add_property_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity">
-
-            <LinearLayout
-                android:id="@+id/linear_layout_photo_add_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:orientation="horizontal">
-            </LinearLayout>
-
-        </HorizontalScrollView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <Button
             android:id="@+id/activity_add_property_button"
@@ -443,7 +442,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_photo_add_activity"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

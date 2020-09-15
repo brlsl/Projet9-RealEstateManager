@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
-import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
@@ -15,23 +14,23 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import android.widget.LinearLayout;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintSet;
+
 import androidx.lifecycle.LiveData;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 
@@ -39,6 +38,8 @@ import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
+import com.openclassrooms.realestatemanager.views.PropertyImageList.PropertyImageAdapter;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +58,9 @@ public class AddPropertyActivity extends BasePropertyActivity {
     // FOR DATA
     private static final String TAG = "AddPropertyActivity";
     private List<Bitmap> mBitmapList = new ArrayList<>();
-    private List<String> mImagePathList = new ArrayList<>(), mPointsOfInterestList = new ArrayList<>();
+    private PropertyImageAdapter mPropertyImageAdapter;
+    private RecyclerView mRecyclerView;
+    private List<String> mImagePathList = new ArrayList<>(),  mImageTitleList = new ArrayList<>(), mPointsOfInterestList = new ArrayList<>();
     private long mAgentId;
     private boolean isAvailable = true;
     private String mAgentNameSurname;
@@ -66,12 +69,13 @@ public class AddPropertyActivity extends BasePropertyActivity {
     private Button mAddPropertyButton;
     private Spinner mTypeSpinner;
     private String  mType, mPrice, mAddress, mCity, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
-    private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface, mEdtTxtNbrRoom, mEdtTxtNbrBedroom, mEdtTxtNbrBathroom, mEdtTxtDescription;
+    private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface, mEdtTxtNbrRoom, mEdtTxtNbrBedroom, mEdtTxtNbrBathroom, mEdtTxtDescription, mEdtTxtPhotoTitle;
     private ImageButton mImgBtnChoosePicture, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailableDate;
     private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable;
     private Date mDateAvailable, mDateSold = new Date();
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
-    private LinearLayout mLinearLayout;
+    //private LinearLayout mLinearLayout;
+
 
     // ----- LIFECYCLE -----
 
@@ -80,8 +84,11 @@ public class AddPropertyActivity extends BasePropertyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_property);
 
+
         configureViews();
         configureLiveData();
+
+        configureRecyclerViewPhoto();
         descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
         configureSpinnerType();
 
@@ -93,6 +100,13 @@ public class AddPropertyActivity extends BasePropertyActivity {
         onClickTakePicture();
         onClickChoosePicture();
         onClickAvailableDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
+    }
+
+    private void configureRecyclerViewPhoto() {
+        mRecyclerView = findViewById(R.id.recycler_view_photo_add_activity);
+        mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList);
+        mRecyclerView.setAdapter(mPropertyImageAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     @AfterPermissionGranted(RC_CHOOSE_PHOTO)
@@ -118,7 +132,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
             }
             takePictureIntent();
         });
-
     }
 
     // ----- CONFIGURATION METHODS -----
@@ -128,8 +141,9 @@ public class AddPropertyActivity extends BasePropertyActivity {
         LiveData<Date> dateLiveData = mPropertyActivityViewModel.getDateAvailable();
         LiveData<List<Bitmap>> bitmapLiveData = mPropertyActivityViewModel.getBitmapList();
         LiveData<Agent> agentLiveData = mPropertyActivityViewModel.getAgentMutableLiveData();
-        LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
         LiveData<List<String>> pointOfInterestLiveData = mPropertyActivityViewModel.getPointsOfInterestList();
+        LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
+        LiveData<List<String>> imageTitleListLiveData = mPropertyActivityViewModel.getImageTitleList();
 
         agentLiveData.observe(this, agent -> {
             mAgentNameSurname = agent.getName()+" "+agent.getSurname();
@@ -145,48 +159,23 @@ public class AddPropertyActivity extends BasePropertyActivity {
         });
 
         bitmapLiveData.observe(this, bitmapList -> {
-            mLinearLayout.removeAllViews();
-            for (int i = 0; i < bitmapList.size() ; i++) {
-                mBitmapList = bitmapList;
-                ImageView imageView = new ImageView(this);
-                imageView.setImageBitmap(bitmapList.get(i));
-                imageView.setPadding(5,20,5,20);
+            mPropertyImageAdapter.updatePhotoList(bitmapList);
+            mBitmapList = bitmapList;
 
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.gravity = Gravity.CENTER;
-                imageView.setLayoutParams(params);
-
-                ImageButton deleteButton = new ImageButton(this);
-                deleteButton.setImageResource(R.drawable.ic_baseline_delete_24);
-                deleteButton.setBackgroundColor(Color.TRANSPARENT);
-
-                imageView.setId(i+1); // avoid id = 0
-                deleteButton.setId(i+1);
-                mLinearLayout.addView(deleteButton, i);
-                mLinearLayout.addView(imageView);
-                deleteButton.setX(-100);
-                deleteButton.bringToFront();
-
-                deleteButton.setOnClickListener(view -> {
-                    mLinearLayout.removeView(view);
-                    mLinearLayout.removeView(imageView);
-                    mBitmapList.remove(imageView.getId()-1);
-                    mPropertyActivityViewModel.getBitmapList().setValue(mBitmapList);
-                    mImagePathList.remove(imageView.getId()-1);
-                    mPropertyActivityViewModel.getPathList().setValue(mImagePathList);
-                });
-
-                Log.e(TAG, "image id: " + imageView.getId() );
-                Log.e(TAG, "Number in bitmap List: " + mBitmapList.size() );
-                Log.e(TAG, "Number of photo in linearlayout: " + mLinearLayout.getChildCount() );
-            }
+            Log.e(TAG, "Number in bitmap List: " + mBitmapList.size() );
+            Log.e(TAG, "image title list size: " + mImageTitleList.size());
 
         });
 
-        pathListLiveData.observe(this, strings -> {
-            mImagePathList = strings;
-            Log.e(TAG, "Number in path List data: " + mImagePathList.size() );
+
+        imageTitleListLiveData.observe(this, strings -> {
+            mPropertyImageAdapter.updateTitleList(strings);
+            mImageTitleList = strings;
+
+            Log.e(TAG, "image title List size: " + mImageTitleList.size());
         });
+
+
 
         pointOfInterestLiveData.observe(this, strings -> {
             mPointsOfInterestList = strings;
@@ -222,7 +211,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
         mTxtViewAgent = findViewById(R.id.agent_chosen_add_property_activity);
         mTxtViewDescriptionTitle = findViewById(R.id.textview_description_add_activity);
         mTxtViewDateAvailable = findViewById(R.id.textView_availability_date_add_property_activity);
-        mLinearLayout = findViewById(R.id.linear_layout_photo_add_activity);
 
         mCckBoxSchool = findViewById(R.id.checkBox_school_add_activity);
         mCckBoxHospital = findViewById(R.id.checkBox_hospital_add_activity);
@@ -266,10 +254,9 @@ public class AddPropertyActivity extends BasePropertyActivity {
 
                     // write image path in DB
                     for (int i = 0; i < mImagePathList.size() ; i++) {
-                        Image image = new Image(propertyId, mImagePathList.get(i));
+                        Image image = new Image(propertyId, mImagePathList.get(i), mImageTitleList.get(i));
                         mPropertyActivityViewModel.createImage(image);
                         Log.e(TAG,"contenu de la liste: " + mImagePathList.get(i) + " " + propertyId);
-
                     }
                 });
 
@@ -294,15 +281,18 @@ public class AddPropertyActivity extends BasePropertyActivity {
                             Bitmap originalBitmap = ImageDecoder.decodeBitmap(source);
 
                             //resize original bitmap for linear layout
-                            Bitmap resizedBitmap = resizeBitmapForLinearLayout(originalBitmap, mLinearLayout);
+                            Bitmap resizedBitmap = resizeBitmapForLinearLayout(originalBitmap);
 
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
                             File selectedImgFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"JPEG_" + timeStamp + "_");
 
-                            createBitmapAtFilePath(selectedImgFile, originalBitmap);
+                            createBitmapAtFilePath(selectedImgFile, originalBitmap); // create bitmap at file path for internal copy
 
                             mBitmapList.add(resizedBitmap);
                             mPropertyActivityViewModel.getBitmapList().setValue(mBitmapList);
+
+                            mImageTitleList.add("Add Title");
+                            mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
 
                             mImagePathList.add(selectedImgFile.getAbsolutePath());
                             mPropertyActivityViewModel.getPathList().setValue(mImagePathList);
@@ -312,10 +302,12 @@ public class AddPropertyActivity extends BasePropertyActivity {
                     } else
                     {
                         Uri uri = data.getData();
-
                         mChosenPhotoPath = getRealPathFromUri(uri);
                         mPropertyActivityViewModel.getChosenPhotoPath().setValue(mChosenPhotoPath);
                         setPictureFromPath(mChosenPhotoPath, mBitmapList, mImagePathList); // and add to linear layout
+
+                        mImagePathList.add("Add Title");
+                        mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
 
                         Log.e(TAG, "Selected picture path:" + mChosenPhotoPath);
 
@@ -335,6 +327,8 @@ public class AddPropertyActivity extends BasePropertyActivity {
             if (resultCode == RESULT_OK) {
                 try {
                     setPictureFromPath(mTakenPhotoPath, mBitmapList, mImagePathList);
+                    mImageTitleList.add("Add Title");
+                    mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -363,4 +357,5 @@ public class AddPropertyActivity extends BasePropertyActivity {
         }
         else return true;
     }
+
 }

@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -328,10 +327,10 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         }
     }
 
-    Bitmap resizeBitmapForLinearLayout(Bitmap bitmap, LinearLayout linearLayoutt){
+    Bitmap resizeBitmapForLinearLayout(Bitmap bitmap){
         //resize original bitmap for linear layout
         float aspectRatio = bitmap.getWidth() / (float) bitmap.getHeight();
-        int height = linearLayoutt.getHeight();
+        int height = 600;
         int width = Math.round(height * aspectRatio);
 
         return Bitmap.createScaledBitmap(bitmap, width, height,false);

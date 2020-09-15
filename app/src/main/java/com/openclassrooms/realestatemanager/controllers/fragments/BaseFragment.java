@@ -14,8 +14,6 @@ import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 
 public abstract class BaseFragment extends Fragment {
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.graphics.Bitmap;
+import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -35,7 +36,7 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<String> mTakenPhotoPath;
     private MutableLiveData<String> mChosenPhotoPath;
-
+    private MutableLiveData<List<String>> mPhotoDescriptionList;
 
     public BasePropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
         this.agentDataRepository = agentDataRepository;
@@ -70,17 +71,6 @@ public class BasePropertyActivityViewModel extends ViewModel {
     public LiveData<Property> getProperty(long propertyId, long agentId){
         return propertyDataRepository.getProperty(propertyId, agentId);
     }
-/*
-    public void updateProperty(long agentId, String city, String type, String address, String price, String surface,
-                               String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                               Date dateAvailable, Date dateSold, String agentNameSurname,
-                               List<String> pointOfInterest, String imagePath, boolean isAvailable, long propertyId){
-        executor.execute(()->
-                propertyDataRepository.updateProperty(agentId, city, type, address, price, surface, numberOfRooms, numberOfBedrooms, numberOfBathRooms,
-                        description, dateAvailable, dateSold, agentNameSurname, pointOfInterest,imagePath, isAvailable, propertyId));
-    }
-
- */
 
     public void updateProperty(Property property){
         executor.execute(()->
@@ -173,4 +163,13 @@ public class BasePropertyActivityViewModel extends ViewModel {
         }
         return mTakenPhotoPath;
     }
+
+    public MutableLiveData<List<String>> getImageTitleList() {
+        if (mPhotoDescriptionList == null){
+            mPhotoDescriptionList = new MutableLiveData<>();
+        }
+
+        return mPhotoDescriptionList;
+    }
+
 }

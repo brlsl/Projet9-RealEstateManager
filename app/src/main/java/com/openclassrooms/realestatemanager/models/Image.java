@@ -15,6 +15,8 @@ public class Image {
 
     private String imagePath;
 
+    private String imageTitle;
+
     @Ignore
     public Image(long id,long propertyId, String imagePath) {
         this.id = id;
@@ -22,10 +24,10 @@ public class Image {
         this.imagePath = imagePath;
     }
 
-    public Image(long propertyId, String imagePath){
+    public Image(long propertyId, String imagePath, String imageTitle){
         this.propertyId = propertyId;
         this.imagePath = imagePath;
-
+        this.imageTitle = imageTitle;
     }
 
     public String getImagePath() {
@@ -50,5 +52,13 @@ public class Image {
 
     public void setPropertyId(long propertyId) {
         this.propertyId = propertyId;
+    }
+
+    public String getImageTitle() {
+        return imageTitle;
+    }
+
+    public void setImageTitle(String imageTitle) {
+        this.imageTitle = imageTitle;
     }
 }

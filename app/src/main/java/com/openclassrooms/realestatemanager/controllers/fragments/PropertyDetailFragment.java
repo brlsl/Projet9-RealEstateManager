@@ -24,11 +24,10 @@ import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.views.ImageSlider.ImageSliderAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
@@ -41,7 +40,8 @@ public class PropertyDetailFragment extends BaseFragment {
 
     // FOR UI
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
-            mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewAgentNameSurname;
+            mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewDateSoldField,
+            mTxtViewDateSold, mTxtViewAgentNameSurname;
 
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
@@ -68,7 +68,7 @@ public class PropertyDetailFragment extends BaseFragment {
             propertyDetail.observe(this, property ->{
                 mTxtViewCity.setText(property.getCity());
                 mTxtViewAddress.setText(property.getAddress());
-                mTxtViewPrice.setText(property.getPrice());
+                mTxtViewPrice.setText(Utils.formatPrice(property.getPrice()));
                 mTxtViewType.setText(property.getType());
                 mTxtViewSurface.setText(property.getSurface());
                 mTxtViewNbrOfRoom.setText(property.getNumberOfRooms());
@@ -76,12 +76,19 @@ public class PropertyDetailFragment extends BaseFragment {
                 mTxtViewNbrOfBathroom.setText(property.getNumberOfBathRooms());
                 mTxtViewDescription.setText(property.getDescription());
                 mTxtViewAgentNameSurname.setText(property.getAgentNameSurname());
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                mTxtViewDateAvailable.setText(sdf.format(property.getDateAvailable()));
+                mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));
+
+                if (property.isAvailable()) {
+                    mTxtViewDateSoldField.setVisibility(View.GONE);
+                    mTxtViewDateSold.setVisibility(View.GONE);
+                }
+                else if (!property.isAvailable()){
+                    mTxtViewDateSold.setText(Utils.formatDateToString(property.getDateSold()));
+                    mTxtViewDateSoldField.setVisibility(View.VISIBLE);
+                    mTxtViewDateSold.setVisibility(View.VISIBLE);
+                }
 
             });
-
-
 
             LiveData<List<Image>> imageList = mViewModel.getImageListOneProperty(propertyId);
 
@@ -120,6 +127,8 @@ public class PropertyDetailFragment extends BaseFragment {
         mTxtViewNbrOfBathroom = view.findViewById(R.id.detail_fragment_property_number_of_bathroom);
         mTxtViewDescription = view.findViewById(R.id.detail_fragment_property_description);
         mTxtViewDateAvailable = view.findViewById(R.id.detail_fragment_property_date_available);
+        mTxtViewDateSoldField = view.findViewById(R.id.detail_fragment_properrty_sold_date_field);
+        mTxtViewDateSold = view.findViewById(R.id.detail_fragment_property_sold_date);
         mTxtViewAgentNameSurname = view.findViewById(R.id.detail_fragment_property_agent_name_surname);
         mFabEditProperty = view.findViewById(R.id.detail_fragment_fab_edit_property);
     }

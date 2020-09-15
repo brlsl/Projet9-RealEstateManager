@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -20,7 +21,7 @@ public class LoanSimulationActivity extends AppCompatActivity {
 
     // FOR UI
     private RadioGroup mRadioGroup;
-    private TextView mTxtViewAmountOrTerms;
+    private TextView mTxtViewAmountOrTerms, mTxtViewSimulationResult;
     private Button mBtnCalculate;
     private EditText mEdtTxtAmountOrTerms, mEdtTxtYears, mEdtTxtMonths, mEdtTxtRate;
     private ConstraintLayout mConstraintLayout;
@@ -53,6 +54,7 @@ public class LoanSimulationActivity extends AppCompatActivity {
         mEdtTxtMonths = findViewById(R.id.loan_activity_editText_duration_months);
         mEdtTxtRate = findViewById(R.id.loan_activity_editText_rate_loan);
         mBtnCalculate = findViewById(R.id.loan_activity_calculation);
+        mTxtViewSimulationResult = findViewById(R.id.loan_activity_simulation_textView_result);
     }
 
     // ------ LISTENERS ------
@@ -69,10 +71,12 @@ public class LoanSimulationActivity extends AppCompatActivity {
                     mStrRadioChecked = getApplicationContext().getString(R.string.loan_amount);
                     mTxtViewAmountOrTerms.setText(getApplicationContext().getString(R.string.loan_terms));
                     mEdtTxtAmountOrTerms.setText("");
+                    mTxtViewSimulationResult.setVisibility(View.GONE);
                 } else if (checkedRatioButton.getText().toString().equals(getApplicationContext().getString(R.string.loan_terms))){
                     mStrRadioChecked = getApplicationContext().getString(R.string.loan_terms);
                     mTxtViewAmountOrTerms.setText(getApplicationContext().getString(R.string.loan_amount));
                     mEdtTxtAmountOrTerms.setText("");
+                    mTxtViewSimulationResult.setVisibility(View.GONE);
                 }
             }
         });
@@ -220,8 +224,10 @@ public class LoanSimulationActivity extends AppCompatActivity {
                     float t = Float.parseFloat(mEdtTxtRate.getText().toString())/100; // annual rate
                     float n = Float.parseFloat(mEdtTxtYears.getText().toString()) + Float.parseFloat(mEdtTxtMonths.getText().toString())/12; // duration
                     double m = (C * t/12) / (1 -  Math.pow(1+ t/12, (-12*n))); // monthly term
+                    double loanCost = Math.round(m * 12 * n - C);
 
-                    Toast.makeText(this, "Your monthly term is: " + Math.round(m), Toast.LENGTH_SHORT).show();
+                    mTxtViewSimulationResult.setVisibility(View.VISIBLE);
+                    mTxtViewSimulationResult.setText("For a loan of  "+ C +" € ,your monthly term is  " + Math.round(m) + " € for a cost without insurance of " + loanCost + " €");
                 }
 
                 if (mStrRadioChecked.equals(getApplicationContext().getString(R.string.loan_amount))){
@@ -230,10 +236,12 @@ public class LoanSimulationActivity extends AppCompatActivity {
                     float n = 12; // number of repayment per year;
                     float N = (Float.parseFloat(mEdtTxtYears.getText().toString())*12) + Float.parseFloat(mEdtTxtMonths.getText().toString()); // total of monthly repayment
                     double C = (m*(1- Math.pow(1+t/n, -N))) / (t/n);
+                    float duration = Float.parseFloat(mEdtTxtYears.getText().toString()) + Float.parseFloat(mEdtTxtMonths.getText().toString())/12; // duration
+                    double loanCost = Math.round(m * 12 * duration - C);
 
-                    Toast.makeText(this, "Your loan is :" + Math.round(C), Toast.LENGTH_SHORT).show();
+                    mTxtViewSimulationResult.setVisibility(View.VISIBLE);
+                    mTxtViewSimulationResult.setText("Your loan amount is " + Math.round(C) + " €,  for a loan term of " + m +" and for a loan cost without insurance of " + loanCost + " €");
                 }
-
             }
         });
     }

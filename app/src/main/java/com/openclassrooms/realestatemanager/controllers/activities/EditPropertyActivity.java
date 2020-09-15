@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -55,10 +56,12 @@ import static com.openclassrooms.realestatemanager.controllers.activities.MainAc
 public class EditPropertyActivity extends BasePropertyActivity {
 
     private Date mDateAvailable, mDateSold;
-    private ArrayAdapter<CharSequence> mTypeArrayAdapter;
+    private ArrayAdapter<CharSequence> mTypeArrayAdapter, mIsAvailableArrayAdapter;
     private static final String TAG = "EditPropertyActivity";
+
     private List<Bitmap> mBitmapList = new ArrayList<>();
-    private List<String> mImagePathList = new ArrayList<>(), mPointsOfInterestList = new ArrayList<>();
+
+    private List<String> mImagePathList = new ArrayList<>(),  mImageTitleList = new ArrayList<>(), mPointsOfInterestList = new ArrayList<>();
 
     private long mAgentId, mPropertyId;
     private boolean isAvailable = true;
@@ -86,6 +89,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
         configureViews();
         configureLiveData();
+
         descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
         configureSpinnerType();
         configureSpinnerPropertyStatus();
@@ -131,7 +135,13 @@ public class EditPropertyActivity extends BasePropertyActivity {
                         }
                     }
 
-                    List <String> poiList = property.getPointsOfInterest();
+
+                    if (!property.isAvailable()){
+                        mIsAvailableSpinner.setSelection(1);
+                        mTxtViewSoldDate.setText(Utils.formatDateToString(property.getDateSold()));
+                    }
+
+                    List<String> poiList = property.getPointsOfInterest();
                     if (!poiList.isEmpty()) {
                         if (poiList.contains(mCckBoxSchool.getText().toString())) {
                             mCckBoxSchool.setChecked(true);
@@ -172,6 +182,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
                         mTxtViewSoldDate.setVisibility(View.VISIBLE);
                         mTxtViewChooseDateTitle.setVisibility(View.VISIBLE);
                         mImgBtnSoldDate.setVisibility(View.VISIBLE);
+                        isAvailable = false;
                     }
 
                     mEdtTxtPrice.setText(property.getPrice());
@@ -185,11 +196,6 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
                     mPropertyActivityViewModel.getDateAvailable().setValue(property.getDateAvailable());
 
-                    //mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));
-                    //mTxtViewAgent.setText(property.getAgentNameSurname());
-
-
-                    System.out.println("TEST onCreate :" + property.getDateAvailable().toString());
                 });
 
                 LiveData<List<Image>> liveDataImageList = mPropertyActivityViewModel.getImageListOneProperty(propertyId);
@@ -232,6 +238,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
+                        mTxtViewSoldDate.setText("");
                         mTxtViewSoldDate.setVisibility(View.GONE);
                         mTxtViewChooseDateTitle.setVisibility(View.GONE);
                         mImgBtnSoldDate.setVisibility(View.GONE);
@@ -304,7 +311,7 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
                 mPropertyActivityViewModel.deleteImagesOneProperty(mPropertyId);
                 for (int i = 0; i <mImagePathList.size() ; i++) {
-                    Image image = new Image(mPropertyId, mImagePathList.get(i));
+                    Image image = new Image(mPropertyId, mImagePathList.get(i), mImageTitleList.get(i).toString());
                     mPropertyActivityViewModel.createImage(image);
                 }
                 finish();
@@ -324,6 +331,8 @@ public class EditPropertyActivity extends BasePropertyActivity {
         LiveData<List<Bitmap>> bitmapLiveData = mPropertyActivityViewModel.getBitmapList();
         LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
         LiveData<List<String>> pointOfInterestLiveData = mPropertyActivityViewModel.getPointsOfInterestList();
+        LiveData<List<String>> imageTitleLiveData = mPropertyActivityViewModel.getImageTitleList();
+
 
         dateAvailableLiveData.observe(this, date -> {
             mDateAvailable = date;
@@ -344,11 +353,14 @@ public class EditPropertyActivity extends BasePropertyActivity {
             mAgentId = agent.getId();
         });
 
+
         bitmapLiveData.observe(this, bitmapList -> {
             mLinearLayout.removeAllViews();
             for (int i = 0; i < bitmapList.size() ; i++) {
                 Log.e(TAG, "Number in bitmap List: " + mBitmapList );
+
                 mBitmapList = bitmapList;
+
                 ImageView imageView = new ImageView(this);
                 imageView.setImageBitmap(bitmapList.get(i));
                 imageView.setPadding(5,20,5,20);
@@ -360,24 +372,50 @@ public class EditPropertyActivity extends BasePropertyActivity {
                 ImageButton deleteButton = new ImageButton(this);
                 deleteButton.setImageResource(R.drawable.ic_baseline_delete_24);
                 deleteButton.setBackgroundColor(Color.TRANSPARENT);
-
                 imageView.setId(i+1); // avoid id = 0
                 deleteButton.setId(i+1);
-                mLinearLayout.addView(deleteButton, i);
-                mLinearLayout.addView(imageView);
-                deleteButton.setX(-100);
-                deleteButton.bringToFront();
+
+
+                LinearLayout linearLayout = new LinearLayout(this);
+                mLinearLayout.addView(linearLayout);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                EditText editText = new EditText(this);
+                editText.setLayoutParams(params);
+                editText.setId(i +1);
+                editText.setSingleLine();
+                if (editText.getText().toString().isEmpty()){
+                    editText.setText("add Title");
+                }
+
+                editText.setBackgroundColor(Color.WHITE);
+                editText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(15) }); // max length
+                editText.setMinEms(5);
+
+
+                linearLayout.setPadding(10,10,10,10);
+                linearLayout.addView(deleteButton);
+                linearLayout.addView(imageView);
+                linearLayout.addView(editText);
+
+
+
+
 
                 deleteButton.setOnClickListener(view -> {
                     mLinearLayout.removeView(view);
                     mLinearLayout.removeView(imageView);
+                    mLinearLayout.removeView(editText);
+
                     mBitmapList.remove(imageView.getId()-1);
                     mPropertyActivityViewModel.getBitmapList().setValue(mBitmapList);
                     mImagePathList.remove(imageView.getId()-1);
                     mPropertyActivityViewModel.getPathList().setValue(mImagePathList);
+
                 });
+
                 Log.e(TAG, "Number in bitmap List: " + mBitmapList );
-                Log.e(TAG, "Number of photo in linearlayout: " + mLinearLayout.getChildCount() );
+
             }
         });
 
@@ -385,6 +423,13 @@ public class EditPropertyActivity extends BasePropertyActivity {
             mImagePathList = strings;
             Log.e(TAG, "Number in path List data: " + mImagePathList.size() );
         });
+
+
+        imageTitleLiveData.observe(this, strings -> {
+            mImageTitleList = strings;
+            Log.e(TAG, "Number title in list: " + mImageTitleList.size() );
+        });
+
 
         pointOfInterestLiveData.observe(this, strings -> {
             mPointsOfInterestList = strings;
@@ -404,10 +449,10 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
     private void configureSpinnerPropertyStatus() {
         mIsAvailableSpinner = findViewById(R.id.spinner_availability_edit_property_activity);
-        ArrayAdapter<CharSequence> propertyStatusArrayAdapter = ArrayAdapter.createFromResource(this, R.array.property_activity_array_is_available,
+        mIsAvailableArrayAdapter = ArrayAdapter.createFromResource(this, R.array.property_activity_array_is_available,
                 android.R.layout.simple_spinner_item);
-        propertyStatusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mIsAvailableSpinner.setAdapter(propertyStatusArrayAdapter);
+        mIsAvailableArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mIsAvailableSpinner.setAdapter(mIsAvailableArrayAdapter);
     }
 
     private void configureViews() {
@@ -458,12 +503,12 @@ public class EditPropertyActivity extends BasePropertyActivity {
                             Bitmap originalBitmap = ImageDecoder.decodeBitmap(source);
 
                             //resize original bitmap for linear layout
-                            Bitmap resizedBitmap = resizeBitmapForLinearLayout(originalBitmap, mLinearLayout);
+                            Bitmap resizedBitmap = resizeBitmapForLinearLayout(originalBitmap);
 
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
                             File selectedImgFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"JPEG_" + timeStamp + "_");
 
-                            createBitmapAtFilePath(selectedImgFile, resizedBitmap);
+                            createBitmapAtFilePath(selectedImgFile, originalBitmap);
 
                             mBitmapList.add(resizedBitmap);
                             mPropertyActivityViewModel.getBitmapList().setValue(mBitmapList);
@@ -514,9 +559,12 @@ public class EditPropertyActivity extends BasePropertyActivity {
     private boolean isDateSaved(){
         switch (mIsAvailableSpinner.getSelectedItemPosition()){
             case 0:
+                isAvailable = true;
+                mPropertyActivityViewModel.getDateSold().setValue(new Date());
                 return mTxtViewAvailableDate.getText().length() != 0;
 
             case 1:
+                isAvailable = false;
                 return mTxtViewSoldDate.getText().length() != 0;
         }
         return false;

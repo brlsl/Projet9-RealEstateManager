@@ -163,15 +163,28 @@
             tools:ignore="HardcodedText" />
 
 
+        <TextView
+            android:id="@+id/loan_activity_simulation_textView_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loan_activity_editText_rate_loan" />
+
         <Button
             android:id="@+id/loan_activity_calculation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="Calculate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loan_activity_editText_rate_loan" />
+            app:layout_constraintTop_toBottomOf="@+id/loan_activity_simulation_textView_result" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

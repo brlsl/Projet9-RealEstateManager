@@ -46,7 +46,7 @@
                     android:ems="8"
                     android:hint="Price "
                     android:inputType="number"
-                    android:maxLength="10"
+                    android:maxLength="9"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
@@ -105,16 +105,24 @@
                     app:layout_constraintStart_toStartOf="@+id/editText_address_edit_activity"
                     app:layout_constraintTop_toBottomOf="@+id/editText_address_edit_activity" />
 
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Points of interest nearby"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/editText_city_edit_activity"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_city_edit_activity" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_city_edit_activity" >
+                    app:layout_constraintStart_toStartOf="@+id/textView6"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -447,26 +455,19 @@
             app:layout_constraintTop_toTopOf="@+id/image_button_take_picture_edit_activity"
             app:srcCompat="@drawable/ic_picture_from_files" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontal_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="2dp"
-            android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_button_take_picture_edit_activity">
-
             <LinearLayout
                 android:id="@+id/linear_layout_photo_edit_activity"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:orientation="vertical"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_button_take_picture_edit_activity">
+             </LinearLayout>
 
-        </HorizontalScrollView>
 
         <Button
             android:id="@+id/activity_edit_property_button"
@@ -478,7 +479,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontal_scroll_view" />
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_photo_edit_activity"/>
 
 
 

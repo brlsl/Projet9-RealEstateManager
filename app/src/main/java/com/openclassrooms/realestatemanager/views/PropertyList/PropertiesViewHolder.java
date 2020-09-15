@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
 
@@ -36,15 +37,12 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 
     public void displayData(final Property property) {
         mPropertyCity.setText(property.getCity());
-        mPropertyPrice.setText(String.valueOf(property.getPrice()));
+        mPropertyPrice.setText(Utils.formatPrice(property.getPrice()) + " €");
         mPropertyType.setText(property.getType());
 
 
         File file = new File(property.getMainImagePath());
         if (file.exists()) {
-            //Bitmap bitmap = BitmapFactory.decodeFile(property.getImagePath());
-            //mPropertyImageView.setImageBitmap(bitmap);
-
             Glide.with(mContext)
                     .load(file)
                     .centerCrop()
