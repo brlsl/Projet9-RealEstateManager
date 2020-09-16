@@ -21,22 +21,18 @@ public class PropertyImageViewHolder extends RecyclerView.ViewHolder {
     private ImageView mImageView;
     private EditText mEditTextTitle;
 
-
     public PropertyImageViewHolder(@NonNull View itemView) {
         super(itemView);
         mImageView = itemView.findViewById(R.id.property_imageView_item);
         mEditTextTitle = itemView.findViewById(R.id.photo_description_item_editText);
-
-
     }
 
 
     public void displayData(List<Bitmap> mBitmapList, List<String> mPhotoTitleList, int position) {
         mImageView.setImageBitmap(mBitmapList.get(position));
-        if (position == 0){
-            //mEditTextTitle.setText("add Title");
-        }
+
         mEditTextTitle.setText(mPhotoTitleList.get((position)));
+
         mEditTextTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -50,7 +46,7 @@ public class PropertyImageViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mPhotoTitleList.set(position, editable.toString());
+            mPhotoTitleList.set(position, editable.toString());
 
             }
         });

@@ -110,7 +110,6 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
         AddAgentDialogFragment addAgentDialogFragment = new AddAgentDialogFragment();
         if (getFragmentManager() != null) {
             addAgentDialogFragment.show(getFragmentManager(), "Add agent dialog fragment");
-
         }
     }
 
@@ -118,7 +117,6 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
         ItemClickSupport.addTo(mRecyclerView, R.layout.rv_agent_item_bottom_sheet_fragment)
                 .setOnItemClickListener((recyclerView, position, v) -> {
                     mListener.onClickAgentItem(mAgentList.get(position));
-                    dismiss();
                     Toast.makeText(requireContext(), "Agent is chosen", Toast.LENGTH_SHORT).show();
                 });
     }

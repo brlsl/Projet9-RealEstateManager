@@ -224,8 +224,6 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
     }
 
 
-
-
     File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
@@ -242,16 +240,13 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         // Save a file: path for use with ACTION_VIEW intents
         mTakenPhotoPath = image.getAbsolutePath();
         mPropertyActivityViewModel.getTakenPhotoPath().setValue(image.getAbsolutePath());
-        Log.e(TAG, "Photo Path :" + mTakenPhotoPath);
+        Log.d(TAG, "Photo Path :" + mTakenPhotoPath);
 
         return image;
     }
 
 
     void createBitmapAtFilePath(File destinationFile, Bitmap bitmap) throws IOException {
-        //create a file to write bitmap data
-        //destinationFile.createNewFile();
-
         //Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
@@ -288,7 +283,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
 
-        Log.e(TAG, "String photo path :" + photoPath);
+        Log.d(TAG, "String photo path :" + photoPath);
 
         // create an internal bitmap copy in case picture is moved or deleted
         Bitmap bitmapCopy = Bitmap.createBitmap(bitmap);
@@ -302,8 +297,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity implements 
         bitmapList.add(bitmap);
         mPropertyActivityViewModel.getBitmapList().setValue(bitmapList);
 
-        Log.e(TAG, "Bitmap List after add :" + bitmapList.size() + bitmapList);
-
+        Log.d(TAG, "Bitmap List after add :" + bitmapList.size() + bitmapList);
 
         imagePathList.add(photoPath);
         mPropertyActivityViewModel.getPathList().setValue(imagePathList);

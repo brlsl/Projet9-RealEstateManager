@@ -1,20 +1,16 @@
 package com.openclassrooms.realestatemanager.views.PropertyImageList;
 
 import android.graphics.Bitmap;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.models.Image;
-import com.openclassrooms.realestatemanager.utils.ItemClickSupport;
 
 import java.util.List;
 
@@ -22,10 +18,13 @@ public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageView
 
     private List<Bitmap> mBitmapList;
     private List<String> mImageTitleList;
+    private List<String> mImagePathList;
 
-    public PropertyImageAdapter(List<Bitmap> bitmapList, List<String> imageTitleList) {
+    public PropertyImageAdapter(List<Bitmap> bitmapList, List<String> imageTitleList, List<String> imagePathList) {
         mBitmapList = bitmapList;
-        mImageTitleList = imageTitleList;
+        this.mImageTitleList = imageTitleList;
+        mImagePathList = imagePathList;
+
     }
 
     @NonNull
@@ -47,24 +46,6 @@ public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageView
             }
         });
 
-        EditText editText = holder.itemView.findViewById(R.id.photo_description_item_editText);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
     }
 
     @Override
@@ -82,11 +63,45 @@ public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageView
         notifyDataSetChanged();
     }
 
+    public void updatePathList(List<String> imagePathList){
+        mImagePathList = imagePathList;
+        notifyDataSetChanged();
+    }
+
     public void removeAt(int position) {
+        for (int i = 0; i <mImagePathList.size() ; i++) {
+            Log.d("PropertyAdapter before:", position + mImagePathList.get(i).toString() + " " );
+        }
+
+        for (int i = 0; i <mBitmapList.size() ; i++) {
+            Log.d("PropertyAdapter before:", position + mBitmapList.get(i).toString() + " " );
+        }
+
+        for (int i = 0; i <mBitmapList.size() ; i++) {
+            Log.d("PropertyAdapter before:", mImageTitleList.get(i) + " ");
+        }
+
+
         mBitmapList.remove(position);
         mImageTitleList.remove(position);
-        notifyItemRemoved(position);
+        mImagePathList.remove(position);
+        notifyDataSetChanged();
         notifyItemRangeChanged(position, mBitmapList.size());
+        notifyItemRangeChanged(position, mImageTitleList.size());
+
+        for (int i = 0; i <mBitmapList.size() ; i++) {
+            Log.d("PropertyAdapter before:", position + mImagePathList.get(i).toString() + " " );
+        }
+
+        for (int i = 0; i <mBitmapList.size() ; i++) {
+            Log.d("PropertyAdapter after:", mBitmapList.get(i).toString() + " ");
+        }
+
+        for (int i = 0; i <mBitmapList.size() ; i++) {
+            Log.d("PropertyAdapter after:", mImageTitleList.get(i) + " ");
+        }
+
+
     }
 
 }

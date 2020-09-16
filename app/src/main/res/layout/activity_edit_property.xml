@@ -455,18 +455,18 @@
             app:layout_constraintTop_toTopOf="@+id/image_button_take_picture_edit_activity"
             app:srcCompat="@drawable/ic_picture_from_files" />
 
-            <LinearLayout
-                android:id="@+id/linear_layout_photo_edit_activity"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_photo_edit_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@color/colorPrimary"
+                tools:listitem="@layout/rv_property_photo_list"
                 app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image_button_take_picture_edit_activity">
-             </LinearLayout>
+             </androidx.recyclerview.widget.RecyclerView>
 
 
         <Button
@@ -479,7 +479,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear_layout_photo_edit_activity"/>
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_photo_edit_activity"/>
 
 
 
