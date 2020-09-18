@@ -46,7 +46,7 @@ import java.util.Locale;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public abstract class BasePropertyActivity extends AppCompatActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener{
+public abstract class BasePropertyActivity extends AppCompatActivity {
 
     // ----- FOR DATA -----
 

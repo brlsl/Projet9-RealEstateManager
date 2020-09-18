@@ -14,11 +14,16 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
+import com.openclassrooms.realestatemanager.injection.Injection;
+import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
 
 import java.util.Objects;
@@ -33,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
 
     private FragmentManager mFragmentManager;
     private boolean isTwoPane;
-    //private REMViewModel mViewModel;
+    private REMViewModel mViewModel;
     PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
     long mPropertyId = -1, mAgentId = -1;
 
@@ -52,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         configureDrawerLayout();
         configureNavigationViewListener();
         configureDualPaneLayout(savedInstanceState);
-
+        configureViewModel();
     }
 
     @Override
@@ -62,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     }
 
     // ------ CONFIGURATION ------
+
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
+    }
 
     private void configureToolBar() {
         this.mToolbar = findViewById(R.id.toolbar_main_activity);
@@ -91,13 +101,15 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
                     .commit();
         }
 
-        if (isTwoPane){
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.container, new PropertiesListFragment())
-                        .replace(R.id.detail_container, new Fragment())
-                        .addToBackStack(null)
-                        .commit();
+
+        if (isTwoPane) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container, new PropertiesListFragment())
+                    .replace(R.id.detail_container, new Fragment())
+                    .addToBackStack(null)
+                    .commit();
         }
+
     }
 
     private void configureNavigationViewListener() {
@@ -114,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         PropertyDetailFragment detailFragment = new PropertyDetailFragment();
         if (!isTwoPane){
             bundle.putLong(PROPERTY_ID_KEY, property.getId());
-            bundle.putLong(PROPERTY_AGENT_ID_KEY, property.getAgentId());
+            bundle.putLong(PROPERTY_AGENT_ID_KEY, property. getAgentId());
             detailFragment.setArguments(bundle);
 
             mFragmentManager
@@ -133,14 +145,14 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
 
                 if (detailFragment != mPropertyDetailFragment) {
                     mPropertyDetailFragment = detailFragment;
+
+
                     mFragmentManager
                             .beginTransaction()
                             .replace(R.id.detail_container, detailFragment)
                             .addToBackStack(null)
                             .commit();
                 }
-
-
         }
     }
 

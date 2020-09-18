@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
@@ -12,8 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 
 import android.widget.ArrayAdapter;
@@ -23,19 +20,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 
+import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentBottomSheetFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.AddPhotoTitleDialogFragment;
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -55,7 +58,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class AddPropertyActivity extends BasePropertyActivity {
+public class AddPropertyActivity extends BasePropertyActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener, AddPhotoTitleDialogFragment.OnClickDialogConfirmListener {
 
     // FOR DATA
     private static final String TAG = "AddPropertyActivity";
@@ -67,6 +70,7 @@ public class AddPropertyActivity extends BasePropertyActivity {
     private String mAgentNameSurname;
 
     // ----- FOR UI -----
+    private ScrollView mScrollView;
     private Button mAddPropertyButton;
     private Spinner mTypeSpinner;
     private String  mType, mPrice, mAddress, mCity, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
@@ -75,7 +79,7 @@ public class AddPropertyActivity extends BasePropertyActivity {
     private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable;
     private Date mDateAvailable, mDateSold = new Date();
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
-
+    private RecyclerView mRecyclerView;
     // ----- LIFECYCLE -----
 
     @Override
@@ -100,35 +104,14 @@ public class AddPropertyActivity extends BasePropertyActivity {
         onClickChoosePicture();
         onClickAvailableDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
 
-        test();
-    }
-
-
-    private TextWatcher test() {
-        return new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        };
     }
 
     private void configureRecyclerViewPhoto() {
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_photo_add_activity);
-        mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList, mImagePathList);
+        mRecyclerView = findViewById(R.id.recycler_view_photo_add_activity);
+        mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList, mImagePathList, getSupportFragmentManager(), getApplicationContext());
         mRecyclerView.setAdapter(mPropertyImageAdapter);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
     }
 
     @AfterPermissionGranted(RC_CHOOSE_PHOTO)
@@ -158,18 +141,33 @@ public class AddPropertyActivity extends BasePropertyActivity {
 
     // ----- CONFIGURATION METHODS -----
 
-    @SuppressLint("ResourceType")
     private void configureLiveData() {
         LiveData<Date> dateLiveData = mPropertyActivityViewModel.getDateAvailable();
         LiveData<List<Bitmap>> bitmapLiveData = mPropertyActivityViewModel.getBitmapList();
         LiveData<Agent> agentLiveData = mPropertyActivityViewModel.getAgentMutableLiveData();
         LiveData<List<String>> pointOfInterestLiveData = mPropertyActivityViewModel.getPointsOfInterestList();
         LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
-        LiveData<List<String>> imageTitleListLiveData = mPropertyActivityViewModel.getImageTitleList();
+        MutableLiveData<List<String>> imageTitleListLiveData = mPropertyActivityViewModel.getImageTitleList();
 
         pathListLiveData.observe(this, strings -> {
             mPropertyImageAdapter.updatePathList(strings);
             mImagePathList = strings;
+        });
+
+        bitmapLiveData.observe(this, bitmapList -> {
+            mPropertyImageAdapter.updatePhotoList(bitmapList);
+            mBitmapList = bitmapList;
+
+            Log.d(TAG, "Number in bitmap List: " + mBitmapList.size() );
+            Log.d(TAG, "image title list size: " + mImageTitleList.size());
+
+        });
+
+        imageTitleListLiveData.observe(this, strings -> {
+            mPropertyImageAdapter.updateTitleList(strings);
+            mImageTitleList = strings;
+
+            Log.d(TAG, "image title List size: " + mImageTitleList.size());
         });
 
         agentLiveData.observe(this, agent -> {
@@ -184,26 +182,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
             mTxtViewDateAvailable.setText(Utils.formatDateToString(mDateAvailable));
             Log.d(TAG, "LiveData date value: " + mDateAvailable + " LiveData TextView date value: "+ mTxtViewDateAvailable.getText().toString());
         });
-
-        bitmapLiveData.observe(this, bitmapList -> {
-            mPropertyImageAdapter.updatePhotoList(bitmapList);
-            mBitmapList = bitmapList;
-
-            Log.d(TAG, "Number in bitmap List: " + mBitmapList.size() );
-            Log.d(TAG, "image title list size: " + mImageTitleList.size());
-
-        });
-
-
-
-        imageTitleListLiveData.observe(this, strings -> {
-            mPropertyImageAdapter.updateTitleList(strings);
-            mImageTitleList = strings;
-
-            Log.d(TAG, "image title List size: " + mImageTitleList.size());
-        });
-
-
 
         pointOfInterestLiveData.observe(this, strings -> {
             mPointsOfInterestList = strings;
@@ -220,6 +198,8 @@ public class AddPropertyActivity extends BasePropertyActivity {
     }
 
     private void configureViews() {
+        mScrollView = findViewById(R.id.add_property_activity_scrollView);
+
         mEdtTxtCity = findViewById(R.id.editText_city_add_activity);
         mEdtTxtPrice = findViewById(R.id.editText_price_add_activity);
         mEdtTxtAddress = findViewById(R.id.editText_address_add_activity);
@@ -252,7 +232,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
 
     // ----- ON CLICK LISTENER -----
 
-
     @Override
     public void onClickAgentItem(Agent agent) {
         mPropertyActivityViewModel.getAgentMutableLiveData().setValue(agent);
@@ -263,10 +242,10 @@ public class AddPropertyActivity extends BasePropertyActivity {
         mAddPropertyButton.setOnClickListener(view -> {
             if (!isPossibleToAddProperty())
             {
-                Toast.makeText(AddPropertyActivity.this, "Missing values", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Missing values", Snackbar.LENGTH_SHORT).show();
             }
             else {
-                mAddPropertyButton.setEnabled(false); // cannot click again
+                mAddPropertyButton.setEnabled(false); // avoid more than one click
                 Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
                         mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable);
                 mPropertyActivityViewModel.createProperty(propertyAdded);
@@ -285,13 +264,13 @@ public class AddPropertyActivity extends BasePropertyActivity {
                     for (int i = 0; i < mImagePathList.size() ; i++) {
                         Image image = new Image(propertyId, mImagePathList.get(i), mImageTitleList.get(i));
                         mPropertyActivityViewModel.createImage(image);
-                        Log.d(TAG,"contenu de la liste: " + mImagePathList.get(i) + " " + propertyId);
+                        Log.d(TAG,"image path list content: " + mImagePathList.get(i) + " " + propertyId);
                     }
                 });
 
-                Log.d(TAG, "Contenu de Image List: " + mImagePathList);
+                Log.d(TAG, "Image list content: " + mImagePathList);
                 finish();
-                Toast.makeText(AddPropertyActivity.this, "Property added date" + mDateAvailable +" et" + mAgentNameSurname, Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Property Added", Snackbar.LENGTH_LONG).show();;
             }
         });
     }
@@ -337,7 +316,6 @@ public class AddPropertyActivity extends BasePropertyActivity {
 
                         mImageTitleList.add("Add Title");
                         mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
-
                         Log.d(TAG, "Selected picture path:" + mChosenPhotoPath);
 
                         Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
@@ -387,4 +365,10 @@ public class AddPropertyActivity extends BasePropertyActivity {
         else return true;
     }
 
+    // listener after change photo title
+    @Override
+    public void onDialogClickConfirmListener(List<String> imageTitleList) {
+        mImageTitleList = imageTitleList;
+        mPropertyActivityViewModel.getImageTitleList().setValue(imageTitleList);
+    }
 }

@@ -93,7 +93,7 @@ public class PropertyDetailFragment extends BaseFragment {
             LiveData<List<Image>> imageList = mViewModel.getImageListOneProperty(propertyId);
 
             imageList.observe(this, images -> {
-                mViewPager2.setAdapter(new ImageSliderAdapter(images, mViewPager2));
+                mViewPager2.setAdapter(new ImageSliderAdapter(images));
                 Log.e("PropertyDetailFragment", "Image list: "+ images.size());
 
                 // method for dots indicator in viewpager2

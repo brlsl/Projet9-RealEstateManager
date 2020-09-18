@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 public class LoanSimulationActivity extends AppCompatActivity {
 
@@ -224,10 +225,11 @@ public class LoanSimulationActivity extends AppCompatActivity {
                     float t = Float.parseFloat(mEdtTxtRate.getText().toString())/100; // annual rate
                     float n = Float.parseFloat(mEdtTxtYears.getText().toString()) + Float.parseFloat(mEdtTxtMonths.getText().toString())/12; // duration
                     double m = (C * t/12) / (1 -  Math.pow(1+ t/12, (-12*n))); // monthly term
-                    double loanCost = Math.round(m * 12 * n - C);
+                    int loanCost = (int) Math.round(m * 12 * n - C);
 
                     mTxtViewSimulationResult.setVisibility(View.VISIBLE);
-                    mTxtViewSimulationResult.setText("For a loan of  "+ C +" € ,your monthly term is  " + Math.round(m) + " € for a cost without insurance of " + loanCost + " €");
+                    mTxtViewSimulationResult.setText("For a loan of  "+ Utils.formatPrice(String.valueOf(C)) +" € ," +
+                            " your monthly term is " + Utils.formatPrice(String.valueOf(Math.round(m))) + " € for a cost without insurance of " + Utils.formatPrice(String.valueOf(loanCost)) + " €");
                 }
 
                 if (mStrRadioChecked.equals(getApplicationContext().getString(R.string.loan_amount))){
@@ -237,10 +239,10 @@ public class LoanSimulationActivity extends AppCompatActivity {
                     float N = (Float.parseFloat(mEdtTxtYears.getText().toString())*12) + Float.parseFloat(mEdtTxtMonths.getText().toString()); // total of monthly repayment
                     double C = (m*(1- Math.pow(1+t/n, -N))) / (t/n);
                     float duration = Float.parseFloat(mEdtTxtYears.getText().toString()) + Float.parseFloat(mEdtTxtMonths.getText().toString())/12; // duration
-                    double loanCost = Math.round(m * 12 * duration - C);
+                    int loanCost = (int) Math.round(m * 12 * duration - C);
 
                     mTxtViewSimulationResult.setVisibility(View.VISIBLE);
-                    mTxtViewSimulationResult.setText("Your loan amount is " + Math.round(C) + " €,  for a loan term of " + m +" and for a loan cost without insurance of " + loanCost + " €");
+                    mTxtViewSimulationResult.setText("Your loan amount is " + Utils.formatPrice(String.valueOf(Math.round(C))) + " €,  for a loan term of " + Utils.formatPrice(String.valueOf(m)) +" and for a loan cost without insurance of " + Utils.formatPrice(String.valueOf(loanCost)) + " €");
                 }
             }
         });

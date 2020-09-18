@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:id="@+id/edit_property_activity_scrollView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -458,7 +459,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_photo_edit_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:background="@color/colorPrimary"
                 tools:listitem="@layout/rv_property_photo_list"
                 app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"

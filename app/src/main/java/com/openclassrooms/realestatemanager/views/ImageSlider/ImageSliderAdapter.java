@@ -17,11 +17,9 @@ import java.util.List;
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderViewHolder> {
 
     private List<Image> mImageList;
-    private ViewPager2 mViewPager2;
 
-    public ImageSliderAdapter(List<Image> mImageList, ViewPager2 mViewPager2) {
+    public ImageSliderAdapter(List<Image> mImageList) {
         this.mImageList = mImageList;
-        this.mViewPager2 = mViewPager2;
     }
 
     @NonNull

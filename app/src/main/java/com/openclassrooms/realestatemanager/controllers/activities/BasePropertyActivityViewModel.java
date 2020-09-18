@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.graphics.Bitmap;
-import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -36,7 +35,8 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     private MutableLiveData<String> mTakenPhotoPath;
     private MutableLiveData<String> mChosenPhotoPath;
-    private MutableLiveData<List<String>> mPhotoDescriptionList;
+    private MutableLiveData<List<String>> mImageTitleList;
+    private MutableLiveData<Integer> mPosition;
 
     public BasePropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
         this.agentDataRepository = agentDataRepository;
@@ -165,11 +165,17 @@ public class BasePropertyActivityViewModel extends ViewModel {
     }
 
     public MutableLiveData<List<String>> getImageTitleList() {
-        if (mPhotoDescriptionList == null){
-            mPhotoDescriptionList = new MutableLiveData<>();
+        if (mImageTitleList == null){
+            mImageTitleList = new MutableLiveData<>();
         }
 
-        return mPhotoDescriptionList;
+        return mImageTitleList;
     }
 
+    public MutableLiveData<Integer> getPosition() {
+        if (mPosition == null) {
+            mPosition = new MutableLiveData<>();
+        }
+        return mPosition;
+    }
 }

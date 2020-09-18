@@ -28,11 +28,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentBottomSheetFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.AddPhotoTitleDialogFragment;
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -55,7 +59,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
 
-public class EditPropertyActivity extends BasePropertyActivity {
+public class EditPropertyActivity extends BasePropertyActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener, AddPhotoTitleDialogFragment.OnClickDialogConfirmListener {
 
     // FOR DATA
     private Date mDateAvailable, mDateSold;
@@ -81,6 +85,8 @@ public class EditPropertyActivity extends BasePropertyActivity {
     private ImageButton mImgBtnChoosePicture, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailableDate, mImgBtnSoldDate;
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
     private Button mEditPropertyButton;
+    private ScrollView mScrollView;
+    private RecyclerView mRecyclerView;
 
 
     @Override
@@ -119,102 +125,123 @@ public class EditPropertyActivity extends BasePropertyActivity {
             System.out.println("EditActivity propertyId: " + propertyId + " + agentId :" + agentId);
 
             if (savedInstanceState == null){ //get data from database once and if screen rotation, don't fetch data again
-                // FOR DATA
-                LiveData<Agent> liveDataAgent = mPropertyActivityViewModel.getAgent(agentId);
 
-                liveDataAgent.observe(this, agent -> {
-                    mPropertyActivityViewModel.getAgentMutableLiveData().setValue(agent);
-                    mAgentNameSurname = agent.getName() + " " + agent.getSurname();
-                    mTxtViewAgent.setText(mAgentNameSurname);
-                });
+                fetchPropertyDetailFromDatabase(agentId, propertyId);
 
-                LiveData<Property> liveDataProperty = mPropertyActivityViewModel.getProperty(propertyId, agentId);
-                liveDataProperty.observe(this, property -> {
-
-                    for (int i = 0; i < mTypeArrayAdapter.getCount() ; i++) {
-                        if (Objects.requireNonNull(mTypeArrayAdapter.getItem(i)).toString().equals(property.getType())){
-                            mTypeSpinner.setSelection(i);
-                        }
-                    }
-
-
-                    if (!property.isAvailable()){
-                        mIsAvailableSpinner.setSelection(1);
-                        mTxtViewSoldDate.setText(Utils.formatDateToString(property.getDateSold()));
-                    }
-
-                    List<String> poiList = property.getPointsOfInterest();
-                    if (!poiList.isEmpty()) {
-                        if (poiList.contains(mCckBoxSchool.getText().toString())) {
-                            mCckBoxSchool.setChecked(true);
-                            mPointsOfInterestList.add(mCckBoxSchool.getText().toString());
-                        }
-                        if (poiList.contains(mCckBoxHospital.getText().toString())) {
-                            mCckBoxHospital.setChecked(true);
-                            mPointsOfInterestList.add(mCckBoxHospital.getText().toString());
-                        }
-                        if (poiList.contains(mCckBoxRestaurant.getText().toString())) {
-                            mCckBoxRestaurant.setChecked(true);
-                            mPointsOfInterestList.add(mCckBoxRestaurant.getText().toString());
-                        }
-                        if (poiList.contains(mCckBoxMall.getText().toString())) {
-                            mCckBoxMall.setChecked(true);
-                            mPointsOfInterestList.add(mCckBoxMall.getText().toString());
-                        }
-                        if (poiList.contains(mCckBoxCinema.getText().toString())) {
-                            mCckBoxCinema.setChecked(true);
-                            mPointsOfInterestList.add(mCckBoxCinema.getText().toString());
-                        }
-                        if (poiList.contains(mCckBoxPark.getText().toString())) {
-                            mCckBoxPark.setChecked(true);
-                            mPointsOfInterestList.add(mCckBoxPark.getText().toString());
-                        }
-                        mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointsOfInterestList);
-                    }
-
-
-                    if (property.isAvailable()){
-                        mIsAvailableSpinner.setSelection(0); // Available
-                        mTxtViewSoldDate.setVisibility(View.GONE);
-                        mTxtViewChooseDateTitle.setVisibility(View.GONE);
-                        mImgBtnSoldDate.setVisibility(View.GONE);
-
-                    } else {
-                        mIsAvailableSpinner.setSelection(1); // Sold
-                        mTxtViewSoldDate.setVisibility(View.VISIBLE);
-                        mTxtViewChooseDateTitle.setVisibility(View.VISIBLE);
-                        mImgBtnSoldDate.setVisibility(View.VISIBLE);
-                        isAvailable = false;
-                    }
-
-                    mEdtTxtPrice.setText(property.getPrice());
-                    mEdtTxtAddress.setText(property.getAddress());
-                    mEdtTxtCity.setText(property.getCity());
-                    mEdtTxtSurface.setText(property.getSurface());
-                    mEdtTxtNbrRoom.setText(property.getNumberOfRooms());
-                    mEdtTxtNbrBedroom.setText(property.getNumberOfBedrooms());
-                    mEdtTxtNbrBathroom.setText(property.getNumberOfBathRooms());
-                    mEdtTxtDescription.setText(property.getDescription());
-
-                    mPropertyActivityViewModel.getDateAvailable().setValue(property.getDateAvailable());
-
-                });
-
-                LiveData<List<Image>> liveDataImageList = mPropertyActivityViewModel.getImageListOneProperty(propertyId);
-                liveDataImageList.observe(this, imageList -> {
-                    for (int i = 0; i <imageList.size() ; i++) {
-                        mImageTitleList.add(imageList.get(i).getImageTitle());
-                        try {
-                            setPictureFromPath(imageList.get(i).getImagePath(), mBitmapList, mImagePathList);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
-                });
             }
         }
     }
+
+    private void fetchPropertyDetailFromDatabase(long agentId, long propertyId) {
+        fetchAgentDataFromDatabase(agentId);
+        fetchPropertyDataFromDatabase(agentId, propertyId);
+        fetchImagesDataFromDatabase(propertyId);
+
+    }
+
+    private void fetchAgentDataFromDatabase(long agentId) {
+        LiveData<Agent> liveDataAgent = mPropertyActivityViewModel.getAgent(agentId);
+
+        liveDataAgent.observe(this, agent -> {
+            mPropertyActivityViewModel.getAgentMutableLiveData().setValue(agent);
+            mAgentNameSurname = agent.getName() + " " + agent.getSurname();
+            mTxtViewAgent.setText(mAgentNameSurname);
+        });
+
+    }
+
+    private void fetchPropertyDataFromDatabase(long agentId, long propertyId) {
+        LiveData<Property> liveDataProperty = mPropertyActivityViewModel.getProperty(propertyId, agentId);
+        liveDataProperty.observe(this, property -> {
+
+            setPoiCheckboxes(property);
+            setPropertyStatus(property);
+
+            // set fields
+            for (int i = 0; i < mTypeArrayAdapter.getCount() ; i++) {
+                if (Objects.requireNonNull(mTypeArrayAdapter.getItem(i)).toString().equals(property.getType())){
+                    mTypeSpinner.setSelection(i);
+                }
+            }
+            mEdtTxtPrice.setText(property.getPrice());
+            mEdtTxtAddress.setText(property.getAddress());
+            mEdtTxtCity.setText(property.getCity());
+            mEdtTxtSurface.setText(property.getSurface());
+            mEdtTxtNbrRoom.setText(property.getNumberOfRooms());
+            mEdtTxtNbrBedroom.setText(property.getNumberOfBedrooms());
+            mEdtTxtNbrBathroom.setText(property.getNumberOfBathRooms());
+            mEdtTxtDescription.setText(property.getDescription());
+        });
+    }
+
+    private void setPoiCheckboxes(Property property) {
+        List<String> poiList = property.getPointsOfInterest();
+        if (!poiList.isEmpty()) {
+            if (poiList.contains(mCckBoxSchool.getText().toString())) {
+                mCckBoxSchool.setChecked(true);
+                mPointsOfInterestList.add(mCckBoxSchool.getText().toString());
+            }
+            if (poiList.contains(mCckBoxHospital.getText().toString())) {
+                mCckBoxHospital.setChecked(true);
+                mPointsOfInterestList.add(mCckBoxHospital.getText().toString());
+            }
+            if (poiList.contains(mCckBoxRestaurant.getText().toString())) {
+                mCckBoxRestaurant.setChecked(true);
+                mPointsOfInterestList.add(mCckBoxRestaurant.getText().toString());
+            }
+            if (poiList.contains(mCckBoxMall.getText().toString())) {
+                mCckBoxMall.setChecked(true);
+                mPointsOfInterestList.add(mCckBoxMall.getText().toString());
+            }
+            if (poiList.contains(mCckBoxCinema.getText().toString())) {
+                mCckBoxCinema.setChecked(true);
+                mPointsOfInterestList.add(mCckBoxCinema.getText().toString());
+            }
+            if (poiList.contains(mCckBoxPark.getText().toString())) {
+                mCckBoxPark.setChecked(true);
+                mPointsOfInterestList.add(mCckBoxPark.getText().toString());
+            }
+            mPropertyActivityViewModel.getPointsOfInterestList().setValue(mPointsOfInterestList);
+        }
+    }
+
+    private void setPropertyStatus(Property property) {
+        if (property.isAvailable()){
+            mIsAvailableSpinner.setSelection(0); // Available
+            mTxtViewSoldDate.setVisibility(View.GONE);
+            mTxtViewChooseDateTitle.setVisibility(View.GONE);
+            mImgBtnSoldDate.setVisibility(View.GONE);
+
+        } else {
+            mIsAvailableSpinner.setSelection(1); // Sold
+            mTxtViewSoldDate.setVisibility(View.VISIBLE);
+            mTxtViewChooseDateTitle.setVisibility(View.VISIBLE);
+            mImgBtnSoldDate.setVisibility(View.VISIBLE);
+            mTxtViewSoldDate.setText(Utils.formatDateToString(property.getDateSold()));
+            isAvailable = false;
+        }
+
+        // avoid data loss after screen rotation
+        mPropertyActivityViewModel.getDateAvailable().setValue(property.getDateAvailable());
+        mPropertyActivityViewModel.getDateSold().setValue(property.getDateSold());
+    }
+
+    private void fetchImagesDataFromDatabase(long propertyId) {
+        LiveData<List<Image>> liveDataImageList = mPropertyActivityViewModel.getImageListOneProperty(propertyId);
+        liveDataImageList.observe(this, imageList -> {
+            for (int i = 0; i <imageList.size() ; i++) {
+                mImageTitleList.add(imageList.get(i).getImageTitle());
+                try {
+                    setPictureFromPath(imageList.get(i).getImagePath(), mBitmapList, mImagePathList);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
+        });
+    }
+
+
 
     private void onClickSoldDatePicker(){
             mImgBtnSoldDate.setOnClickListener(view -> {
@@ -300,11 +327,11 @@ public class EditPropertyActivity extends BasePropertyActivity {
     private void onClickEditProperty() {
         mEditPropertyButton.setOnClickListener(view -> {
             if (!isPossibleToEditProperty()){
-                Toast.makeText(EditPropertyActivity.this, "Missing a value", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Missing values", Snackbar.LENGTH_SHORT).show();
             }
             else {
 
-                mEditPropertyButton.setEnabled(false);
+                mEditPropertyButton.setEnabled(false); // avoid more than one click
                 Toast.makeText(EditPropertyActivity.this, "Property Edited", Toast.LENGTH_SHORT).show();
 
                 Property updatedProperty = new Property(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
@@ -315,7 +342,6 @@ public class EditPropertyActivity extends BasePropertyActivity {
 
                 mPropertyActivityViewModel.updateProperty(updatedProperty);
 
-                Log.e("EditProperty", String.valueOf(mImageTitleList.size()));
                 mPropertyActivityViewModel.deleteImagesOneProperty(mPropertyId);
                 for (int i = 0; i <mImagePathList.size() ; i++) {
                     Image image = new Image(mPropertyId, mImagePathList.get(i), mImageTitleList.get(i));
@@ -324,7 +350,6 @@ public class EditPropertyActivity extends BasePropertyActivity {
                 finish();
             }
         });
-
 
     }
 
@@ -437,12 +462,13 @@ public class EditPropertyActivity extends BasePropertyActivity {
         mCckBoxCinema = findViewById(R.id.checkBox_cinema_edit_activity);
         mCckBoxPark = findViewById(R.id.checkBox_park__edit_activity);
 
+        mScrollView = findViewById(R.id.edit_property_activity_scrollView);
 
     }
 
     private void configureRecyclerViewPhoto() {
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_photo_edit_activity);
-        mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList, mImagePathList);
+        mRecyclerView = findViewById(R.id.recycler_view_photo_edit_activity);
+        mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList, mImagePathList, getSupportFragmentManager(), getApplicationContext());
         mRecyclerView.setAdapter(mPropertyImageAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
@@ -554,4 +580,9 @@ public class EditPropertyActivity extends BasePropertyActivity {
         else return true;
     }
 
+    @Override
+    public void onDialogClickConfirmListener(List<String> imageTitleList) {
+        mImageTitleList = imageTitleList;
+        mPropertyActivityViewModel.getImageTitleList().setValue(imageTitleList);
+    }
 }

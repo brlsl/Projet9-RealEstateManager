@@ -32,11 +32,6 @@ public class REMViewModel extends ViewModel {
         this.executor = executor;
     }
 
-    public void init(long agentId){
-        if (mPropertyList == null){
-            mPropertyList = propertyDataSource.getPropertyList();
-        }
-    }
 
     // ---------
     // AGENT
