@@ -24,11 +24,11 @@ public class Property{
     private String type; // apartment, house, etc
     private String city;
     private String address;
-    private String price;
-    private String surface; // in square meters
-    private String numberOfRooms; // kitchen, living room, rooms, etc
-    private String numberOfBedrooms;
-    private String numberOfBathRooms;
+    private int price;
+    private int surface; // in square meters
+    private int numberOfRooms; // kitchen, living room, rooms, etc
+    private int numberOfBedrooms;
+    private int numberOfBathRooms;
     private String description;
     private List<String> pointsOfInterest;
     private Date dateAvailable;
@@ -40,15 +40,31 @@ public class Property{
 
     // constructor for database testing
     @Ignore
-    public Property(long id, long agentId, String city, String price){
+    public Property(long id, long agentId, String city, int price){
         this.id = id;
         this.agentId = agentId;
         this.city = city;
         this.price = price;
     }
 
-    public Property(long agentId, String city, String type, String address, String price, String surface,
-                    String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
+    @Ignore
+    public Property(long id, long agentId, int surface, int price){
+        this.id = id;
+        this.agentId = agentId;
+        this.surface = surface;
+        this.price = price;
+    }
+
+    @Ignore
+    public Property(long id, long agentId, String type) {
+        this.id = id;
+        this.agentId = agentId;
+        this.type = type;
+    }
+
+
+    public Property(long agentId, String city, String type, String address, int price, int surface,
+                    int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description,
                     Date dateAvailable, Date dateSold, String agentNameSurname, List<String> pointsOfInterest, String mainImagePath, boolean isAvailable) {
         this.agentId = agentId;
         this.city = city;
@@ -66,6 +82,13 @@ public class Property{
         this.pointsOfInterest = pointsOfInterest;
         this.mainImagePath = mainImagePath;
         this.isAvailable = isAvailable;
+    }
+
+    @Ignore
+    public Property(long id, long agentId, Date date) {
+        this.id = id;
+        this.agentId = agentId;
+        this.dateAvailable = date;
     }
 
 
@@ -102,43 +125,43 @@ public class Property{
         this.type = type;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getSurface() {
+    public int getSurface() {
         return surface;
     }
 
-    public void setSurface(String surface) {
+    public void setSurface(int surface) {
         this.surface = surface;
     }
 
-    public String getNumberOfRooms() {
+    public int getNumberOfRooms() {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(String numberOfRooms) {
+    public void setNumberOfRooms(int numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 
-    public String getNumberOfBedrooms() {
+    public int getNumberOfBedrooms() {
         return numberOfBedrooms;
     }
 
-    public void setNumberOfBedrooms(String numberOfBedrooms) {
+    public void setNumberOfBedrooms(int numberOfBedrooms) {
         this.numberOfBedrooms = numberOfBedrooms;
     }
 
-    public String getNumberOfBathRooms() {
+    public int getNumberOfBathRooms() {
         return numberOfBathRooms;
     }
 
-    public void setNumberOfBathRooms(String numberOfBathRooms) {
+    public void setNumberOfBathRooms(int numberOfBathRooms) {
         this.numberOfBathRooms = numberOfBathRooms;
     }
 

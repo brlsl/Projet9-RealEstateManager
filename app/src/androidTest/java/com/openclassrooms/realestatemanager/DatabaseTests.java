@@ -9,6 +9,7 @@ import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +17,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -52,8 +57,8 @@ public class DatabaseTests {
 
     private static long PROPERTY_ID_1 = 123456;
     private static long PROPERTY_ID_2 = 987654;
-    private static Property PROPERTY_DEMO_1 = new Property(PROPERTY_ID_1, AGENT_ID_1, "Paris", "123");
-    private static Property PROPERTY_DEMO_2 = new Property(PROPERTY_ID_2, AGENT_ID_1, "Issy", "456");
+    private static Property PROPERTY_DEMO_1 = new Property(PROPERTY_ID_1, AGENT_ID_1, "Paris", 123);
+    private static Property PROPERTY_DEMO_2 = new Property(PROPERTY_ID_2, AGENT_ID_1, "Issy", 456);
 
     private static String IMAGE_PATH_1 = "storage/fakePath1/";
     private static String IMAGE_PATH_2 = "storage/fakePath1/";
@@ -124,7 +129,7 @@ public class DatabaseTests {
         assertTrue(property.getAgentId() == AGENT_DEMO_1.getId()
                 && property.getId() == PROPERTY_DEMO_2.getId()
                 && property.getCity().equals(PROPERTY_DEMO_2.getCity())
-                && property.getPrice().equals(PROPERTY_DEMO_2.getPrice())
+                && property.getPrice() == (PROPERTY_DEMO_2.getPrice())
                 && propertyList.size() == 2);
 
     }
@@ -153,16 +158,16 @@ public class DatabaseTests {
         this.database.agentDao().createAgent(AGENT_DEMO_1);
         this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
 
-        List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());;
+        List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
         assertTrue( propertyList.size() == 1
                 && propertyList.get(0).getCity().equals("Paris")
-                && propertyList.get(0).getPrice().equals("123"));
+                && propertyList.get(0).getPrice() == 123);
         //TEST
         this.database.propertyDao().updatePropertyTest("St-Louis", "444" , PROPERTY_ID_1);
         propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
         assertTrue( propertyList.size() == 1
                 && propertyList.get(0).getCity().equals("St-Louis")
-                && propertyList.get(0).getPrice().equals("444"));
+                && propertyList.get(0).getPrice() == 444);
 
     }
 
@@ -214,4 +219,75 @@ public class DatabaseTests {
         imageList = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
         assertEquals(1, imageList.size());
     }
+
+    // Search property
+    @Test
+    public void filterPropertyListWithInt() throws InterruptedException {
+        Property property1 = new Property(1, AGENT_DEMO_1.getId(), 300,4000);
+        Property property2 = new Property(2, AGENT_DEMO_1.getId(), 200,5000);
+        Property property3 = new Property(3, AGENT_DEMO_1.getId(), 100,6000);
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.propertyDao().createProperty(property1);
+        this.database.propertyDao().createProperty(property2);
+        this.database.propertyDao().createProperty(property3);
+
+        List<Property> filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestInt(0,300, 0, 4000));
+        assertTrue(filteredList.size() == 1  && filteredList.get(0).getPrice() == 4000);
+
+        filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestInt(150,250, 4000, 6000));
+        assertTrue(filteredList.size() == 1 && filteredList.get(0).getPrice() == 5000);
+
+        filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestInt(0,99, 3000, 6000));
+        assertEquals(0, filteredList.size());
+
+        filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestInt(100,300, 0, 6000));
+        assertEquals(3, filteredList.size());
+
+    }
+
+    @Test
+    public void filterPropertyListWithString() throws InterruptedException {
+        Property property = new Property(1, AGENT_DEMO_1.getId(), " ");
+        Property property2 = new Property(2, AGENT_DEMO_1.getId(), " ");
+        Property property3 = new Property(3, AGENT_DEMO_1.getId(), "Apartment");
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.propertyDao().createProperty(property);
+        this.database.propertyDao().createProperty(property2);
+        this.database.propertyDao().createProperty(property3);
+
+        List<Property> filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestString(" "));
+        assertEquals(2, filteredList.size());
+
+        filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestString("Apartment"));
+        assertEquals(1, filteredList.size());
+
+    }
+
+    @Test
+    public void filterPropertyListWithDate() throws ParseException, InterruptedException {
+        Date date1 = Utils.formatStringToDate("01/01/2019");
+        Date date2 = Utils.formatStringToDate("01/01/2020");
+        Date date3 = Utils.formatStringToDate("01/01/2021");
+        Property property = new Property(1, AGENT_DEMO_1.getId(), date1);
+        Property property2 = new Property(2, AGENT_DEMO_1.getId(), date2);
+        Property property3 = new Property(3, AGENT_DEMO_1.getId(), date3);
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.propertyDao().createProperty(property);
+        this.database.propertyDao().createProperty(property2);
+        this.database.propertyDao().createProperty(property3);
+
+        Date dateMin = Utils.formatStringToDate("01/01/2019");
+        Date dateMax = Utils.formatStringToDate("01/01/2020");
+        List<Property> filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestDate(dateMin, dateMax));
+        assertEquals(2, filteredList.size());
+    }
+
+
 }

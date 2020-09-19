@@ -68,12 +68,12 @@ public class PropertyDetailFragment extends BaseFragment {
             propertyDetail.observe(this, property ->{
                 mTxtViewCity.setText(property.getCity());
                 mTxtViewAddress.setText(property.getAddress());
-                mTxtViewPrice.setText(Utils.formatPrice(property.getPrice()));
-                mTxtViewType.setText(property.getType());
-                mTxtViewSurface.setText(property.getSurface());
-                mTxtViewNbrOfRoom.setText(property.getNumberOfRooms());
-                mTxtViewNbrOfBedroom.setText(property.getNumberOfBedrooms());
-                mTxtViewNbrOfBathroom.setText(property.getNumberOfBathRooms());
+                mTxtViewPrice.setText(Utils.formatPrice(String.valueOf(property.getPrice())));
+                mTxtViewType.setText(String.valueOf(property.getType()));
+                mTxtViewSurface.setText(String.valueOf(property.getSurface()));
+                mTxtViewNbrOfRoom.setText(String.valueOf(property.getNumberOfRooms()));
+                mTxtViewNbrOfBedroom.setText(String.valueOf(property.getNumberOfBedrooms()));
+                mTxtViewNbrOfBathroom.setText(String.valueOf(property.getNumberOfBathRooms()));
                 mTxtViewDescription.setText(property.getDescription());
                 mTxtViewAgentNameSurname.setText(property.getAgentNameSurname());
                 mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));

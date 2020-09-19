@@ -42,6 +42,33 @@ public interface PropertyDao {
                        List<String> pointOfInterest, String mainImagePath, boolean isAvailable, long propertyId);
 */
     @Update(entity = Property.class)
-    public void updateProperty(Property property);
+    void updateProperty(Property property);
+
+    // ------ DATABASE PROPERTY SEARCH ------
+
+    // Queries for testing
+    @Query("SELECT * FROM property_table WHERE (type =:type )")
+    LiveData<List<Property>> searchPropertyTestString(String type);
+
+    // Query for testing
+    @Query("SELECT * FROM property_table WHERE (surface BETWEEN :surfaceMin AND :surfaceMax) " +
+            "AND (price BETWEEN :priceMin AND :priceMax) AND pointsOfInterest")
+    LiveData<List<Property>> searchPropertyTestInt(int surfaceMin,
+                                                   int surfaceMax, int priceMin, int priceMax);
+    // Query for testing
+    @Query("SELECT * FROM property_table WHERE (dateAvailable >= :dateMin AND dateAvailable <= :dateMax) ")
+    LiveData<List<Property>> searchPropertyTestDate(Date dateMin, Date dateMax);
+
+    // QUERY FOR APP
+
+    @Query("SELECT * FROM property_table WHERE (surface BETWEEN :surfaceMin AND :surfaceMax) AND" +
+            " (price BETWEEN :priceMin AND :priceMax) AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax) AND " +
+            "(type IN (:type)) AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
+            "AND (dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax)")
+    LiveData<List<Property>> searchProperty(int surfaceMin, int surfaceMax,
+                                            int priceMin, int priceMax,
+                                            int nbrRoomMin, int nbrRoomMax, String type,
+                                            Date dateAvailableMin, Date dateAvailableMax,
+                                            Date dateSoldMin, Date dateSoldMax);
 
 }

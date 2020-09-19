@@ -37,7 +37,7 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 
     public void displayData(final Property property) {
         mPropertyCity.setText(property.getCity());
-        mPropertyPrice.setText(Utils.formatPrice(property.getPrice()) + " €");
+        mPropertyPrice.setText(Utils.formatPrice(String.valueOf(property.getPrice())) + " €");
         mPropertyType.setText(property.getType());
 
 

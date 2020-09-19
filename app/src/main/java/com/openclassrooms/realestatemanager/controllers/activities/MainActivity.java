@@ -14,7 +14,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
@@ -35,13 +34,12 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
     public static final String PROPERTY_AGENT_ID_KEY = "PROPERTY_AGENT_ID_KEY";
     private static final String DETAIL_FRAGMENT_KEY = "DETAIL_FRAGMENT_KEY";
-
     private FragmentManager mFragmentManager;
     private boolean isTwoPane;
     private REMViewModel mViewModel;
-    PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
-    long mPropertyId = -1, mAgentId = -1;
-
+    private PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
+    private long mPropertyId = -1, mAgentId = -1;
+    private int SEARCH_PROPERTY_REQUEST_CODE = 100;
     // FOR UI
     private androidx.appcompat.widget.Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -179,12 +177,15 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         int id = item.getItemId();
         switch (id){
             case R.id.search_property_toolbar:
+                Intent intent = new Intent(this, SearchPropertyActivity.class);
+                startActivityForResult(intent, SEARCH_PROPERTY_REQUEST_CODE);
                 Toast.makeText(this, "Open search property", Toast.LENGTH_SHORT).show();
                 break;
         }
 
         return true;
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) { // menu drawer

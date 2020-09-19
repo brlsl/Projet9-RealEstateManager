@@ -36,48 +36,11 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RealEstateManagerDatabase.class, "MyDatabase.db")
-                            //.fallbackToDestructiveMigration()
-                            //.addCallback(prepopulateDatabase())
                             .build();
                 }
             }
         }
         return INSTANCE;
-    }
-
-    private static Callback prepopulateDatabase(){
-        return new Callback() {
-
-            @Override
-            public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                super.onCreate(db);
-
-                ContentValues agent = new ContentValues();
-                agent.put("id", 1);
-                agent.put("name", "REM");
-                agent.put("surname", "Agency");
-                db.insert("agent_table", OnConflictStrategy.IGNORE, agent);
-
-                ContentValues property = new ContentValues();
-                property.put("agentId", 1);
-                property.put("type", "Apartment");
-                property.put("city", "CityTest");
-                property.put("address","123 test street");
-                property.put("price", "123");
-                property.put("surface", "100");
-                property.put("numberOfRooms", "6");
-                property.put("numberOfBedrooms", "3");
-                property.put("numberOfBathrooms", "1");
-                property.put("description", "Nice apartment, well located");
-                property.put("dateAvailable", "01/01/2021");
-                property.put("pointsOfInterest", "School");
-                property.put("agentNameSurname", "REM Agency");
-                property.put("mainImagePath", "fakePath/");
-                property.put("isAvailable",  true);
-
-                db.insert("property_table", OnConflictStrategy.IGNORE, property);
-            }
-        };
     }
 
 }

@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
 
 import androidx.lifecycle.MutableLiveData;
@@ -86,6 +85,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_property);
+        setTitle("Add Property");
 
 
         configureViews();
@@ -246,8 +246,8 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
             }
             else {
                 mAddPropertyButton.setEnabled(false); // avoid more than one click
-                Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
-                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable);
+                Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
+                        Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable);
                 mPropertyActivityViewModel.createProperty(propertyAdded);
 
                 // wait between property creation and get all properties from database

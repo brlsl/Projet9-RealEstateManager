@@ -93,6 +93,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_property);
+        setTitle("Edit Property");
 
         configureViews();
         configureLiveData();
@@ -163,13 +164,13 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                     mTypeSpinner.setSelection(i);
                 }
             }
-            mEdtTxtPrice.setText(property.getPrice());
+            mEdtTxtPrice.setText(String.valueOf(property.getPrice()));
             mEdtTxtAddress.setText(property.getAddress());
             mEdtTxtCity.setText(property.getCity());
-            mEdtTxtSurface.setText(property.getSurface());
-            mEdtTxtNbrRoom.setText(property.getNumberOfRooms());
-            mEdtTxtNbrBedroom.setText(property.getNumberOfBedrooms());
-            mEdtTxtNbrBathroom.setText(property.getNumberOfBathRooms());
+            mEdtTxtSurface.setText(String.valueOf(property.getSurface()));
+            mEdtTxtNbrRoom.setText(String.valueOf(property.getNumberOfRooms()));
+            mEdtTxtNbrBedroom.setText(String.valueOf(property.getNumberOfBedrooms()));
+            mEdtTxtNbrBathroom.setText(String.valueOf(property.getNumberOfBathRooms()));
             mEdtTxtDescription.setText(property.getDescription());
         });
     }
@@ -334,8 +335,8 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                 mEditPropertyButton.setEnabled(false); // avoid more than one click
                 Toast.makeText(EditPropertyActivity.this, "Property Edited", Toast.LENGTH_SHORT).show();
 
-                Property updatedProperty = new Property(mAgentId, mCity, mType, mAddress, mPrice, mSurface, mNbrOfRoom, mNbrOfBedroom,
-                        mNbrOfBathroom, mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,
+                Property updatedProperty = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
+                        Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,
                         mImagePathList.get(0), isAvailable);
 
                 updatedProperty.setId(mPropertyId);
