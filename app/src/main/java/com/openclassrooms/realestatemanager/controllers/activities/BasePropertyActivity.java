@@ -171,7 +171,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
 
     }
 
-    void onClickAvailableDatePicker(ImageButton imageButton, BasePropertyActivityViewModel viewModel){
+    void onClickDatePicker(ImageButton imageButton, BasePropertyActivityViewModel viewModel){
         imageButton.setOnClickListener(view -> {
             int currentYear, currentMonth, currentDayOfMonth ;
             Calendar calendar = Calendar.getInstance();

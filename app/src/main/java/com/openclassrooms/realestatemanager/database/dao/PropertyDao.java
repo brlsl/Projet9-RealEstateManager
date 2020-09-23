@@ -34,25 +34,31 @@ public interface PropertyDao {
 
     @Query("UPDATE property_table SET price =:price, city =:city WHERE id =:propertyId")
     int updatePropertyTest(String city, String price, long propertyId);
-/*
-    @Query("UPDATE property_table SET agentId =:agentId, type =:type, city=:city, address = :address, price = :price, surface = :surface, numberOfRooms =:numberOfRooms, numberOfBedrooms = :numberOfBedrooms, numberOfBathRooms =:numberOfBathRooms, description=:description,dateAvailable =:dateAvailable, dateSold=:dateSold, agentNameSurname=:agentNameSurname, pointsOfInterest=:pointOfInterest, mainImagePath=:mainImagePath, isAvailable=:isAvailable WHERE id =:propertyId")
-    int updateProperty(long agentId, String city, String type, String address, String price, String surface,
-                       String numberOfRooms, String numberOfBedrooms, String numberOfBathRooms, String description,
-                       Date dateAvailable, Date dateSold, String agentNameSurname,
-                       List<String> pointOfInterest, String mainImagePath, boolean isAvailable, long propertyId);
-*/
+
+
     @Update(entity = Property.class)
     void updateProperty(Property property);
 
     // ------ DATABASE PROPERTY SEARCH ------
-
+/*
+    //(type =:input ) OR (LENGHT(:input) > 2)
+    // WHERE (type =:input) OR (LENGTH(type) >=1)
     // Queries for testing
-    @Query("SELECT * FROM property_table WHERE (type =:type )")
-    LiveData<List<Property>> searchPropertyTestString(String type);
+    @Query("SELECT * FROM property_table type " +
+            "CASE " +
+            "WHEN (LENGTH(:input) > 1) THEN (type)"+
+            "END FROM property_table")
+    LiveData<List<Property>> searchPropertyTestString(String input);
+
+ */
+
+    // test for String query
+    @Query("SELECT * FROM property_table WHERE (type LIKE :input) ")
+    LiveData<List<Property>> searchPropertyTestString(String input);
 
     // Query for testing
     @Query("SELECT * FROM property_table WHERE (surface BETWEEN :surfaceMin AND :surfaceMax) " +
-            "AND (price BETWEEN :priceMin AND :priceMax) AND pointsOfInterest")
+            "AND (price BETWEEN :priceMin AND :priceMax)")
     LiveData<List<Property>> searchPropertyTestInt(int surfaceMin,
                                                    int surfaceMax, int priceMin, int priceMax);
     // Query for testing
@@ -62,13 +68,25 @@ public interface PropertyDao {
     // QUERY FOR APP
 
     @Query("SELECT * FROM property_table WHERE (surface BETWEEN :surfaceMin AND :surfaceMax) AND" +
-            " (price BETWEEN :priceMin AND :priceMax) AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax) AND " +
-            "(type IN (:type)) AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
+            " (price BETWEEN :priceMin AND :priceMax) AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax)" +
+            "AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
             "AND (dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax)")
-    LiveData<List<Property>> searchProperty(int surfaceMin, int surfaceMax,
-                                            int priceMin, int priceMax,
-                                            int nbrRoomMin, int nbrRoomMax, String type,
-                                            Date dateAvailableMin, Date dateAvailableMax,
-                                            Date dateSoldMin, Date dateSoldMax);
+    LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax,
+                                                       int priceMin, int priceMax,
+                                                       int nbrRoomMin, int nbrRoomMax,
+                                                       Date dateAvailableMin, Date dateAvailableMax,
+                                                       Date dateSoldMin, Date dateSoldMax);
+
+    @Query("SELECT * FROM property_table WHERE (type LIKE :type) AND (surface BETWEEN :surfaceMin AND :surfaceMax) AND" +
+            " (price BETWEEN :priceMin AND :priceMax) AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax)" +
+            "AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
+            "AND (dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax)")
+    LiveData<List<Property>> filterPropertyListOneType(String type,
+                                                       int surfaceMin, int surfaceMax,
+                                                       int priceMin, int priceMax,
+                                                       int nbrRoomMin, int nbrRoomMax,
+                                                       Date dateAvailableMin, Date dateAvailableMax,
+                                                       Date dateSoldMin, Date dateSoldMax);
+
 
 }

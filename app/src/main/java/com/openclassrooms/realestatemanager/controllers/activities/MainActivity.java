@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.REMViewModel;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     private REMViewModel mViewModel;
     private PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
     private long mPropertyId = -1, mAgentId = -1;
-    private int SEARCH_PROPERTY_REQUEST_CODE = 100;
+
     // FOR UI
     private androidx.appcompat.widget.Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         configureDrawerLayout();
         configureNavigationViewListener();
         configureDualPaneLayout(savedInstanceState);
+        configureBottomNavigationView();
         configureViewModel();
     }
 
@@ -178,8 +180,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         switch (id){
             case R.id.search_property_toolbar:
                 Intent intent = new Intent(this, SearchPropertyActivity.class);
-                startActivityForResult(intent, SEARCH_PROPERTY_REQUEST_CODE);
-                Toast.makeText(this, "Open search property", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 break;
         }
 
@@ -194,16 +195,31 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
             case R.id.activity_main_drawer_loan:
                 Intent loanIntent = new Intent(this, LoanSimulationActivity.class);
                 startActivity(loanIntent);
-                Toast.makeText(this, "Open loan activity", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_main_drawer_settings:
                 Intent SettingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(SettingsIntent);
-                Toast.makeText(this, "Open settings", Toast.LENGTH_SHORT).show();
                 break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);  //close navigation drawer after choice
         return true;
     }
+
+
+    private void configureBottomNavigationView() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.bottom_navigation_map:
+
+                }
+                return false;
+            }
+        });
+    }
+
 
 }

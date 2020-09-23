@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.models.Property;
 
+import java.util.Date;
 import java.util.List;
 
 public class PropertyDataRepository {
@@ -38,6 +39,18 @@ public class PropertyDataRepository {
 
     public void updateProperty(Property property){
         propertyDao.updateProperty(property);
+    }
+
+    public LiveData<List<Property>> filterPropertyListOneType(String type, int surfaceMin, int surfaceMax, int priceMin, int priceMax, int nbrRoomMin, int nbrRoomMax,
+                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax){
+        return propertyDao.filterPropertyListOneType(type,surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
+                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax);
+    }
+
+    public LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax, int priceMin, int priceMax, int nbrRoomMin, int nbrRoomMax,
+                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax){
+        return propertyDao.filterPropertyListAllType(surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
+                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax);
     }
 
 }

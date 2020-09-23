@@ -102,7 +102,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
         onClickChooseAgent(mImgBtnChooseAgent);
         onClickTakePicture();
         onClickChoosePicture();
-        onClickAvailableDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
+        onClickDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
 
     }
 

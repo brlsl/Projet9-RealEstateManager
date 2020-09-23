@@ -108,7 +108,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
         onClickTakePicture();
         onClickChoosePicture();
         onClickChooseAgent(mImgBtnChooseAgent);
-        onClickAvailableDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
+        onClickDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
         onClickSoldDatePicker();
 
         onSelectedStatusPropertySpinner();

@@ -36,4 +36,16 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="loan_amount">Loan amount</string>
     <string name="loan_terms">Loan terms</string>
+    <string name="minimum_price">Minimum price</string>
+    <string name="maximum_price">Maximum price</string>
+    <string name="available_before">Available before</string>
+    <string name="available_since">Available since</string>
+    <string name="maximum_room">Maximum room</string>
+    <string name="minimum_room">Minimum room</string>
+    <string name="maximum_surface">Maximum Surface</string>
+    <string name="minimum_surface">Minimum Surface</string>
+    <string name="property_type_wanted">Property type wanted</string>
+    <string name="sold_since">Sold since</string>
+    <string name="sold_before">Sold before</string>
+    <string name="enter_search_information">Enter search information</string>
 </resources>
