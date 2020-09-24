@@ -47,10 +47,6 @@
         <!-- Loan Activity -->
         <activity android:name=".controllers.activities.LoanSimulationActivity" />
 
-        <!-- Search Property Activity-->
-        <activity android:name=".controllers.activities.SearchPropertyActivity"
-            android:theme="@style/ActivityWithActionBar"> </activity>
-
         <!-- Settings Activity-->
         <activity
             android:name=".controllers.activities.SettingsActivity"

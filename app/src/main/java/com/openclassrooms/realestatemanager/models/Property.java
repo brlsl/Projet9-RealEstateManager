@@ -1,5 +1,8 @@
 package com.openclassrooms.realestatemanager.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -15,7 +18,7 @@ import java.util.List;
         childColumns = "agentId"
         ))
 
-public class Property{
+public class Property implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -91,6 +94,36 @@ public class Property{
         this.dateAvailable = date;
     }
 
+
+    protected Property(Parcel in) {
+        id = in.readLong();
+        agentId = in.readLong();
+        type = in.readString();
+        city = in.readString();
+        address = in.readString();
+        price = in.readInt();
+        surface = in.readInt();
+        numberOfRooms = in.readInt();
+        numberOfBedrooms = in.readInt();
+        numberOfBathRooms = in.readInt();
+        description = in.readString();
+        pointsOfInterest = in.createStringArrayList();
+        agentNameSurname = in.readString();
+        mainImagePath = in.readString();
+        isAvailable = in.readByte() != 0;
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     // ----- GETTERS AND SETTERS -----
     public long getId() {
@@ -230,5 +263,29 @@ public class Property{
 
     public void setDateSold(Date dateSold) {
         this.dateSold = dateSold;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeLong(agentId);
+        parcel.writeString(type);
+        parcel.writeString(city);
+        parcel.writeString(address);
+        parcel.writeInt(price);
+        parcel.writeInt(surface);
+        parcel.writeInt(numberOfRooms);
+        parcel.writeInt(numberOfBedrooms);
+        parcel.writeInt(numberOfBathRooms);
+        parcel.writeString(description);
+        parcel.writeStringList(pointsOfInterest);
+        parcel.writeString(agentNameSurname);
+        parcel.writeString(mainImagePath);
+        parcel.writeByte((byte) (isAvailable ? 1 : 0));
     }
 }

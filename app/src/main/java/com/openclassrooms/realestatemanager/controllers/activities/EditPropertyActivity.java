@@ -582,7 +582,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
     }
 
     @Override
-    public void onDialogClickConfirmListener(List<String> imageTitleList) {
+    public void onConfirmClick(List<String> imageTitleList) {
         mImageTitleList = imageTitleList;
         mPropertyActivityViewModel.getImageTitleList().setValue(imageTitleList);
     }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,21 +19,28 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.REMViewModel;
+import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesFilteredListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.SearchPropertyFragment;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements PropertiesListFragment.OnItemPropertyClickListener,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, SearchPropertyFragment.OnClickFilterPropertyList {
 
     // FOR DATA
     public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
     public static final String PROPERTY_AGENT_ID_KEY = "PROPERTY_AGENT_ID_KEY";
+    public static final String PROPERTY_LIST_FILTERED_KEY = "PROPERTY_FILTERED_LIST";
     private static final String DETAIL_FRAGMENT_KEY = "DETAIL_FRAGMENT_KEY";
+    private static final String SEARCH_PROPERTY_TAG = "SEARCH_PROPERTY_FRAGMENT";
+
     private FragmentManager mFragmentManager;
     private boolean isTwoPane;
     private REMViewModel mViewModel;
@@ -164,11 +170,15 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
             a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(a);
         }
-        // after multiple rotation, fragment are added to backstack, if > 1 and detail not visible, finish activity in portrait
-       else if (mFragmentManager.getBackStackEntryCount() > 1 &&
-                !Objects.requireNonNull(mFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_KEY)).isVisible()){
+       /* // after multiple rotation, fragment are added to backstack, if > 1 and detail not visible, finish activity in portrait
+       else if (mFragmentManager.getBackStackEntryCount() > 1 && (
+                !Objects.requireNonNull(mFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_KEY)).isVisible()) ||
+                !Objects.requireNonNull(mFragmentManager.findFragmentByTag(SEARCH_PROPERTY_KEY)).isVisible()){
             finish();
+
+
         }
+        */
         else
             super.onBackPressed();
     }
@@ -177,11 +187,20 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) { // toolbar item
         int id = item.getItemId();
-        switch (id){
-            case R.id.search_property_toolbar:
-                Intent intent = new Intent(this, SearchPropertyActivity.class);
-                startActivity(intent);
-                break;
+        if (id == R.id.search_property_toolbar) {
+            if (!isTwoPane) {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, new SearchPropertyFragment(), SEARCH_PROPERTY_TAG)
+                        .addToBackStack(null)
+                        .commit();
+
+            } else {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.detail_container, new SearchPropertyFragment(), SEARCH_PROPERTY_TAG)
+                        .addToBackStack(null)
+                        .commit();
+
+            }
         }
 
         return true;
@@ -222,4 +241,18 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     }
 
 
+    @Override
+    public void onClickFilterPropertiesListener(List<Property> propertyList) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(PROPERTY_LIST_FILTERED_KEY, (ArrayList<Property>) propertyList);
+
+        PropertiesFilteredListFragment filteredListFragment = new PropertiesFilteredListFragment();
+        filteredListFragment.setArguments(bundle);
+
+        mFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, filteredListFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 }

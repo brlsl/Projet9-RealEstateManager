@@ -41,7 +41,7 @@ public class AddPhotoTitleDialogFragment extends DialogFragment {
     private BasePropertyActivityViewModel mViewModel;
 
     public interface OnClickDialogConfirmListener {
-        void onDialogClickConfirmListener(List<String> imageTitleList);
+        void onConfirmClick(List<String> imageTitleList);
     }
 
     // LISTENER
@@ -129,7 +129,7 @@ public class AddPhotoTitleDialogFragment extends DialogFragment {
                         if (mPhotoTitleDescriptionEdtTxt.getText().toString().length() > 0) {
                             String photoTitle =  mPhotoTitleDescriptionEdtTxt.getText().toString();
                             mCopyImageTitleList.set(copyPosition, photoTitle);
-                            mListener.onDialogClickConfirmListener(mCopyImageTitleList);
+                            mListener.onConfirmClick(mCopyImageTitleList);
 
                             dialog.dismiss();
                         }

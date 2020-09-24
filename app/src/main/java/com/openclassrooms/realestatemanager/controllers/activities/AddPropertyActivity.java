@@ -367,7 +367,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
 
     // listener after change photo title
     @Override
-    public void onDialogClickConfirmListener(List<String> imageTitleList) {
+    public void onConfirmClick(List<String> imageTitleList) {
         mImageTitleList = imageTitleList;
         mPropertyActivityViewModel.getImageTitleList().setValue(imageTitleList);
     }
