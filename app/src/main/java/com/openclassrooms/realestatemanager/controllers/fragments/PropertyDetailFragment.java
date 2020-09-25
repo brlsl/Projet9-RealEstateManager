@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -24,10 +26,16 @@ import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.api.Geocode;
+import com.openclassrooms.realestatemanager.utils.GoogleApiStreams;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.views.ImageSlider.ImageSliderAdapter;
 
+import java.util.BitSet;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
@@ -37,19 +45,27 @@ public class PropertyDetailFragment extends BaseFragment {
 
     // FOR DATA
     private PropertyDetailFragmentViewModel mViewModel;
+    private static final String TAG = "PropertyDetailFragment";
+    private String mPropertyLatLng;
+    public static String API_KEY;
 
     // FOR UI
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
             mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewDateSoldField,
             mTxtViewDateSold, mTxtViewAgentNameSurname;
-
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
     private FloatingActionButton mFabEditProperty;
+    private Disposable mDisposable;
+    private ImageView mStaticMapImageView;
+
+    // ------ LIFECYCLE ------
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        API_KEY = requireActivity().getString(R.string.api_key);
+
         View view = inflater.inflate(R.layout.fragment_property_detail,container,false);
 
         configureViewModel();
@@ -78,6 +94,48 @@ public class PropertyDetailFragment extends BaseFragment {
                 mTxtViewAgentNameSurname.setText(property.getAgentNameSurname());
                 mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));
 
+                Log.d(TAG, "PROPERTY ADDRESS" + property.getCity());
+                Log.d(TAG, String.valueOf(Thread.currentThread()));
+
+
+                this.mDisposable = GoogleApiStreams.streamFetchLocationFromAddress(property.getAddress()+" " + property.getCity(), API_KEY)
+                        .subscribeWith(new DisposableObserver<Geocode>() {
+                            @Override
+                            public void onNext(Geocode geocode) {
+                                if (geocode.getResults().size()> 0){
+                                    String latitude = geocode.getResults().get(0).getGeometry().getLocation().getLat().toString();
+                                    String longitude = geocode.getResults().get(0).getGeometry().getLocation().getLng().toString();
+
+                                    mPropertyLatLng = latitude+","+longitude;
+                                    Log.d(TAG, "Property latitude" + geocode.getResults().get(0).getGeometry().getLocation().getLat().toString());
+                                    Log.d(TAG, "property lng" + geocode.getResults().get(0).getGeometry().getLocation().getLng().toString());
+                                }
+                                else
+                                    Log.d(TAG,"NO RESULT");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                String staticMapUrl1 = "https://maps.googleapis.com/maps/api/staticmap?markers=";
+                                String staticMapUrl2 =  "&zoom=14&size=400x400&key=";
+
+                                if (mPropertyLatLng != null){
+                                    Glide.with(requireContext())
+                                            .load(staticMapUrl1 + mPropertyLatLng + staticMapUrl2 + API_KEY)
+                                            .into(mStaticMapImageView);
+                                }
+
+                                Log.d(TAG, "mPropertyLatLng : " + mPropertyLatLng);
+                                Log.d(TAG, "url link :" + staticMapUrl1+mPropertyLatLng+staticMapUrl2+API_KEY);
+                            }
+                        });
+
+
                 if (property.isAvailable()) {
                     mTxtViewDateSoldField.setVisibility(View.GONE);
                     mTxtViewDateSold.setVisibility(View.GONE);
@@ -94,7 +152,7 @@ public class PropertyDetailFragment extends BaseFragment {
 
             imageList.observe(this, images -> {
                 mViewPager2.setAdapter(new ImageSliderAdapter(images));
-                Log.e("PropertyDetailFragment", "Image list: "+ images.size());
+                Log.d(TAG, "Image list: "+ images.size());
 
                 // method for dots indicator in viewpager2
                 new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy(){
@@ -105,11 +163,16 @@ public class PropertyDetailFragment extends BaseFragment {
 
             });
 
-
-
         }
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (this.mDisposable != null && !this.mDisposable.isDisposed())
+            this.mDisposable.dispose();
     }
 
     // ------ METHODS CONFIGURATION ------
@@ -131,6 +194,9 @@ public class PropertyDetailFragment extends BaseFragment {
         mTxtViewDateSold = view.findViewById(R.id.detail_fragment_property_sold_date);
         mTxtViewAgentNameSurname = view.findViewById(R.id.detail_fragment_property_agent_name_surname);
         mFabEditProperty = view.findViewById(R.id.detail_fragment_fab_edit_property);
+
+        mStaticMapImageView = view.findViewById(R.id.static_map_imageView_detail_property_activity);
+
     }
 
     private void configureViewModel() {

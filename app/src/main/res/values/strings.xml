@@ -48,4 +48,25 @@
     <string name="sold_since">Sold since</string>
     <string name="sold_before">Sold before</string>
     <string name="enter_search_information">Enter search information</string>
+    <string name="api_key">AIzaSyDcADdHw6_IUPrjzmEnbo55OdmSdCKb27A</string>
+    <string name="choose_availability_date">Choose availability date</string>
+    <string name="description_300_300">Description (300/300)</string>
+    <string name="room_s">Room(s)</string>
+    <string name="bedroom_s">Bedroom(s)</string>
+    <string name="bathroom_s">Bathroom(s)</string>
+    <string name="points_of_interest_nearby">Points of interest nearby</string>
+    <string name="city">City</string>
+    <string name="address">Address</string>
+    <string name="euro">€</string>
+    <string name="price">Price</string>
+    <string name="school">School</string>
+    <string name="hospital">Hospital</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="mall">Mall</string>
+    <string name="cinema">Cinema</string>
+    <string name="park">Park</string>
+    <string name="choose_sold_date">Choose sold date</string>
+    <string name="choose_agent">Choose agent</string>
+    <string name="edit_property">Edit Property</string>
+    <string name="add_property">Add Property</string>
 </resources>

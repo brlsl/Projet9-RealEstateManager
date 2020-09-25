@@ -45,17 +45,17 @@
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/edit_text_border"
                     android:ems="8"
-                    android:hint="Price "
+                    android:hint="@string/price"
                     android:inputType="number"
                     android:maxLength="9"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_activity_spinner_type"
                     app:layout_constraintEnd_toStartOf="@+id/currency"
                     app:layout_constraintStart_toEndOf="@+id/edit_activity_spinner_type"
-                    app:layout_constraintTop_toTopOf="@+id/edit_activity_spinner_type" />
+                    app:layout_constraintTop_toTopOf="@+id/edit_activity_spinner_type"
+                    android:autofillHints="" />
 
 
                 <TextView
@@ -63,8 +63,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="€"
-                    android:textSize="15dp"
+                    android:text="@string/euro"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_price_edit_activity"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/editText_price_edit_activity" />
@@ -79,16 +79,16 @@
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/edit_text_border"
                     android:ems="8"
-                    android:hint="Address"
+                    android:hint="@string/address"
                     android:inputType="textNoSuggestions"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_activity_spinner_type" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_activity_spinner_type"
+                    android:autofillHints="" />
 
                 <EditText
                     android:id="@+id/editText_city_edit_activity"
@@ -97,22 +97,22 @@
                     android:layout_marginTop="24dp"
                     android:background="@drawable/edit_text_border"
                     android:ems="8"
-                    android:hint="City"
+                    android:hint="@string/city"
                     android:inputType="textNoSuggestions"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_address_edit_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_address_edit_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_address_edit_activity"
+                    android:autofillHints="" />
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Points of interest nearby"
-                    android:textStyle="bold"
+                    android:text="@string/points_of_interest_nearby"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/editText_city_edit_activity"
                     app:layout_constraintTop_toBottomOf="@+id/editText_city_edit_activity" />
 
@@ -135,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
-                            android:text="School"
+                            android:text="@string/school"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -144,7 +144,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Hospital"
+                            android:text="@string/hospital"
                             app:layout_constraintEnd_toStartOf="@+id/checkBox_restaurant_edit_activity"
                             app:layout_constraintStart_toEndOf="@+id/checkBox_school_edit_activity"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -155,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
-                            android:text="Restaurant"
+                            android:text="@string/restaurant"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -166,7 +166,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
-                            android:text="Mall"
+                            android:text="@string/mall"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/checkBox_school_edit_activity" />
@@ -175,7 +175,7 @@
                             android:id="@+id/checkBox_cinema_edit_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cinema"
+                            android:text="@string/cinema"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/checkBox_hospital_edit_activity"
                             app:layout_constraintTop_toBottomOf="@+id/checkBox_hospital_edit_activity" />
@@ -184,7 +184,7 @@
                             android:id="@+id/checkBox_park__edit_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Park"
+                            android:text="@string/park"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/checkBox_restaurant_edit_activity"
                             app:layout_constraintTop_toBottomOf="@+id/checkBox_restaurant_edit_activity" />
@@ -202,10 +202,11 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     android:ems="3"
                     app:layout_constraintStart_toStartOf="@+id/editText_city_edit_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+                    app:layout_constraintTop_toBottomOf="@+id/cardView5"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -213,9 +214,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="m²"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_surface_edit_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_surface_edit_activity"
-                    app:layout_constraintTop_toTopOf="@+id/editText_surface_edit_activity" />
+                    app:layout_constraintTop_toTopOf="@+id/editText_surface_edit_activity"
+                    tools:ignore="HardcodedText" />
 
                 <EditText
                     android:id="@+id/editText_number_of_room_edit_activity"
@@ -229,16 +232,18 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_surface_edit_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_surface_edit_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_surface_edit_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Room(s)"
+                    android:text="@string/room_s"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room_edit_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_number_of_room_edit_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_edit_activity"
@@ -257,17 +262,18 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_surface_edit_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room_edit_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room_edit_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Bedroom(s)"
-                    android:textSize="15sp"
+                    android:text="@string/bedroom_s"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bedroom_edit_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_number_of_bedroom_edit_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_number_of_bedroom_edit_activity" />
@@ -284,17 +290,18 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_number_of_bedroom_edit_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_edit_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_edit_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Bathroom(s)"
-                    android:textSize="15sp"
+                    android:text="@string/bathroom_s"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bathroom_edit_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_number_of_bathroom_edit_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_number_of_bathroom_edit_activity"
@@ -305,7 +312,8 @@
                     android:id="@+id/textview_description_edit_activity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Description (300/300)"
+                    android:text="@string/description_300_300"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/editText_description_edit_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_surface_edit_activity" />
 
@@ -327,7 +335,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/textview_description_edit_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/textview_description_edit_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <Spinner
                     android:id="@+id/spinner_availability_edit_property_activity"
@@ -343,7 +353,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginTop="16dp"
-                    android:text="Choose availability date"
+                    android:text="@string/choose_availability_date"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/image_button_availability_date_edit_activity"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_availability_edit_property_activity" />
 
@@ -351,10 +362,13 @@
                     android:id="@+id/image_button_availability_date_edit_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="image button choose date available"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_availability_date_edit_activity"
-                    app:srcCompat="@drawable/ic_calendar" />
+                    app:srcCompat="@drawable/ic_calendar"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/textView_availability_date_edit_property_activity"
@@ -362,6 +376,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/image_button_availability_date_edit_activity"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/image_button_availability_date_edit_activity"
@@ -373,7 +388,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginTop="24dp"
-                    android:text="Choose sold date"
+                    android:text="@string/choose_sold_date"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/image_button_availability_date_edit_activity"
                     app:layout_constraintTop_toBottomOf="@+id/image_button_availability_date_edit_activity" />
 
@@ -381,12 +397,15 @@
                     android:id="@+id/imageButton_sold_date_edit_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginBottom="24dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="image button choose sold date"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_choose_sold_date_edit_activity"
-                    app:srcCompat="@drawable/ic_calendar" />
+                    app:srcCompat="@drawable/ic_calendar"
+                    tools:ignore="HardcodedText" />
 
 
                 <TextView
@@ -395,7 +414,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageButton_sold_date_edit_activity"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageButton_sold_date_edit_activity"
@@ -412,7 +431,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Choose agent"
+            android:text="@string/choose_agent"
+            android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="@+id/image_button_choose_agent_edit_activity"
             app:layout_constraintTop_toBottomOf="@+id/cardView_edit_property" />
 
@@ -420,10 +440,13 @@
             android:id="@+id/image_button_choose_agent_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="edit agent chosen"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_choose_agent_edit_property_activity"
-            app:srcCompat="@drawable/ic_agent" />
+            app:srcCompat="@drawable/ic_agent"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/agent_chosen_edit_property_activity"
@@ -431,6 +454,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
+            android:textStyle="bold|italic"
             app:layout_constraintBottom_toBottomOf="@+id/image_button_choose_agent_edit_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_button_choose_agent_edit_activity"
@@ -440,35 +464,40 @@
             android:id="@+id/image_button_take_picture_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="take picture button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_button_choose_agent_edit_activity"
-            app:srcCompat="@drawable/ic_take_picture" />
+            app:srcCompat="@drawable/ic_take_picture"
+            tools:ignore="HardcodedText" />
 
         <ImageButton
             android:id="@+id/image_button_choose_picture_edit_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="@+id/image_button_take_picture_edit_activity"
             app:layout_constraintStart_toEndOf="@+id/image_button_take_picture_edit_activity"
             app:layout_constraintTop_toTopOf="@+id/image_button_take_picture_edit_activity"
-            app:srcCompat="@drawable/ic_picture_from_files" />
+            app:srcCompat="@drawable/ic_picture_from_files"
+            android:contentDescription="choose picture button"
+            tools:ignore="HardcodedText" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_photo_edit_activity"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimary"
-                tools:listitem="@layout/rv_property_photo_list"
-                app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_button_take_picture_edit_activity">
-             </androidx.recyclerview.widget.RecyclerView>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_photo_edit_activity"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/activity_edit_property_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_button_take_picture_edit_activity"
+            tools:listitem="@layout/rv_property_photo_list"/>
 
         <Button
             android:id="@+id/activity_edit_property_button"
@@ -476,7 +505,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
-            android:text="Edit Property"
+            android:text="@string/edit_property"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

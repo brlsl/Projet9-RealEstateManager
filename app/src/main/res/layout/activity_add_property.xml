@@ -46,26 +46,25 @@
                     android:layout_marginEnd="30dp"
                     android:background="@drawable/edit_text_border"
                     android:ems="8"
-                    android:hint="Price "
+                    android:hint="@string/price"
                     android:inputType="number"
                     android:maxLength="9"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="@+id/add_activity_spinner_type"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/add_activity_spinner_type"
-                    app:layout_constraintTop_toTopOf="@+id/add_activity_spinner_type" />
+                    app:layout_constraintTop_toTopOf="@+id/add_activity_spinner_type"
+                    android:autofillHints="" />
 
                 <TextView
                     android:id="@+id/currency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="€"
-                    android:textSize="15dp"
+                    android:text="@string/euro"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_price_add_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_price_add_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_price_add_activity" />
@@ -80,16 +79,16 @@
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/edit_text_border"
                     android:ems="8"
-                    android:hint="Address"
+                    android:hint="@string/address"
                     android:inputType="textNoSuggestions"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_price_add_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_price_add_activity"
+                    android:autofillHints="" />
 
 
                 <EditText
@@ -99,22 +98,22 @@
                     android:layout_marginTop="24dp"
                     android:background="@drawable/edit_text_border"
                     android:ems="8"
-                    android:hint="City"
+                    android:hint="@string/city"
                     android:inputType="textNoSuggestions"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_address_add_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_address_add_activity"
+                    android:autofillHints="" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Points of interest nearby"
-                    android:textStyle="bold"
+                    android:text="@string/points_of_interest_nearby"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/editText_city_add_activity"
                     app:layout_constraintTop_toBottomOf="@+id/editText_city_add_activity" />
 
@@ -137,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
-                            android:text="School"
+                            android:text="@string/school"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,7 +144,7 @@
                             android:id="@+id/checkBox_hospital_add_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Hospital"
+                            android:text="@string/hospital"
                             app:layout_constraintEnd_toStartOf="@+id/checkBox_restaurant_add_activity"
                             app:layout_constraintStart_toEndOf="@+id/checkBox_school_add_activity"
                             app:layout_constraintTop_toTopOf="@+id/checkBox_school_add_activity" />
@@ -155,7 +154,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:text="Restaurant"
+                            android:text="@string/restaurant"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/checkBox_hospital_add_activity" />
 
@@ -166,7 +165,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
-                            android:text="Mall"
+                            android:text="@string/mall"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/checkBox_school_add_activity" />
@@ -176,7 +175,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Cinema"
+                            android:text="@string/cinema"
                             app:layout_constraintStart_toStartOf="@+id/checkBox_hospital_add_activity"
                             app:layout_constraintTop_toBottomOf="@+id/checkBox_hospital_add_activity" />
 
@@ -185,7 +184,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Park"
+                            android:text="@string/park"
                             app:layout_constraintStart_toStartOf="@+id/checkBox_restaurant_add_activity"
                             app:layout_constraintTop_toBottomOf="@+id/checkBox_restaurant_add_activity" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -203,10 +202,11 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     android:ems="3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView_add_property_poi" />
+                    app:layout_constraintTop_toBottomOf="@+id/cardView_add_property_poi"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <EditText
                     android:id="@+id/editText_number_of_room_add_activity"
@@ -219,18 +219,19 @@
                     android:maxLength="2"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp"
                     android:textAlignment="viewEnd"
                     app:layout_constraintStart_toStartOf="@+id/editText_surface_add_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_surface_add_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_surface_add_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Bathroom(s)"
-                    android:textSize="15sp"
+                    android:text="@string/bathroom_s"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bathroom_add_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_number_of_bathroom_add_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_number_of_bathroom_add_activity"
@@ -254,7 +255,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/textview_description_add_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/textview_description_add_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <EditText
                     android:id="@+id/editText_number_of_bedroom_add_activity"
@@ -268,16 +271,18 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_number_of_room_add_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room_add_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_room_add_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Room(s)"
+                    android:text="@string/room_s"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_room_add_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_number_of_room_add_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_number_of_room_add_activity"
@@ -288,8 +293,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Bedroom(s)"
-                    android:textSize="15sp"
+                    android:text="@string/bedroom_s"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_number_of_bedroom_add_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_number_of_bedroom_add_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_number_of_bedroom_add_activity" />
@@ -306,15 +311,17 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:textAlignment="viewEnd"
-                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="@+id/editText_number_of_bedroom_add_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_add_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_number_of_bedroom_add_activity"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <TextView
                     android:id="@+id/textview_description_add_activity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Description (300/300)"
+                    android:text="@string/description_300_300"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/editText_description_add_activity"
                     app:layout_constraintTop_toTopOf="@+id/editText_surface_add_activity" />
 
@@ -324,9 +331,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="m²"
+                    android:textStyle="bold|italic"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_surface_add_activity"
                     app:layout_constraintStart_toEndOf="@+id/editText_surface_add_activity"
-                    app:layout_constraintTop_toTopOf="@+id/editText_surface_add_activity" />
+                    app:layout_constraintTop_toTopOf="@+id/editText_surface_add_activity"
+                    tools:ignore="HardcodedText" />
 
 
                 <TextView
@@ -334,7 +343,8 @@
                     android:layout_width="155dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="24dp"
-                    android:text="Choose availability date"
+                    android:text="@string/choose_availability_date"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/button_availability_date_add_activity"
                     app:layout_constraintTop_toBottomOf="@+id/editText_description_add_activity" />
 
@@ -343,12 +353,15 @@
                     android:id="@+id/button_availability_date_add_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginBottom="24dp"
+                    android:background="@android:color/transparent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_availability_date_edit_activity"
-                    app:srcCompat="@drawable/ic_calendar" />
+                    app:srcCompat="@drawable/ic_calendar"
+                    android:contentDescription="choose date available"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/textView_availability_date_add_property_activity"
@@ -356,6 +369,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/button_availability_date_add_activity"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/button_availability_date_add_activity"
@@ -373,7 +387,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Choose agent"
+            android:text="@string/choose_agent"
             app:layout_constraintEnd_toEndOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/choose_agent_button_add_activity"
@@ -383,10 +397,12 @@
             android:id="@+id/choose_agent_button_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
+            android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_choose_agent_edit_property_activity"
-            app:srcCompat="@drawable/ic_agent" />
+            app:srcCompat="@drawable/ic_agent"
+            android:contentDescription="@string/choose_agent" />
 
         <TextView
             android:id="@+id/agent_chosen_add_property_activity"
@@ -394,6 +410,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/choose_agent_button_add_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/choose_agent_button_add_activity"
@@ -405,33 +422,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="@+id/button_take_picture_add_activity"
             app:layout_constraintStart_toEndOf="@+id/button_take_picture_add_activity"
             app:layout_constraintTop_toTopOf="@+id/button_take_picture_add_activity"
-            app:srcCompat="@drawable/ic_picture_from_files" />
+            app:srcCompat="@drawable/ic_picture_from_files"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/button_take_picture_add_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/choose_agent_button_add_activity"
-            app:srcCompat="@drawable/ic_take_picture" />
+            app:srcCompat="@drawable/ic_take_picture"
+            android:contentDescription="take picture"
+            tools:ignore="HardcodedText" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_photo_add_activity"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_marginTop="16dp"
             android:background="@color/colorPrimary"
-            tools:listitem="@layout/rv_property_photo_list"
             app:layout_constraintBottom_toTopOf="@+id/activity_add_property_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity">
-        </androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@+id/button_take_picture_add_activity"
+            tools:listitem="@layout/rv_property_photo_list"/>
 
         <Button
             android:id="@+id/activity_add_property_button"
@@ -439,13 +461,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
-            android:text="Add Property"
+            android:text="@string/add_property"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recycler_view_photo_add_activity"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
