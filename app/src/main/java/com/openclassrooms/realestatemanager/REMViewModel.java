@@ -24,6 +24,7 @@ public class REMViewModel extends ViewModel {
 
 
     private MutableLiveData<List<Property>> mFilteredPropertyList;
+    private MutableLiveData<List<String>> mPointsOfInterestList;
 
     private MutableLiveData<Date> mDateAvailableMin, mDateAvailableMax, mDateSoldMin, mDateSoldMax;
 
@@ -80,17 +81,17 @@ public class REMViewModel extends ViewModel {
     public LiveData<List<Property>> getPropertyList(){
         return propertyDataSource.getPropertyList();
     }
-
+/*
     public LiveData<List<Property>> filterPropertyListOneType(String type, int surfaceMin, int surfaceMax, int priceMin, int priceMax, int nbrRoomMin, int nbrRoomMax,
                                                               Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax){
         return propertyDataSource.filterPropertyListOneType(type, surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
                 dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax);
     }
-
+*/
     public LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax, int priceMin, int priceMax, int nbrRoomMin, int nbrRoomMax,
-                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax){
+                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax, boolean isAvailable){
         return propertyDataSource.filterPropertyListAllType(surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
-                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax);
+                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax, isAvailable);
     }
     /*
     public void updateProperty(Property property){
@@ -161,5 +162,12 @@ public class REMViewModel extends ViewModel {
             mFilteredPropertyList = new MutableLiveData<>();
         }
         return mFilteredPropertyList;
+    }
+
+    public MutableLiveData<List<String>> getPointsOfInterestList() {
+        if (mPointsOfInterestList == null){
+            mPointsOfInterestList = new MutableLiveData<>();
+        }
+        return mPointsOfInterestList;
     }
 }

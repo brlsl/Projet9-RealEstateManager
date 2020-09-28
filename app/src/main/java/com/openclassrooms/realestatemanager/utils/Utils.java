@@ -4,7 +4,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Utils {
@@ -27,4 +30,23 @@ public class Utils {
         return pattern.format(Integer.parseInt(decimalInput));
 
     }
+
+    public static boolean areSameListOrderNoMatterOrder(List<String> listOne, List<String> listTwo){
+        if (listOne == null && listTwo == null){
+            return true;
+        }
+
+        if(listOne == null || listTwo == null || listOne.size() != listTwo.size()){
+            return false;
+        }
+
+        //to avoid messing the order of the original lists, we use a copy
+        listOne = new ArrayList<String>(listOne);
+        listTwo = new ArrayList<String>(listTwo);
+
+        Collections.sort(listOne);
+        Collections.sort(listTwo);
+        return listOne.equals(listTwo);
+    }
+
 }

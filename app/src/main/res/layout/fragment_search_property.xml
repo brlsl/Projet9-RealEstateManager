@@ -42,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:textStyle="bold|italic"
                     android:text="@string/property_type_wanted"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -55,14 +56,110 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
                 <TextView
-                    android:id="@+id/textView26"
+                    android:id="@+id/textView_status_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="@string/minimum_price"
+                    android:text="@string/property_status"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_type_activity_search" />
+
+                <Spinner
+                    android:id="@+id/spinner_status_activity_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_status_search_activity" />
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_add_property_poi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_status_activity_search">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <CheckBox
+                            android:id="@+id/checkBox_school_search_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/school"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <CheckBox
+                            android:id="@+id/checkBox_hospital_search_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hospital"
+                            app:layout_constraintEnd_toStartOf="@+id/checkBox_restaurant_search_fragment"
+                            app:layout_constraintStart_toEndOf="@+id/checkBox_school_search_fragment"
+                            app:layout_constraintTop_toTopOf="@+id/checkBox_school_search_fragment" />
+
+                        <CheckBox
+                            android:id="@+id/checkBox_restaurant_search_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/restaurant"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/checkBox_hospital_search_fragment" />
+
+                        <CheckBox
+                            android:id="@+id/checkBox_mall_search_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:text="@string/mall"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/checkBox_school_search_fragment" />
+
+                        <CheckBox
+                            android:id="@+id/checkBox_cinema_search_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/cinema"
+                            app:layout_constraintStart_toStartOf="@+id/checkBox_hospital_search_fragment"
+                            app:layout_constraintTop_toBottomOf="@+id/checkBox_hospital_search_fragment" />
+
+                        <CheckBox
+                            android:id="@+id/checkBox_park_search_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/park"
+                            app:layout_constraintStart_toStartOf="@+id/checkBox_restaurant_search_fragment"
+                            app:layout_constraintTop_toBottomOf="@+id/checkBox_restaurant_search_fragment" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/minimum_price"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView_add_property_poi" />
 
                 <EditText
                     android:id="@+id/editText_activity_search_minimum_price"
@@ -79,6 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/maximum_price"
+                    android:textStyle="bold|italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView26"
                     app:layout_constraintTop_toTopOf="@+id/textView26" />
@@ -103,6 +201,7 @@
                     android:layout_marginTop="16dp"
                     android:inputType="number"
                     android:text="@string/minimum_surface"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editText_activity_search_minimum_price" />
 
@@ -123,6 +222,7 @@
                     android:layout_marginTop="16dp"
                     android:inputType="number"
                     android:text="@string/maximum_surface"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/textView27"
                     app:layout_constraintTop_toBottomOf="@+id/editText_activity_search_maximum_price" />
 
@@ -143,6 +243,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/minimum_room"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editTextNumber_activity_search_minimum_surface" />
 
@@ -162,6 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/maximum_room"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/textView29"
                     app:layout_constraintTop_toBottomOf="@+id/editTextNumber_activity_search_maximum_surface" />
 
@@ -183,6 +285,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/available_since"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editTextNumber_activity_search_minimum_room" />
 
@@ -191,7 +294,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageButton_activity_search_date_available_since"
+                    app:layout_constraintEnd_toStartOf="@+id/imageButton_activity_search_date_available_before"
                     app:layout_constraintStart_toEndOf="@+id/imageButton_activity_search_date_available_since"
                     app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
@@ -199,6 +304,7 @@
                     android:id="@+id/imageButton_activity_search_date_available_before"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     app:layout_constraintStart_toStartOf="@+id/textView30"
                     app:layout_constraintTop_toBottomOf="@+id/textView30"
                     app:srcCompat="@drawable/ic_calendar" />
@@ -209,6 +315,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/available_before"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/textView22"
                     app:layout_constraintTop_toBottomOf="@+id/editTextNumber_activity_search_maximum_room" />
 
@@ -218,6 +325,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageButton_activity_search_date_available_before"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageButton_activity_search_date_available_before"
                     app:layout_constraintTop_toTopOf="@+id/imageButton_activity_search_date_available_before" />
 
@@ -225,26 +333,29 @@
                     android:id="@+id/imageButton_activity_search_date_available_since"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     app:layout_constraintStart_toStartOf="@+id/textView24"
                     app:layout_constraintTop_toBottomOf="@+id/textView24"
                     app:srcCompat="@drawable/ic_calendar" />
 
                 <TextView
-                    android:id="@+id/textView31"
+                    android:id="@+id/textView_title_sold_since_search_fragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/sold_since"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/imageButton_activity_search_date_available_since"
                     app:layout_constraintTop_toBottomOf="@+id/imageButton_activity_search_date_available_since" />
 
 
                 <ImageButton
-                    android:id="@+id/imageButton_activity_search_date_sold_since"
+                    android:id="@+id/imageButton_fragment_search_date_sold_since"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@+id/textView31"
-                    app:layout_constraintTop_toBottomOf="@+id/textView31"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintStart_toStartOf="@+id/textView_title_sold_since_search_fragment"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_title_sold_since_search_fragment"
                     app:srcCompat="@drawable/ic_calendar" />
 
 
@@ -252,29 +363,30 @@
                     android:id="@+id/textView_date_sold_since"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageButton_activity_search_date_sold_since"
-                    app:layout_constraintStart_toEndOf="@+id/imageButton_activity_search_date_sold_since"
-                    app:layout_constraintTop_toTopOf="@+id/imageButton_activity_search_date_sold_since"
-                    app:layout_constraintVertical_bias="0.0" />
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageButton_fragment_search_date_sold_since"
+                    app:layout_constraintEnd_toStartOf="@+id/imageButton_fragment_search_date_sold_before"
+                    app:layout_constraintStart_toEndOf="@+id/imageButton_fragment_search_date_sold_since"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_title_sold_since_search_fragment" />
 
                 <TextView
-                    android:id="@+id/textView32"
+                    android:id="@+id/textView_title_sold_before_search_fragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/sold_before"
+                    android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="@+id/imageButton_activity_search_date_available_before"
                     app:layout_constraintTop_toBottomOf="@+id/imageButton_activity_search_date_available_before" />
 
 
                 <ImageButton
-                    android:id="@+id/imageButton_activity_search_date_sold_before"
+                    android:id="@+id/imageButton_fragment_search_date_sold_before"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@+id/textView32"
-                    app:layout_constraintTop_toBottomOf="@+id/textView32"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintStart_toStartOf="@+id/textView_title_sold_before_search_fragment"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_title_sold_before_search_fragment"
                     app:srcCompat="@drawable/ic_calendar" />
 
                 <TextView
@@ -282,9 +394,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageButton_activity_search_date_sold_before"
-                    app:layout_constraintStart_toEndOf="@+id/imageButton_activity_search_date_sold_before"
-                    app:layout_constraintTop_toTopOf="@+id/imageButton_activity_search_date_sold_before" />
+                    app:layout_constraintBottom_toBottomOf="@+id/imageButton_fragment_search_date_sold_before"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageButton_fragment_search_date_sold_before"
+                    app:layout_constraintTop_toTopOf="@+id/imageButton_fragment_search_date_sold_before" />
 
                 <Button
                     android:id="@+id/search_property_activity_button"
@@ -294,7 +407,7 @@
                     android:text="Filter Property List"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton_activity_search_date_sold_since" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton_fragment_search_date_sold_since" />
 
                 <Button
                     android:id="@+id/search_property_activity_button_reinitiate_filters"

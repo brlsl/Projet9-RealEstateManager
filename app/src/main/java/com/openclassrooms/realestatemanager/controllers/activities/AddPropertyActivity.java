@@ -185,7 +185,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
 
         pointOfInterestLiveData.observe(this, strings -> {
             mPointsOfInterestList = strings;
-            System.out.println(TAG + "point of Interest list " + mPointsOfInterestList.size());
+            Log.d(TAG, "point of Interest list " + mPointsOfInterestList.size());
         } );
     }
 

@@ -19,9 +19,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.REMViewModel;
+import com.openclassrooms.realestatemanager.controllers.fragments.MapFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesFilteredListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
-import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.DetailPropertyFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.SearchPropertyFragment;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
@@ -29,7 +30,6 @@ import com.openclassrooms.realestatemanager.models.Property;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements PropertiesListFragment.OnItemPropertyClickListener,
         NavigationView.OnNavigationItemSelectedListener, SearchPropertyFragment.OnClickFilterPropertyList {
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     private FragmentManager mFragmentManager;
     private boolean isTwoPane;
     private REMViewModel mViewModel;
-    private PropertyDetailFragment mPropertyDetailFragment = new PropertyDetailFragment();
+    private DetailPropertyFragment mDetailPropertyFragment = new DetailPropertyFragment();
     private long mPropertyId = -1, mAgentId = -1;
 
     // FOR UI
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     @Override
     public void onItemPropertySelected(Property property) {
         Bundle bundle = new Bundle();
-        PropertyDetailFragment detailFragment = new PropertyDetailFragment();
+        DetailPropertyFragment detailFragment = new DetailPropertyFragment();
         if (!isTwoPane){
             bundle.putLong(PROPERTY_ID_KEY, property.getId());
             bundle.putLong(PROPERTY_AGENT_ID_KEY, property. getAgentId());
@@ -149,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
             bundle.putLong(PROPERTY_AGENT_ID_KEY, mAgentId);
             detailFragment.setArguments(bundle);
 
-                if (detailFragment != mPropertyDetailFragment) {
-                    mPropertyDetailFragment = detailFragment;
+                if (detailFragment != mDetailPropertyFragment) {
+                    mDetailPropertyFragment = detailFragment;
 
 
                     mFragmentManager
@@ -232,7 +232,16 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.bottom_navigation_map:
+                    /*case R.id.bottom_navigation_map:
+                        if (!isTwoPane){
+                            mFragmentManager.beginTransaction()
+                                    .replace(R.id.container, new MapFragment())
+                                    .commit();
+                        }
+
+
+
+                     */
 
                 }
                 return false;

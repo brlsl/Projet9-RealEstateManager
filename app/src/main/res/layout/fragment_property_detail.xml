@@ -53,23 +53,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/static_map_imageView_detail_property_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:text="Type"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/static_map_imageView_detail_property_activity" />
 
                 <TextView
                     android:id="@+id/detail_fragment_property_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="type"
                     app:layout_constraintBottom_toBottomOf="@+id/textView8"
                     app:layout_constraintStart_toEndOf="@+id/textView8"
                     app:layout_constraintTop_toTopOf="@+id/textView8" />
@@ -90,7 +100,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="price"
                     app:layout_constraintBottom_toBottomOf="@+id/textView10"
                     app:layout_constraintStart_toEndOf="@+id/textView10"
                     app:layout_constraintTop_toTopOf="@+id/textView10" />
@@ -122,7 +131,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-                    android:text="Example: New York"
                     app:layout_constraintBottom_toBottomOf="@+id/textView12"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView12"
@@ -140,28 +148,52 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
                 <TextView
+                    android:id="@+id/textView_no_connexion_detail_property"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableTop="@drawable/ic_baseline_wifi_off_24"
+                    android:text="@string/map_not_available_please_verify_your_connexion"
+                    android:textAlignment="center"
+                    android:textSize="23sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+                <TextView
                     android:id="@+id/detail_fragment_property_address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     android:maxLength="50"
-                    android:text="Example: 123 Broome Street"
                     app:layout_constraintBottom_toBottomOf="@+id/textView15"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView15"
                     app:layout_constraintTop_toTopOf="@+id/textView15" />
 
-                <ImageView
-                    android:id="@+id/static_map_imageView_detail_property_activity"
+                <TextView
+                    android:id="@+id/textView_point_of_interests_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="Point of Interests"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_fragment_property_address"
-                    app:srcCompat="@drawable/ic_launcher_background" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_no_connexion_detail_property" />
+
+                <TextView
+                    android:id="@+id/textView_point_of_interests_detail_property"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView_point_of_interests_title"
+                    app:layout_constraintTop_toTopOf="@+id/textView_point_of_interests_title" />
 
                 <TextView
                     android:id="@+id/textView14"
@@ -169,10 +201,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
-                    android:text="Surface"
+                    android:text="@string/surface"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/static_map_imageView_detail_property_activity" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView_point_of_interests_detail_property" />
 
                 <TextView
                     android:id="@+id/detail_fragment_property_surface"
@@ -191,7 +223,8 @@
                     android:text="m²"
                     app:layout_constraintBottom_toBottomOf="@+id/detail_fragment_property_surface"
                     app:layout_constraintStart_toEndOf="@+id/detail_fragment_property_surface"
-                    app:layout_constraintTop_toTopOf="@+id/detail_fragment_property_surface" />
+                    app:layout_constraintTop_toTopOf="@+id/detail_fragment_property_surface"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/textView16"
@@ -199,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
-                    android:text="Rooms"
+                    android:text="@string/room_s"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -261,7 +294,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:text="Availability date"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -277,7 +310,7 @@
                     app:layout_constraintTop_toTopOf="@+id/textView20" />
 
                 <TextView
-                    android:id="@+id/detail_fragment_properrty_sold_date_field"
+                    android:id="@+id/detail_fragment_property_sold_date_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -295,9 +328,9 @@
                     android:layout_marginStart="24dp"
                     android:text="sold date"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/detail_fragment_properrty_sold_date_field"
-                    app:layout_constraintStart_toEndOf="@+id/detail_fragment_properrty_sold_date_field"
-                    app:layout_constraintTop_toTopOf="@+id/detail_fragment_properrty_sold_date_field" />
+                    app:layout_constraintBottom_toBottomOf="@+id/detail_fragment_property_sold_date_field"
+                    app:layout_constraintStart_toEndOf="@+id/detail_fragment_property_sold_date_field"
+                    app:layout_constraintTop_toTopOf="@+id/detail_fragment_property_sold_date_field" />
 
                 <TextView
                     android:id="@+id/textView19"
@@ -308,7 +341,7 @@
                     android:text="Description"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_fragment_properrty_sold_date_field" />
+                    app:layout_constraintTop_toBottomOf="@+id/detail_fragment_property_sold_date_field" />
 
                 <TextView
                     android:id="@+id/detail_fragment_property_description"
@@ -316,7 +349,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-                    android:text="Description text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView19" />
@@ -339,7 +371,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="agent"
                     app:layout_constraintBottom_toBottomOf="@+id/textView22"
                     app:layout_constraintStart_toEndOf="@+id/textView22"
                     app:layout_constraintTop_toTopOf="@+id/textView22" />

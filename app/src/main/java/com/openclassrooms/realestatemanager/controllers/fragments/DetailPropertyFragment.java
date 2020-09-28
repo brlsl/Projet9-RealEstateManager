@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +33,6 @@ import com.openclassrooms.realestatemanager.utils.GoogleApiStreams;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.views.ImageSlider.ImageSliderAdapter;
 
-import java.util.BitSet;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
@@ -41,10 +42,10 @@ import static com.openclassrooms.realestatemanager.controllers.activities.MainAc
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
 
 
-public class PropertyDetailFragment extends BaseFragment {
+public class DetailPropertyFragment extends BaseFragment {
 
     // FOR DATA
-    private PropertyDetailFragmentViewModel mViewModel;
+    private DetailPropertyFragmentViewModel mViewModel;
     private static final String TAG = "PropertyDetailFragment";
     private String mPropertyLatLng;
     public static String API_KEY;
@@ -52,13 +53,13 @@ public class PropertyDetailFragment extends BaseFragment {
     // FOR UI
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
             mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewDateSoldField,
-            mTxtViewDateSold, mTxtViewAgentNameSurname;
+            mTxtViewDateSold, mTxtViewAgentNameSurname, mTxtViewPOI;
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
     private FloatingActionButton mFabEditProperty;
     private Disposable mDisposable;
     private ImageView mStaticMapImageView;
-
+    private TextView mTxtViewNoConnexion;
     // ------ LIFECYCLE ------
 
     @Nullable
@@ -94,6 +95,13 @@ public class PropertyDetailFragment extends BaseFragment {
                 mTxtViewAgentNameSurname.setText(property.getAgentNameSurname());
                 mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));
 
+                if (property.getPointsOfInterest().size()>0) {
+                    String joinList = TextUtils.join(", ", property.getPointsOfInterest());
+                    mTxtViewPOI.setText(joinList);
+                } else
+                    mTxtViewPOI.setText(R.string.No_points_of_interests_around);
+
+
                 Log.d(TAG, "PROPERTY ADDRESS" + property.getCity());
                 Log.d(TAG, String.valueOf(Thread.currentThread()));
 
@@ -122,14 +130,20 @@ public class PropertyDetailFragment extends BaseFragment {
                             @Override
                             public void onComplete() {
                                 String staticMapUrl1 = "https://maps.googleapis.com/maps/api/staticmap?markers=";
-                                String staticMapUrl2 =  "&zoom=14&size=400x400&key=";
+                                String staticMapUrl2 =  "&zoom=18&size=1024x800&key=";
 
                                 if (mPropertyLatLng != null){
+                                    mTxtViewNoConnexion.setVisibility(View.GONE);
+                                    mStaticMapImageView.setVisibility(View.VISIBLE);
                                     Glide.with(requireContext())
                                             .load(staticMapUrl1 + mPropertyLatLng + staticMapUrl2 + API_KEY)
                                             .into(mStaticMapImageView);
-                                }
 
+                                }
+                                else {
+                                    mTxtViewNoConnexion.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_baseline_map_24_black,0,0);
+                                    mTxtViewNoConnexion.setText("Map not available, please check property address");
+                                }
                                 Log.d(TAG, "mPropertyLatLng : " + mPropertyLatLng);
                                 Log.d(TAG, "url link :" + staticMapUrl1+mPropertyLatLng+staticMapUrl2+API_KEY);
                             }
@@ -190,10 +204,12 @@ public class PropertyDetailFragment extends BaseFragment {
         mTxtViewNbrOfBathroom = view.findViewById(R.id.detail_fragment_property_number_of_bathroom);
         mTxtViewDescription = view.findViewById(R.id.detail_fragment_property_description);
         mTxtViewDateAvailable = view.findViewById(R.id.detail_fragment_property_date_available);
-        mTxtViewDateSoldField = view.findViewById(R.id.detail_fragment_properrty_sold_date_field);
+        mTxtViewDateSoldField = view.findViewById(R.id.detail_fragment_property_sold_date_field);
         mTxtViewDateSold = view.findViewById(R.id.detail_fragment_property_sold_date);
         mTxtViewAgentNameSurname = view.findViewById(R.id.detail_fragment_property_agent_name_surname);
         mFabEditProperty = view.findViewById(R.id.detail_fragment_fab_edit_property);
+        mTxtViewNoConnexion = view.findViewById(R.id.textView_no_connexion_detail_property);
+        mTxtViewPOI = view.findViewById(R.id.textView_point_of_interests_detail_property);
 
         mStaticMapImageView = view.findViewById(R.id.static_map_imageView_detail_property_activity);
 
@@ -201,7 +217,7 @@ public class PropertyDetailFragment extends BaseFragment {
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(requireContext());
-        mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(PropertyDetailFragmentViewModel.class);
+        mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(DetailPropertyFragmentViewModel.class);
     }
 
     // ------ LISTENER ------

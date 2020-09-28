@@ -15,7 +15,7 @@ import java.util.List;
 
 
 
-public class PropertyDetailFragmentViewModel extends ViewModel {
+public class DetailPropertyFragmentViewModel extends ViewModel {
 
     private PropertyDataRepository propertyDataSource;
     private ImageDataRepository imageDataSource;
@@ -23,7 +23,7 @@ public class PropertyDetailFragmentViewModel extends ViewModel {
     private MutableLiveData<Geocode> mResult;
 
 
-    public PropertyDetailFragmentViewModel(PropertyDataRepository propertyDataSource,
+    public DetailPropertyFragmentViewModel(PropertyDataRepository propertyDataSource,
                                            ImageDataRepository imageDataSource) {
 
         this.propertyDataSource = propertyDataSource;

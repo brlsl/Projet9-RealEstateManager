@@ -62,21 +62,32 @@ public interface PropertyDao {
     LiveData<List<Property>> searchPropertyTestInt(int surfaceMin,
                                                    int surfaceMax, int priceMin, int priceMax);
     // Query for testing
-    @Query("SELECT * FROM property_table WHERE (dateAvailable >= :dateMin AND dateAvailable <= :dateMax) ")
-    LiveData<List<Property>> searchPropertyTestDate(Date dateMin, Date dateMax);
+    @Query("SELECT * FROM property_table WHERE (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax) AND " +
+            "(dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax)")
+    LiveData<List<Property>> searchPropertyTestDate(Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax);
+
+    // Query for testing
+    @Query("SELECT * FROM property_table WHERE (isAvailable = :isAvailable)")
+    LiveData<List<Property>> searchPropertyBoolean(boolean isAvailable);
+
 
     // QUERY FOR APP
 
     @Query("SELECT * FROM property_table WHERE (surface BETWEEN :surfaceMin AND :surfaceMax) AND" +
-            " (price BETWEEN :priceMin AND :priceMax) AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax)" +
+            " (price BETWEEN :priceMin AND :priceMax) " +
+            "AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax)" +
             "AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
-            "AND (dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax)")
+            "AND (dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax) " +
+            "AND (isAvailable = :isAvailable)")
     LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax,
                                                        int priceMin, int priceMax,
                                                        int nbrRoomMin, int nbrRoomMax,
                                                        Date dateAvailableMin, Date dateAvailableMax,
-                                                       Date dateSoldMin, Date dateSoldMax);
+                                                       Date dateSoldMin, Date dateSoldMax,
+                                                       boolean isAvailable);
 
+    /*
+    // useless
     @Query("SELECT * FROM property_table WHERE (type LIKE :type) AND (surface BETWEEN :surfaceMin AND :surfaceMax) AND" +
             " (price BETWEEN :priceMin AND :priceMax) AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax)" +
             "AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
@@ -88,5 +99,7 @@ public interface PropertyDao {
                                                        Date dateAvailableMin, Date dateAvailableMax,
                                                        Date dateSoldMin, Date dateSoldMax);
 
+
+     */
 
 }

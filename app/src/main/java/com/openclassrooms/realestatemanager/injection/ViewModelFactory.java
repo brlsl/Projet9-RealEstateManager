@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.REMViewModel;
 
 import com.openclassrooms.realestatemanager.controllers.activities.BasePropertyActivityViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentDialogFragmentViewModel;
-import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDetailFragmentViewModel;
+import com.openclassrooms.realestatemanager.controllers.fragments.DetailPropertyFragmentViewModel;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
@@ -42,8 +42,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(AddAgentDialogFragmentViewModel.class)){
             return (T) new AddAgentDialogFragmentViewModel(agentDataSource,executor);
         }
-        if (modelClass.isAssignableFrom(PropertyDetailFragmentViewModel.class)){
-            return (T) new PropertyDetailFragmentViewModel( propertyDataSource, imageDataSource);
+        if (modelClass.isAssignableFrom(DetailPropertyFragmentViewModel.class)){
+            return (T) new DetailPropertyFragmentViewModel( propertyDataSource, imageDataSource);
         }
 
         throw  new IllegalArgumentException("Unknown ViewModel Class");

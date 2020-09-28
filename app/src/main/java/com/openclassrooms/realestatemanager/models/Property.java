@@ -65,6 +65,13 @@ public class Property implements Parcelable {
         this.type = type;
     }
 
+    @Ignore
+    public Property(long id, long agentId, boolean isAvailable) {
+        this.id = id;
+        this.agentId = agentId;
+        this.isAvailable = isAvailable;
+    }
+
 
     public Property(long agentId, String city, String type, String address, int price, int surface,
                     int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description,
@@ -88,10 +95,11 @@ public class Property implements Parcelable {
     }
 
     @Ignore
-    public Property(long id, long agentId, Date date) {
+    public Property(long id, long agentId, Date dateAvailable, Date dateSold) {
         this.id = id;
         this.agentId = agentId;
-        this.dateAvailable = date;
+        this.dateAvailable = dateAvailable;
+        this.dateSold = dateSold;
     }
 
 

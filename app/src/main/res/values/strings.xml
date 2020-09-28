@@ -13,6 +13,11 @@
         <item>Loft</item>
     </string-array>
 
+    <string-array name="property_activity_array_status">
+        <item>Available</item>
+        <item>Sold</item>
+    </string-array>
+
     <string-array name="property_activity_array_is_available">
         <item>Available</item>
         <item>Sold</item>
@@ -56,7 +61,7 @@
     <string name="bathroom_s">Bathroom(s)</string>
     <string name="points_of_interest_nearby">Points of interest nearby</string>
     <string name="city">City</string>
-    <string name="address">Address</string>
+    <string name="address">Example: 123 Broome Street</string>
     <string name="euro">€</string>
     <string name="price">Price</string>
     <string name="school">School</string>
@@ -69,4 +74,11 @@
     <string name="choose_agent">Choose agent</string>
     <string name="edit_property">Edit Property</string>
     <string name="add_property">Add Property</string>
+    <string name="map_not_available_please_verify_your_connexion">Map not available, please verify your connexion</string>
+    <string name="surface">Surface</string>
+    <string name="property_list">Property List</string>
+    <string name="map">Map</string>
+    <string name="property_status">Property status</string>
+    <string name="available">Available</string>
+    <string name="No_points_of_interests_around">No point of interests around</string>
 </resources>

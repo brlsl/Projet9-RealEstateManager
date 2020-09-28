@@ -219,7 +219,7 @@ public class DatabaseTests {
         assertEquals(1, imageList.size());
     }
 
-    // Search property
+    // ------ DATABASE TESTS ------
     @Test
     public void filterPropertyListWithString() throws InterruptedException{
         Property property1 = new Property(1, AGENT_DEMO_1.getId(), "Apartment");
@@ -274,22 +274,42 @@ public class DatabaseTests {
 
     @Test
     public void filterPropertyListWithDate() throws ParseException, InterruptedException {
-        Date date1 = Utils.formatStringToDate("01/01/2019");
-        Date date2 = Utils.formatStringToDate("01/01/2020");
-        Date date3 = Utils.formatStringToDate("01/01/2021");
-        Property property = new Property(1, AGENT_DEMO_1.getId(), date1);
-        Property property2 = new Property(2, AGENT_DEMO_1.getId(), date2);
-        Property property3 = new Property(3, AGENT_DEMO_1.getId(), date3);
+        Date dateAvailable1 = Utils.formatStringToDate("01/01/2019");
+        Date dateAvailable2 = Utils.formatStringToDate("01/01/2020");
+        Date dateAvailable3 = Utils.formatStringToDate("01/01/2021");
+
+        Date dateSold1 = Utils.formatStringToDate("01/01/2020");
+        Date dateSold2 = Utils.formatStringToDate("01/01/2021");
+        Date dateSold3 = Utils.formatStringToDate("01/01/2022");
+        Property property = new Property(1, AGENT_DEMO_1.getId(), dateAvailable1, dateSold1);
+        Property property2 = new Property(2, AGENT_DEMO_1.getId(), dateAvailable2, dateSold2);
+        Property property3 = new Property(3, AGENT_DEMO_1.getId(), dateAvailable3, dateSold3);
         this.database.agentDao().createAgent(AGENT_DEMO_1);
         this.database.propertyDao().createProperty(property);
         this.database.propertyDao().createProperty(property2);
         this.database.propertyDao().createProperty(property3);
 
-        Date dateMin = Utils.formatStringToDate("01/01/2019");
-        Date dateMax = Utils.formatStringToDate("01/01/2020");
+        Date dateAvailableMin = Utils.formatStringToDate("01/01/1900");
+        Date dateAvailableMax = Utils.formatStringToDate("01/01/2021");
+        Date dateSoldMin = Utils.formatStringToDate("01/01/1900");
+        Date dateSoldMax = Utils.formatStringToDate("01/01/2021");
         List<Property> filteredList = LiveDataTestUtil.getValue(
-                this.database.propertyDao().searchPropertyTestDate(dateMin, dateMax));
-        assertEquals(2, filteredList.size());
+                this.database.propertyDao().searchPropertyTestDate(dateAvailableMin, dateAvailableMax, dateSoldMin, dateSoldMax));
+        assertEquals(1, filteredList.size());
     }
 
+    @Test
+    public void filterPropertyIsAvailable() throws InterruptedException {
+        Property property = new Property(1, AGENT_DEMO_1.getId(), true);
+        Property property2 = new Property(2, AGENT_DEMO_1.getId(), false);
+        Property property3 = new Property(3, AGENT_DEMO_1.getId(), true);
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.propertyDao().createProperty(property);
+        this.database.propertyDao().createProperty(property2);
+        this.database.propertyDao().createProperty(property3);
+
+        List<Property> filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyBoolean(false));
+        assertEquals(1, filteredList.size());
+    }
 }

@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDcADdHw6_IUPrjzmEnbo55OdmSdCKb27A"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
