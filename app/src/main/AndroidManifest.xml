@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDcADdHw6_IUPrjzmEnbo55OdmSdCKb27A"/>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDcADdHw6_IUPrjzmEnbo55OdmSdCKb27A"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -45,6 +46,9 @@
         <!-- Edit Property Activity -->
         <activity android:name=".controllers.activities.EditPropertyActivity"
             android:theme="@style/ActivityWithActionBar"/>
+
+        <!--Map Activity -->
+        <activity android:name=".controllers.activities.MapActivity"/>
 
         <!-- Loan Activity -->
         <activity android:name=".controllers.activities.LoanSimulationActivity" />

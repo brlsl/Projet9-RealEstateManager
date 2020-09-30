@@ -2,9 +2,13 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,19 +17,17 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.REMViewModel;
+
 import com.openclassrooms.realestatemanager.controllers.fragments.MapFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesFilteredListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertiesListFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailPropertyFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.SearchPropertyFragment;
-import com.openclassrooms.realestatemanager.injection.Injection;
-import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
+
 import com.openclassrooms.realestatemanager.models.Property;
 
 import java.util.ArrayList;
@@ -35,21 +37,28 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         NavigationView.OnNavigationItemSelectedListener, SearchPropertyFragment.OnClickFilterPropertyList {
 
     // FOR DATA
+    public static final String TAG = "MAIN_ACTIVITY";
     public static final String PROPERTY_ID_KEY = "PROPERTY_ID_KEY";
     public static final String PROPERTY_AGENT_ID_KEY = "PROPERTY_AGENT_ID_KEY";
     public static final String PROPERTY_LIST_FILTERED_KEY = "PROPERTY_FILTERED_LIST";
-    private static final String DETAIL_FRAGMENT_KEY = "DETAIL_FRAGMENT_KEY";
+    private static final String DETAIL_FRAGMENT_PORTRAIT_TAG = "DETAIL_FRAGMENT_TAG";
     private static final String SEARCH_PROPERTY_TAG = "SEARCH_PROPERTY_FRAGMENT";
+    private static final String DETAIL_FRAGMENT_PORTRAIT_COPY = "DETAIL_FRAGMENT_COPY_TAG" ;
+    private static final String CURRENT_SELECTED_FRAGMENT = "CURRENT_SELECTED_FRAGMENT";
+    private int mSelectedNavItem;
 
     private FragmentManager mFragmentManager;
     private boolean isTwoPane;
-    private REMViewModel mViewModel;
     private DetailPropertyFragment mDetailPropertyFragment = new DetailPropertyFragment();
     private long mPropertyId = -1, mAgentId = -1;
+    private BottomNavigationView mBottomNavigationView;
 
     // FOR UI
     private androidx.appcompat.widget.Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
+
+    private FrameLayout mMapContainerFrameLayout;
+
 
     // ------ LIFE CYCLE ------
 
@@ -58,13 +67,21 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        configureViews();
         configureToolBar();
         configureDrawerLayout();
         configureNavigationViewListener();
         configureDualPaneLayout(savedInstanceState);
         configureBottomNavigationView();
-        configureViewModel();
+
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_SELECTED_FRAGMENT, mSelectedNavItem);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { // make toolbar menu item appears
@@ -74,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
 
     // ------ CONFIGURATION ------
 
-    private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
+    private void configureViews(){
+        mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        mMapContainerFrameLayout = findViewById(R.id.map_container);
     }
 
     private void configureToolBar() {
@@ -92,9 +109,15 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         toggle.syncState();
     }
 
+    final PropertiesListFragment mPropertiesListFragment = new PropertiesListFragment();
+    final MapFragment mMapFragment = new MapFragment();
+
     private void configureDualPaneLayout(Bundle savedInstanceState) {
         View detailView = findViewById(R.id.detail_container);
 
+        if (savedInstanceState != null) {
+            mSelectedNavItem = savedInstanceState.getInt(CURRENT_SELECTED_FRAGMENT);
+        }
         // -----------------------
         mFragmentManager = getSupportFragmentManager();
 
@@ -102,18 +125,93 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
 
 
         if (savedInstanceState == null) { // add fragment only once
+
+
+            PropertiesListFragment test = new PropertiesListFragment();
+            mPropertiesListFragment.setArguments(getIntent().getExtras());
             mFragmentManager.beginTransaction()
-                    .add(R.id.container, new PropertiesListFragment())
+                    .replace(R.id.container_list, mPropertiesListFragment, "test_tag")
                     .commit();
+
+
+
+
         }
 
 
-        if (isTwoPane) {
+        // manage map fragment
+        if (!isTwoPane) {
             mFragmentManager.beginTransaction()
-                    .replace(R.id.container, new PropertiesListFragment())
-                    .replace(R.id.detail_container, new Fragment())
-                    .addToBackStack(null)
+                    //.add(R.id.container_list, mPropertiesListFragment)
+                    .add(R.id.container_list, mMapFragment,"map_portrait").hide(mMapFragment)
                     .commit();
+        }
+
+        if (isTwoPane){
+            mFragmentManager.beginTransaction()
+                    //.add(R.id.container_list, mPropertiesListFragment)
+                    .add(R.id.detail_container, mMapFragment,"map_landscape").hide(mMapFragment)
+                    .commit();
+        }
+
+        // case rotation, retrieve map fragment
+        if (!isTwoPane){
+            if (mSelectedNavItem == R.id.bottom_navigation_map) {
+
+                mFragmentManager.beginTransaction()
+                        .hide(mPropertiesListFragment)
+                        .show(mMapFragment)
+                        .commit();
+                mMapContainerFrameLayout.setVisibility(View.VISIBLE);
+                Toast.makeText(this, "CABOOOOOO", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+
+        if (isTwoPane) {
+            if (mSelectedNavItem == R.id.bottom_navigation_map){
+                    mFragmentManager.beginTransaction()
+                            .hide(mMapFragment)
+                            .show(mMapFragment)
+                            .commit();
+                mMapContainerFrameLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(this, "FBAOOOOOOOO", Toast.LENGTH_SHORT).show();
+
+            }
+
+            // in case rotation, retrieve detail fragment
+            DetailPropertyFragment fragmentDetailPortrait = (DetailPropertyFragment) mFragmentManager.findFragmentByTag(DETAIL_FRAGMENT_PORTRAIT_COPY);
+            DetailPropertyFragment fragmentDetailLand = (DetailPropertyFragment) mFragmentManager.findFragmentByTag("test_land");
+           // MapFragment mapFragmentTest = (MapFragment) mFragmentManager.findFragmentByTag("test_map");
+
+            if (fragmentDetailPortrait != null) {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container_list, new PropertiesListFragment())
+                        .replace(R.id.detail_container, fragmentDetailPortrait)
+                        .addToBackStack(null)
+                        .commit();
+
+                Log.d(TAG, "Portrait debug");
+
+            }
+
+            else if (fragmentDetailLand!= null){
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container_list, new PropertiesListFragment())
+                        .replace(R.id.detail_container, fragmentDetailLand)
+                        .addToBackStack(null)
+                        .commit();
+                Log.d(TAG, "Land debug");
+            }
+
+            else {
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container_list, new PropertiesListFragment())
+                        .replace(R.id.detail_container, new Fragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
         }
 
     }
@@ -130,14 +228,18 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     public void onItemPropertySelected(Property property) {
         Bundle bundle = new Bundle();
         DetailPropertyFragment detailFragment = new DetailPropertyFragment();
+        DetailPropertyFragment detailFragmentCopy = new DetailPropertyFragment();
         if (!isTwoPane){
             bundle.putLong(PROPERTY_ID_KEY, property.getId());
             bundle.putLong(PROPERTY_AGENT_ID_KEY, property. getAgentId());
             detailFragment.setArguments(bundle);
 
+            detailFragmentCopy.setArguments(bundle);
+
             mFragmentManager
                     .beginTransaction()
-                    .replace(R.id.container, detailFragment, DETAIL_FRAGMENT_KEY)
+                    .replace(R.id.container_list, detailFragment, DETAIL_FRAGMENT_PORTRAIT_TAG)
+                    .replace(R.id.detail_container,detailFragmentCopy, DETAIL_FRAGMENT_PORTRAIT_COPY) // need a copy because can't change container of an existing fragment
                     .addToBackStack(null)
                     .commit();
         }
@@ -149,13 +251,14 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
             bundle.putLong(PROPERTY_AGENT_ID_KEY, mAgentId);
             detailFragment.setArguments(bundle);
 
+            detailFragmentCopy.setArguments(bundle);
+
                 if (detailFragment != mDetailPropertyFragment) {
                     mDetailPropertyFragment = detailFragment;
 
-
                     mFragmentManager
                             .beginTransaction()
-                            .replace(R.id.detail_container, detailFragment)
+                            .replace(R.id.detail_container, detailFragment, "test_land")
                             .addToBackStack(null)
                             .commit();
                 }
@@ -190,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
         if (id == R.id.search_property_toolbar) {
             if (!isTwoPane) {
                 mFragmentManager.beginTransaction()
-                        .replace(R.id.container, new SearchPropertyFragment(), SEARCH_PROPERTY_TAG)
+                        .replace(R.id.container_list, new SearchPropertyFragment(), SEARCH_PROPERTY_TAG)
                         .addToBackStack(null)
                         .commit();
 
@@ -216,38 +319,69 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
                 startActivity(loanIntent);
                 break;
             case R.id.activity_main_drawer_settings:
-                Intent SettingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(SettingsIntent);
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+            case R.id.activity_main_map:
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                startActivity(mapIntent);
                 break;
         }
+
         mDrawerLayout.closeDrawer(GravityCompat.START);  //close navigation drawer after choice
         return true;
     }
 
 
     private void configureBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()){
-                    /*case R.id.bottom_navigation_map:
+                    case R.id.bottom_navigation_map:
+                        mSelectedNavItem = R.id.bottom_navigation_map;
                         if (!isTwoPane){
                             mFragmentManager.beginTransaction()
-                                    .replace(R.id.container, new MapFragment())
+                                    .hide(mPropertiesListFragment)
+                                    .show(mMapFragment)
                                     .commit();
+                            Log.d(TAG, "show map portrait");
+                        }
+                        if (isTwoPane){
+                            mFragmentManager.beginTransaction()
+                                    .show(mMapFragment)
+                                    .commit();
+
+                            mMapContainerFrameLayout.setVisibility(View.VISIBLE);
+                            Log.d(TAG, "show map landscape");
                         }
 
+                        return true;
 
+                    case R.id.bottom_navigation_restaurant_list:
+                        mSelectedNavItem = R.id.bottom_navigation_restaurant_list;
+                        if (!isTwoPane){
+                            mFragmentManager.beginTransaction()
+                                    .hide(mMapFragment)
+                                    .show(mPropertiesListFragment)
+                                    .commit();
+                            Log.d(TAG, "show restaurant portrait");
 
-                     */
+                        }
+                        if (isTwoPane){
+                            mMapContainerFrameLayout.setVisibility(View.GONE);
+                            Log.d(TAG, "show restaurant landscape");
+                        }
 
+                        return true;
                 }
                 return false;
             }
         });
     }
+
 
 
     @Override
@@ -260,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
 
         mFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, filteredListFragment)
+                .replace(R.id.container_list, filteredListFragment)
                 .addToBackStack(null)
                 .commit();
     }

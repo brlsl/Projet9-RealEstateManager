@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
