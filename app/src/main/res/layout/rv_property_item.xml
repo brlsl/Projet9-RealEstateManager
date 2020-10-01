@@ -17,14 +17,13 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/property_type"
+        android:id="@+id/properties_list_property_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:singleLine="true"
-        android:text="Type"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -32,22 +31,21 @@
         app:layout_constraintTop_toBottomOf="@+id/properties_list_property_imageview" />
 
     <TextView
-        android:id="@+id/property_price"
+        android:id="@+id/properties_list_property_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:singleLine="true"
-        android:text="Price"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/property_type" />
+        app:layout_constraintTop_toBottomOf="@+id/properties_list_property_type" />
 
     <TextView
-        android:id="@+id/property_city"
+        android:id="@+id/properties_list_property_city"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -55,13 +53,29 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:singleLine="true"
-        android:text="property_city"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/property_price"
+        app:layout_constraintTop_toBottomOf="@+id/properties_list_property_price"
         app:layout_constraintVertical_bias="0.818" />
+
+    <TextView
+        android:id="@+id/properties_list_property_is_sold"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rotation="-30"
+        android:text="@string/sold"
+        android:textAlignment="center"
+        android:textColor="#FF0000"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:background="@drawable/textview_sold_border"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/properties_list_property_city"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/properties_list_property_imageview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

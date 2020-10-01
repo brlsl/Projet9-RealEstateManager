@@ -26,7 +26,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bottom_navigation"
             android:layout_below="@id/toolbar_main_activity"
             android:orientation="horizontal">
 
@@ -44,26 +43,8 @@
                 android:layout_weight="0.67"
                 android:background="@color/colorAccent" />
 
-            <FrameLayout
-                android:id="@+id/map_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                />
-
-
-
         </LinearLayout>
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            app:itemIconTint="@drawable/bottom_navigation_colors"
-            app:itemTextColor="@drawable/bottom_navigation_colors"
-            app:menu="@menu/bottom_navigation_menu"
-            />
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

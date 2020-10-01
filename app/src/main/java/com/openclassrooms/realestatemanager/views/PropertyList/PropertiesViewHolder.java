@@ -22,24 +22,24 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
     private Context mContext;
 
     // FOR UI
-    private TextView mPropertyPrice, mPropertyCity, mPropertyType;
+    private TextView mPropertyPrice, mPropertyCity, mPropertyType, mSoldTxtView;
     private ImageView mPropertyImageView;
 
     public PropertiesViewHolder(@NonNull View itemView) {
         super(itemView);
 
         mContext = itemView.getContext();
-        mPropertyPrice = itemView.findViewById(R.id.property_price);
-        mPropertyCity = itemView.findViewById(R.id.property_city);
-        mPropertyType = itemView.findViewById(R.id.property_type);
+        mPropertyPrice = itemView.findViewById(R.id.properties_list_property_price);
+        mPropertyCity = itemView.findViewById(R.id.properties_list_property_city);
+        mPropertyType = itemView.findViewById(R.id.properties_list_property_type);
         mPropertyImageView = itemView.findViewById(R.id.properties_list_property_imageview);
+        mSoldTxtView = itemView.findViewById(R.id.properties_list_property_is_sold);
     }
 
     public void displayData(final Property property) {
         mPropertyCity.setText(property.getCity());
         mPropertyPrice.setText(Utils.formatPrice(String.valueOf(property.getPrice())) + " €");
         mPropertyType.setText(property.getType());
-
 
         File file = new File(property.getMainImagePath());
         if (file.exists()) {
@@ -54,5 +54,13 @@ public class PropertiesViewHolder extends RecyclerView.ViewHolder{
                     .centerCrop()
                     .into(mPropertyImageView);
         }
+
+
+        if (property.isAvailable()){
+            mSoldTxtView.setVisibility(View.GONE);
+        } else {
+            mSoldTxtView.setVisibility(View.VISIBLE);
+        }
+
     }
 }

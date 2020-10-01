@@ -58,6 +58,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
+import static com.openclassrooms.realestatemanager.controllers.activities.MapActivity.PROPERTY_KEY_MAP_ACTIVITY;
 
 public class EditPropertyActivity extends BasePropertyActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener, AddPhotoTitleDialogFragment.OnClickDialogConfirmListener {
 
@@ -348,6 +349,12 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                     Image image = new Image(mPropertyId, mImagePathList.get(i), mImageTitleList.get(i));
                     mPropertyActivityViewModel.createImage(image);
                 }
+
+                // if property edited from map activity, send the updated on activity result
+                Intent data = new Intent();
+                data.putExtra(PROPERTY_KEY_MAP_ACTIVITY, updatedProperty);
+                setResult(RESULT_OK, data);
+
                 finish();
             }
         });

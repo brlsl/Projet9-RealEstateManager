@@ -48,12 +48,12 @@ public class DetailPropertyFragment extends BaseFragment {
     private DetailPropertyFragmentViewModel mViewModel;
     private static final String TAG = "PropertyDetailFragment";
     private String mPropertyLatLng;
-    public static String API_KEY;
+    private static String API_KEY;
 
     // FOR UI
     private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
             mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewDateSoldField,
-            mTxtViewDateSold, mTxtViewAgentNameSurname, mTxtViewPOI;
+            mTxtViewDateSold, mTxtViewAgentNameSurname, mTxtViewPOI, mTxtViewStatus;
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
     private FloatingActionButton mFabEditProperty;
@@ -94,6 +94,8 @@ public class DetailPropertyFragment extends BaseFragment {
                 mTxtViewDescription.setText(property.getDescription());
                 mTxtViewAgentNameSurname.setText(property.getAgentNameSurname());
                 mTxtViewDateAvailable.setText(Utils.formatDateToString(property.getDateAvailable()));
+                String status = property.isAvailable()? "Available": "Sold";
+                mTxtViewStatus.setText(status);
 
                 if (property.getPointsOfInterest().size()>0) {
                     String joinList = TextUtils.join(", ", property.getPointsOfInterest());
@@ -103,8 +105,6 @@ public class DetailPropertyFragment extends BaseFragment {
 
 
                 Log.d(TAG, "PROPERTY ADDRESS" + property.getCity());
-                Log.d(TAG, String.valueOf(Thread.currentThread()));
-
 
                 this.mDisposable = GoogleApiStreams.streamFetchLocationFromAddress(property.getAddress()+" " + property.getCity(), API_KEY)
                         .subscribeWith(new DisposableObserver<Geocode>() {
@@ -210,6 +210,7 @@ public class DetailPropertyFragment extends BaseFragment {
         mFabEditProperty = view.findViewById(R.id.detail_fragment_fab_edit_property);
         mTxtViewNoConnexion = view.findViewById(R.id.textView_no_connexion_detail_property);
         mTxtViewPOI = view.findViewById(R.id.textView_point_of_interests_detail_property);
+        mTxtViewStatus = view.findViewById(R.id.fragment_property_detail_status);
 
         mStaticMapImageView = view.findViewById(R.id.static_map_imageView_detail_property_activity);
 

@@ -25,8 +25,8 @@ public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageView
     private List<Bitmap> mBitmapList;
     private List<String> mImageTitleList;
     private List<String> mImagePathList;
-    FragmentManager fm;
-    Context mContext;
+    private FragmentManager fm;
+    private Context mContext;
 
 
     public PropertyImageAdapter(List<Bitmap> bitmapList, List<String> imageTitleList,
@@ -38,8 +38,8 @@ public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageView
         mContext = context;
     }
 
+    // empty constructor required
     public PropertyImageAdapter() {
-
     }
 
     @NonNull
