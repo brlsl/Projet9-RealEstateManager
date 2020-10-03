@@ -3,7 +3,7 @@
     package="com.openclassrooms.realestatemanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -62,6 +62,14 @@
         <activity
             android:name=".controllers.activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
+
+        <!-- Content provider -->
+        <provider
+            android:name=".provider.PropertyContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true"/>
+
+
     </application>
 
 </manifest>

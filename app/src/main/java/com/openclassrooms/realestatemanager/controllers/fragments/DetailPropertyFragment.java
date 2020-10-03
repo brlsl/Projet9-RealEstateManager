@@ -51,7 +51,7 @@ public class DetailPropertyFragment extends BaseFragment {
     private static String API_KEY;
 
     // FOR UI
-    private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
+    private TextView mTxtViewCity, mTxtViewAddress, mTxtViewPrice, mTxtViewCurrency, mTxtViewType, mTxtViewSurface, mTxtViewNbrOfRoom,
             mTxtViewNbrOfBedroom, mTxtViewNbrOfBathroom, mTxtViewDescription, mTxtViewDateAvailable, mTxtViewDateSoldField,
             mTxtViewDateSold, mTxtViewAgentNameSurname, mTxtViewPOI, mTxtViewStatus;
     private ViewPager2 mViewPager2;
@@ -86,6 +86,7 @@ public class DetailPropertyFragment extends BaseFragment {
                 mTxtViewCity.setText(property.getCity());
                 mTxtViewAddress.setText(property.getAddress());
                 mTxtViewPrice.setText(Utils.formatPrice(String.valueOf(property.getPrice())));
+                mTxtViewCurrency.setText(property.getCurrency());
                 mTxtViewType.setText(String.valueOf(property.getType()));
                 mTxtViewSurface.setText(String.valueOf(property.getSurface()));
                 mTxtViewNbrOfRoom.setText(String.valueOf(property.getNumberOfRooms()));
@@ -197,6 +198,7 @@ public class DetailPropertyFragment extends BaseFragment {
         mTxtViewCity = view.findViewById(R.id.detail_fragment_property_city);
         mTxtViewAddress = view.findViewById(R.id.detail_fragment_property_address);
         mTxtViewPrice = view.findViewById(R.id.detail_fragment_property_price);
+        mTxtViewCurrency = view.findViewById(R.id.detail_fragment_currency);
         mTxtViewType = view.findViewById(R.id.detail_fragment_property_type);
         mTxtViewSurface = view.findViewById(R.id.detail_fragment_property_surface);
         mTxtViewNbrOfRoom = view.findViewById(R.id.detail_fragment_property_number_of_room);

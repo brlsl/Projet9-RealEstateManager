@@ -24,18 +24,13 @@ public class BasePropertyActivityViewModel extends ViewModel {
     private final ImageDataRepository imageDataRepository;
     private final Executor executor; // permits to realize asynchronous requests
 
-    private MutableLiveData<Date> mDateAvailable;
-    private MutableLiveData<Date> mDateSold;
-
+    private MutableLiveData<Date> mDateAvailable, mDateSold;;
     private MutableLiveData<List<Bitmap>> mBitmapList;
-
     private MutableLiveData<Agent> mAgent;
 
-    private MutableLiveData<List<String>> mPathList, mPointsOfInterestList;
+    private MutableLiveData<List<String>> mPathList, mPointsOfInterestList, mImageTitleList;
 
-    private MutableLiveData<String> mTakenPhotoPath;
-    private MutableLiveData<String> mChosenPhotoPath;
-    private MutableLiveData<List<String>> mImageTitleList;
+    private MutableLiveData<String> mTakenPhotoPath, mChosenPhotoPath, mCurrency;
     private MutableLiveData<Integer> mPosition;
 
     public BasePropertyActivityViewModel(AgentDataRepository agentDataRepository, PropertyDataRepository propertyDataRepository, ImageDataRepository imageDataRepository, Executor executor) {
@@ -177,5 +172,12 @@ public class BasePropertyActivityViewModel extends ViewModel {
             mPosition = new MutableLiveData<>();
         }
         return mPosition;
+    }
+
+    public MutableLiveData<String> getCurrency() {
+        if (mCurrency == null){
+            mCurrency = new MutableLiveData<>();
+        }
+        return mCurrency;
     }
 }

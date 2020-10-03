@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.database.dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -17,8 +19,11 @@ import java.util.List;
 @Dao
 public interface PropertyDao {
 
+    @Query("SELECT * FROM property_table WHERE agentId = :agentId")
+    Cursor getPropertyWithCursor(long agentId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void createProperty(Property property);
+    long createProperty(Property property);
 
     @Query("SELECT * FROM property_table WHERE agentId = :agentId AND id= :propertyId")
     LiveData<Property> getProperty(long propertyId, long agentId);
@@ -32,12 +37,11 @@ public interface PropertyDao {
 
  */
 
-    @Query("UPDATE property_table SET price =:price, city =:city WHERE id =:propertyId")
-    int updatePropertyTest(String city, String price, long propertyId);
-
-
     @Update(entity = Property.class)
-    void updateProperty(Property property);
+    int updateProperty(Property property);
+
+    //@Query("UPDATE property_table SET  ")
+    //int updateTest(Property property);
 
     // ------ DATABASE PROPERTY SEARCH ------
 /*

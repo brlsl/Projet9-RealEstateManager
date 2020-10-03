@@ -31,7 +31,6 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
@@ -66,11 +65,8 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
     private Date mDateAvailable, mDateSold;
     private ArrayAdapter<CharSequence> mTypeArrayAdapter;
     private static final String TAG = "EditPropertyActivity";
-
     private List<Bitmap> mBitmapList = new ArrayList<>();
-
     private List<String> mImagePathList = new ArrayList<>(),  mImageTitleList = new ArrayList<>(), mPointsOfInterestList = new ArrayList<>();
-
     private long mAgentId, mPropertyId;
     private boolean isAvailable = true;
     private String  mType, mPrice, mAddress, mCity, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
@@ -80,9 +76,8 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
     private PropertyImageAdapter mPropertyImageAdapter;
     private EditText mEdtTxtPrice, mEdtTxtAddress, mEdtTxtCity, mEdtTxtSurface, mEdtTxtNbrRoom, mEdtTxtNbrBedroom,
             mEdtTxtNbrBathroom, mEdtTxtDescription;
-    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewAvailableDate, mTxtViewSoldDate, mTxtViewChooseDateTitle;
+    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewAvailableDate, mTxtViewSoldDate, mTxtViewChooseDateTitle, mTxtViewCurrency;
     private Spinner mTypeSpinner, mIsAvailableSpinner;
-
     private ImageButton mImgBtnChoosePicture, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailableDate, mImgBtnSoldDate;
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
     private Button mEditPropertyButton;
@@ -173,33 +168,35 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
             mEdtTxtNbrBedroom.setText(String.valueOf(property.getNumberOfBedrooms()));
             mEdtTxtNbrBathroom.setText(String.valueOf(property.getNumberOfBathRooms()));
             mEdtTxtDescription.setText(property.getDescription());
+
+            mPropertyActivityViewModel.getCurrency().setValue(property.getCurrency());
         });
     }
 
     private void setPoiCheckboxes(Property property) {
         List<String> poiList = property.getPointsOfInterest();
         if (!poiList.isEmpty()) {
-            if (poiList.contains(mCckBoxSchool.getText().toString())) {
+            if (poiList.toString().trim().contains(mCckBoxSchool.getText().toString())) {
                 mCckBoxSchool.setChecked(true);
                 mPointsOfInterestList.add(mCckBoxSchool.getText().toString());
             }
-            if (poiList.contains(mCckBoxHospital.getText().toString())) {
+            if (poiList.toString().trim().contains(mCckBoxHospital.getText().toString())) {
                 mCckBoxHospital.setChecked(true);
                 mPointsOfInterestList.add(mCckBoxHospital.getText().toString());
             }
-            if (poiList.contains(mCckBoxRestaurant.getText().toString())) {
+            if (poiList.toString().trim().contains(mCckBoxRestaurant.getText().toString())) {
                 mCckBoxRestaurant.setChecked(true);
                 mPointsOfInterestList.add(mCckBoxRestaurant.getText().toString());
             }
-            if (poiList.contains(mCckBoxMall.getText().toString())) {
+            if (poiList.toString().trim().contains(mCckBoxMall.getText().toString())) {
                 mCckBoxMall.setChecked(true);
                 mPointsOfInterestList.add(mCckBoxMall.getText().toString());
             }
-            if (poiList.contains(mCckBoxCinema.getText().toString())) {
+            if (poiList.toString().trim().contains(mCckBoxCinema.getText().toString())) {
                 mCckBoxCinema.setChecked(true);
                 mPointsOfInterestList.add(mCckBoxCinema.getText().toString());
             }
-            if (poiList.contains(mCckBoxPark.getText().toString())) {
+            if (poiList.toString().trim().contains(mCckBoxPark.getText().toString())) {
                 mCckBoxPark.setChecked(true);
                 mPointsOfInterestList.add(mCckBoxPark.getText().toString());
             }
@@ -334,9 +331,9 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
             else {
 
                 mEditPropertyButton.setEnabled(false); // avoid more than one click
-                Toast.makeText(EditPropertyActivity.this, "Property Edited", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Property Edited", Snackbar.LENGTH_SHORT).show();
 
-                Property updatedProperty = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
+                Property updatedProperty = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), mTxtViewCurrency.getText().toString() , Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
                         Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,
                         mImagePathList.get(0), isAvailable);
 
@@ -371,7 +368,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
         LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
         LiveData<List<String>> pointOfInterestLiveData = mPropertyActivityViewModel.getPointsOfInterestList();
         LiveData<List<String>> imageTitleLiveData = mPropertyActivityViewModel.getImageTitleList();
-
+        LiveData<String> currencyLiveData = mPropertyActivityViewModel.getCurrency();
 
         dateAvailableLiveData.observe(this, date -> {
             mDateAvailable = date;
@@ -419,7 +416,11 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
         pointOfInterestLiveData.observe(this, strings -> {
             mPointsOfInterestList = strings;
             System.out.println(TAG + "point of Interest list " + mPointsOfInterestList.size());
-        } );
+        });
+
+        currencyLiveData.observe(this, s -> {
+            mTxtViewCurrency.setText(s);
+        });
 
     }
 
@@ -455,6 +456,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
         mTxtViewAvailableDate = findViewById(R.id.textView_availability_date_edit_property_activity);
         mTxtViewSoldDate = findViewById(R.id.textView_sold_date_edit_property_activity);
         mTxtViewChooseDateTitle = findViewById(R.id.textView_choose_sold_date_edit_activity);
+        mTxtViewCurrency = findViewById(R.id.edit_property_activity_currency);
 
         mImgBtnChoosePicture = findViewById(R.id.image_button_choose_picture_edit_activity);
         mImgBtnTakePhoto = findViewById(R.id.image_button_take_picture_edit_activity);
@@ -523,7 +525,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
 
                         Log.d(TAG, "Selected picture path:" + mChosenPhotoPath);
 
-                        Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(mScrollView,"Picture Selected", Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception e){
@@ -531,7 +533,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                 }
 
             } else{
-                Toast.makeText(this, "Picture has not been selected", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Picture has not been selected", Snackbar.LENGTH_SHORT).show();
             }
         }
 
@@ -546,10 +548,10 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                     e.printStackTrace();
                 }
 
-                Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Property Edited", Snackbar.LENGTH_SHORT).show();
 
             } else if (resultCode == RESULT_CANCELED){
-                Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Picture not captured", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

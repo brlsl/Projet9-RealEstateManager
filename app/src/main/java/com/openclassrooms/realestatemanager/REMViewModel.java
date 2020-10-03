@@ -93,13 +93,13 @@ public class REMViewModel extends ViewModel {
         return propertyDataSource.filterPropertyListAllType(surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
                 dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax, isAvailable);
     }
-    /*
+
     public void updateProperty(Property property){
         executor.execute(()->
                 propertyDataSource.updateProperty(property));
     }
 
-     */
+
 
 
     // ---------

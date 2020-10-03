@@ -21,7 +21,6 @@ public class Utils {
     public static Date formatStringToDate(String input) throws ParseException {
         String pattern = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.ENGLISH);
-
         return sdf.parse(input);
     }
 
@@ -31,7 +30,7 @@ public class Utils {
 
     }
 
-    public static boolean areSameListOrderNoMatterOrder(List<String> listOne, List<String> listTwo){
+    public static boolean areSameListNoMatterOrder(List<String> listOne, List<String> listTwo){
         if (listOne == null && listTwo == null){
             return true;
         }
@@ -41,8 +40,8 @@ public class Utils {
         }
 
         //to avoid messing the order of the original lists, we use a copy
-        listOne = new ArrayList<String>(listOne);
-        listTwo = new ArrayList<String>(listTwo);
+        listOne = new ArrayList<>(listOne);
+        listTwo = new ArrayList<>(listTwo);
 
         Collections.sort(listOne);
         Collections.sort(listTwo);

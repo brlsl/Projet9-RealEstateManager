@@ -156,17 +156,22 @@ public class DatabaseTests {
     public void insertAndUpdateProperty() throws InterruptedException{
         this.database.agentDao().createAgent(AGENT_DEMO_1);
         this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_2);
 
         List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
-        assertTrue( propertyList.size() == 1
+        assertTrue( propertyList.size() == 2
                 && propertyList.get(0).getCity().equals("Paris")
                 && propertyList.get(0).getPrice() == 123);
+
+        PROPERTY_DEMO_2.setCity("St-Louis");
+        PROPERTY_DEMO_2.setPrice(444);
+
         //TEST
-        this.database.propertyDao().updatePropertyTest("St-Louis", "444" , PROPERTY_ID_1);
+        this.database.propertyDao().updateProperty(PROPERTY_DEMO_2);
         propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
-        assertTrue( propertyList.size() == 1
-                && propertyList.get(0).getCity().equals("St-Louis")
-                && propertyList.get(0).getPrice() == 444);
+        assertTrue( propertyList.size() == 2
+                && propertyList.get(1).getCity().equals("St-Louis")
+                && propertyList.get(1).getPrice() == 444);
 
     }
 

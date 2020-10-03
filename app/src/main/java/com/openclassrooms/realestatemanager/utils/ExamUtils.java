@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 
 import java.text.DateFormat;
@@ -27,7 +29,7 @@ public class ExamUtils {
 
     // method added
     public static int convertEuroToDollar(int euros){
-        return (int) Math.round(euros * 1.231);
+        return (int) Math.round(euros * 1.231527);
     }
 
     /**
@@ -47,8 +49,28 @@ public class ExamUtils {
      * @param context
      * @return
      */
+
+
     public static Boolean isInternetAvailable(Context context){
-        WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        return wifi.isWifiEnabled();
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] activeNetworkInfo = connectivityManager.getAllNetworkInfo();
+
+        for (NetworkInfo ni : activeNetworkInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+
+        return haveConnectedWifi || haveConnectedMobile;
+        // previous method
+        //WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        //return wifi.isWifiEnabled();
     }
 }

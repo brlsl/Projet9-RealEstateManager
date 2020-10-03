@@ -124,11 +124,10 @@
                     app:layout_constraintTop_toTopOf="@+id/textView10" />
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/detail_fragment_currency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="€"
                     app:layout_constraintBottom_toBottomOf="@+id/detail_fragment_property_price"
                     app:layout_constraintStart_toEndOf="@+id/detail_fragment_property_price"
                     app:layout_constraintTop_toTopOf="@+id/detail_fragment_property_price" />

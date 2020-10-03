@@ -85,4 +85,6 @@
     <string name="type">Type</string>
     <string name="address">Address</string>
     <string name="sold">SOLD</string>
+    <string name="currency">Currency</string>
+    <string name="dollar">$</string>
 </resources>

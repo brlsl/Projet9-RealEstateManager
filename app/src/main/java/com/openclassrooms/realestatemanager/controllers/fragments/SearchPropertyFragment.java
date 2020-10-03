@@ -319,7 +319,7 @@ public class SearchPropertyFragment extends BaseFragment {
                                 mPropertyListFiltered.clear();
                                 for (int i = 0; i <properties.size() ; i++) {
                                     if (mPOIListFilter.size() == properties.get(i).getPointsOfInterest().size()){
-                                        if (Utils.areSameListOrderNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
+                                        if (Utils.areSameListNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
                                             mPropertyListFiltered.add(properties.get(i));
                                         }
                                     }
@@ -337,7 +337,7 @@ public class SearchPropertyFragment extends BaseFragment {
                                     }
                                     else if (properties.get(i).getType().equals(type) && !mPOIListFilter.isEmpty()){
                                         if (mPOIListFilter.size() == properties.get(i).getPointsOfInterest().size()){
-                                            if (Utils.areSameListOrderNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
+                                            if (Utils.areSameListNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
                                                 mPropertyListFiltered.add(properties.get(i));
                                             }
                                         }

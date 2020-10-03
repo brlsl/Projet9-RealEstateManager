@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,6 +25,7 @@ import com.openclassrooms.realestatemanager.controllers.fragments.DetailProperty
 import com.openclassrooms.realestatemanager.controllers.fragments.SearchPropertyFragment;
 
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.utils.ExamUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,8 +258,14 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
                 startActivity(settingsIntent);
                 break;
             case R.id.activity_main_map:
-                Intent mapIntent = new Intent(this, MapActivity.class);
-                startActivity(mapIntent);
+                boolean isInternetAvailable = ExamUtils.isInternetAvailable(this);
+                if (isInternetAvailable){
+                    Intent mapIntent = new Intent(this, MapActivity.class);
+                    startActivity(mapIntent);
+                }
+                else {
+                    Toast.makeText(this, "Please check your internet connexion", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
 

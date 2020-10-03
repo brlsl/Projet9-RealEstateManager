@@ -41,6 +41,8 @@ public class MapCustomWindowAdapter implements GoogleMap.InfoWindowAdapter{
         TextView type = mView.findViewById(R.id.custom_information_map_property_type);
         type.setText(mProperty.getType());
 
+        TextView currency = mView.findViewById(R.id.custom_information_map_property_currency);
+        currency.setText(mProperty.getCurrency());
 
         return mView;
     }

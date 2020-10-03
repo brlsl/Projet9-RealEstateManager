@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import android.graphics.ImageDecoder;
@@ -23,13 +24,13 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import androidx.lifecycle.LiveData;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +45,6 @@ import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.views.PropertyImageList.PropertyImageAdapter;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -55,6 +55,8 @@ import java.util.Locale;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static com.openclassrooms.realestatemanager.controllers.activities.SettingsActivity.SettingsFragment.PREFERENCES_CURRENCY;
 
 
 public class AddPropertyActivity extends BasePropertyActivity implements AddAgentBottomSheetFragment.OnAgentItemClickListener, AddPhotoTitleDialogFragment.OnClickDialogConfirmListener {
@@ -75,7 +77,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
     private String  mType, mPrice, mAddress, mCity, mSurface, mNbrOfRoom, mNbrOfBedroom, mNbrOfBathroom, mDescription;
     private EditText mEdtTxtCity,mEdtTxtPrice, mEdtTxtAddress, mEdtTxtSurface, mEdtTxtNbrRoom, mEdtTxtNbrBedroom, mEdtTxtNbrBathroom, mEdtTxtDescription;
     private ImageButton mImgBtnChoosePicture, mImgBtnTakePhoto, mImgBtnChooseAgent, mImgBtnAvailableDate;
-    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable;
+    private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable, mTxtViewCurrency;
     private Date mDateAvailable, mDateSold = new Date();
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
     private RecyclerView mRecyclerView;
@@ -89,6 +91,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
 
 
         configureViews();
+        configureCurrenryField();
         configureLiveData();
 
         configureRecyclerViewPhoto();
@@ -103,6 +106,18 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
         onClickTakePicture();
         onClickChoosePicture();
         onClickDatePicker(mImgBtnAvailableDate, mPropertyActivityViewModel);
+
+    }
+
+    private void configureCurrenryField() {
+        SharedPreferences preferences =  PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isDollar = preferences.getBoolean(PREFERENCES_CURRENCY,false);
+        if (isDollar){
+            mTxtViewCurrency.setText(this.getString(R.string.dollar));
+        } else
+        {
+            mTxtViewCurrency.setText(this.getString(R.string.euro));
+        }
 
     }
 
@@ -148,6 +163,8 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
         LiveData<List<String>> pointOfInterestLiveData = mPropertyActivityViewModel.getPointsOfInterestList();
         LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
         MutableLiveData<List<String>> imageTitleListLiveData = mPropertyActivityViewModel.getImageTitleList();
+        LiveData<String> currencyLiveData = mPropertyActivityViewModel.getCurrency();
+
 
         pathListLiveData.observe(this, strings -> {
             mPropertyImageAdapter.updatePathList(strings);
@@ -187,6 +204,10 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
             mPointsOfInterestList = strings;
             Log.d(TAG, "point of Interest list " + mPointsOfInterestList.size());
         } );
+
+        currencyLiveData.observe(this, s -> {
+           // mC
+        });
     }
 
     private void configureSpinnerType() {
@@ -219,6 +240,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
         mTxtViewAgent = findViewById(R.id.agent_chosen_add_property_activity);
         mTxtViewDescriptionTitle = findViewById(R.id.textview_description_add_activity);
         mTxtViewDateAvailable = findViewById(R.id.textView_availability_date_add_property_activity);
+        mTxtViewCurrency = findViewById(R.id.add_property_activity_currency);
 
         mCckBoxSchool = findViewById(R.id.checkBox_school_add_activity);
         mCckBoxHospital = findViewById(R.id.checkBox_hospital_add_activity);
@@ -246,7 +268,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
             }
             else {
                 mAddPropertyButton.setEnabled(false); // avoid more than one click
-                Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
+                Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), mTxtViewCurrency.getText().toString() ,Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
                         Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable);
                 mPropertyActivityViewModel.createProperty(propertyAdded);
 
@@ -318,7 +340,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
                         mPropertyActivityViewModel.getImageTitleList().setValue(mImageTitleList);
                         Log.d(TAG, "Selected picture path:" + mChosenPhotoPath);
 
-                        Toast.makeText(this, "Picture Selected", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(mScrollView,"Picture Selected", Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception e){
@@ -326,7 +348,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
                 }
 
             } else{
-                Toast.makeText(this, "Picture has not been selected", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Picture has not been selected", Snackbar.LENGTH_SHORT).show();
             }
         }
 
@@ -339,9 +361,10 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(this, "Picture captured", Toast.LENGTH_SHORT).show();
+
+                Snackbar.make(mScrollView,"Picture captured", Snackbar.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED){
-                Toast.makeText(this, "Picture not captured", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mScrollView,"Picture not captured", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

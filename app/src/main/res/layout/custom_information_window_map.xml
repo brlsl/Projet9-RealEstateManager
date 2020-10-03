@@ -62,11 +62,10 @@
         app:layout_constraintTop_toTopOf="@+id/textView32" />
 
     <TextView
-        android:id="@+id/textView34"
+        android:id="@+id/custom_information_map_property_currency"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="24dp"
-        android:text="@string/euro"
         app:layout_constraintBottom_toBottomOf="@+id/custom_information_map_property_price"
         app:layout_constraintStart_toEndOf="@+id/custom_information_map_property_price"
         app:layout_constraintTop_toTopOf="@+id/custom_information_map_property_price" />
