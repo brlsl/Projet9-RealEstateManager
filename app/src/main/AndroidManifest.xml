@@ -63,12 +63,26 @@
             android:name=".controllers.activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
-        <!-- Content provider -->
+
+
+        <!-- CONTENT PROVIDER -->
+        <!-- Property provider -->
         <provider
             android:name=".provider.PropertyContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:authorities="com.openclassrooms.realestatemanager.property_provider"
             android:exported="true"/>
 
+        <!-- Agent provider -->
+        <provider
+            android:name=".provider.AgentContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.agent_provider"
+            android:exported="true"/>
+
+        <!-- Image provider -->
+        <provider
+            android:name=".provider.ImageContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.image_provider"
+            android:exported="true"/>
 
     </application>
 

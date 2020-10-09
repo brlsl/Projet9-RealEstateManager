@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.database.dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -15,8 +17,11 @@ import java.util.List;
 @Dao
 public interface ImageDao {
 
+    @Query("SELECT * FROM image_table WHERE propertyId =:propertyId")
+    Cursor getImagesWithCursor(long propertyId);
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void createImage(Image image);
+    long createImage(Image image);
 
     @Query("SELECT * FROM image_table")
     LiveData<List<Image>> getImageListAllProperties();
@@ -27,8 +32,8 @@ public interface ImageDao {
     @Query("SELECT * FROM image_table WHERE propertyId = :propertyId AND id = :imageId" )
     LiveData<Image> getImage(long imageId, long propertyId);
 
-    @Query("UPDATE image_table SET imagePath = :imagePath  WHERE id=:imageId")
-    int updateImage(String imagePath, long imageId);
+    @Update (entity = Image.class)
+    int updateImage(Image image);
 
     @Query("DELETE FROM image_table WHERE propertyId =:propertyId")
     int deleteImagesOneProperty(long propertyId);

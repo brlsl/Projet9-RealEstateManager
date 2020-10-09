@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -59,8 +58,8 @@ public class DatabaseTests {
     private static Property PROPERTY_DEMO_1 = new Property(PROPERTY_ID_1, AGENT_ID_1, "Paris", 123);
     private static Property PROPERTY_DEMO_2 = new Property(PROPERTY_ID_2, AGENT_ID_1, "Issy", 456);
 
-    private static String IMAGE_PATH_1 = "storage/fakePath1/";
-    private static String IMAGE_PATH_2 = "storage/fakePath1/";
+    private static String IMAGE_PATH_1 = "storage/originalPath1/";
+    private static String IMAGE_PATH_2 = "storage/originalPath2/";
     private static long IMAGE_ID_1 = 147;
     private static long IMAGE_ID_2 = 963;
     private static Image IMAGE_DEMO_1 = new Image(IMAGE_ID_1, PROPERTY_ID_1, IMAGE_PATH_1);
@@ -201,13 +200,18 @@ public class DatabaseTests {
     @Test
     public void insertAndUpdateImage() throws InterruptedException {
         this.database.imageDao().createImage(IMAGE_DEMO_1);
+        this.database.imageDao().createImage(IMAGE_DEMO_2);
         Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
-        image.setImagePath("storage/originalPath");
+        assertTrue(image.getId() == IMAGE_ID_1
+                && image.getImagePath().equals(IMAGE_PATH_1));
+
+        image.setImagePath("storage/updatedPath");
+
         // TEST
-        this.database.imageDao().updateImage("storage/updatedPath", IMAGE_ID_1);
-        Image imageUpdated = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
-        assertTrue(imageUpdated.getId() == IMAGE_ID_1
-                && imageUpdated.getImagePath().equals("storage/updatedPath"));
+        this.database.imageDao().updateImage(image);
+        // imageUpdated = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
+        assertTrue(image.getId() == IMAGE_ID_1
+                && image.getImagePath().equals("storage/updatedPath"));
     }
 
     @Test
@@ -300,7 +304,7 @@ public class DatabaseTests {
         Date dateSoldMax = Utils.formatStringToDate("01/01/2021");
         List<Property> filteredList = LiveDataTestUtil.getValue(
                 this.database.propertyDao().searchPropertyTestDate(dateAvailableMin, dateAvailableMax, dateSoldMin, dateSoldMax));
-        assertEquals(1, filteredList.size());
+        assertEquals(2, filteredList.size());
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.database.dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -15,8 +17,11 @@ import java.util.List;
 @Dao
 public interface AgentDao {
 
+    @Query("SELECT * FROM agent_table")
+    Cursor getAllAgent();
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void createAgent(Agent agent);
+    long createAgent(Agent agent);
 
     @Query("SELECT * FROM agent_table")
     LiveData<List<Agent>> getAgentList();
@@ -25,7 +30,7 @@ public interface AgentDao {
     LiveData<Agent> getAgent(long id);
 
     @Update
-    void updateAgent(Agent agent);
+    int updateAgent(Agent agent);
 
     @Delete
     void deleteAgent(Agent agent);

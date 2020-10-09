@@ -84,7 +84,12 @@
     <string name="status">Status</string>
     <string name="type">Type</string>
     <string name="address">Address</string>
-    <string name="sold">SOLD</string>
+    <string name="sold">Sold</string>
     <string name="currency">Currency</string>
     <string name="dollar">$</string>
+    <string name="simulation_loan_terms_result">For a loan of %1$s %2$s,
+        your monthly term is %3$s %4$s for a cost without insurance of %5$s %6$s</string>
+
+    <string name="simulation_loan_amount_result">Your loan amount is %1$s %2$s, for a loan term of %3$s %4$s and
+        for a loan cost without insurance of %5$s %6$s</string>
 </resources>

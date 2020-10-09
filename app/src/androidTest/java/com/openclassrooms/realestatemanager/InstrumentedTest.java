@@ -16,10 +16,9 @@ import static org.junit.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class InstrumentedTest {
     @Test
     public void internetTest_ShouldWorks(){
-
         assertTrue(
                 ExamUtils.isInternetAvailable(InstrumentationRegistry.getInstrumentation().getContext())
         );

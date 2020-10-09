@@ -32,6 +32,15 @@ public class MapCustomWindowAdapter implements GoogleMap.InfoWindowAdapter{
         Bitmap bitmap = BitmapFactory.decodeFile(mProperty.getMainImagePath());
         propertyImage.setImageBitmap(bitmap);
 
+        TextView status = mView.findViewById(R.id.custom_information_map_property_textView_status);
+        if (mProperty.isAvailable()){
+            status.setText(mView.getContext().getString(R.string.available));
+        }
+        else {
+            status.setText(mView.getContext().getString(R.string.sold));
+        }
+
+
         TextView address = mView.findViewById(R.id.custom_information_map_address_and_city);
         address.setText(mProperty.getAddress());
 

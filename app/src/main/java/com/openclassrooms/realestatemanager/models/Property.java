@@ -324,11 +324,13 @@ public class Property implements Parcelable {
     public static Property fromContentValues(ContentValues values) throws ParseException {
         final Property property = new Property();
 
+        if (values.containsKey("id")) property.setId(values.getAsLong("id"));
         if (values.containsKey("agentId")) property.setAgentId(values.getAsLong("agentId"));
         if (values.containsKey("type")) property.setType(values.getAsString("type"));
         if (values.containsKey("city")) property.setCity(values.getAsString("city"));
         if (values.containsKey("address")) property.setAddress(values.getAsString("address"));
         if (values.containsKey("price")) property.setPrice(values.getAsInteger("price"));
+        if (values.containsKey("currency")) property.setCurrency(values.getAsString("currency"));
         if (values.containsKey("surface")) property.setSurface(values.getAsInteger("surface"));
         if (values.containsKey("numberOfRooms")) property.setNumberOfRooms(values.getAsInteger("numberOfRooms"));
         if (values.containsKey("numberOfBedrooms")) property.setNumberOfBedrooms(values.getAsInteger("numberOfBedrooms"));
@@ -336,7 +338,7 @@ public class Property implements Parcelable {
         if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
 
         String pointsOfInterests = values.getAsString("pointsOfInterest");
-        List<String> listConverted = new ArrayList<String>(Arrays.asList(pointsOfInterests.split(",")));
+        List<String> listConverted = new ArrayList<>(Arrays.asList(pointsOfInterests.split(",")));
 
         if (values.containsKey("pointsOfInterest")) property.setPointsOfInterest(listConverted);
 

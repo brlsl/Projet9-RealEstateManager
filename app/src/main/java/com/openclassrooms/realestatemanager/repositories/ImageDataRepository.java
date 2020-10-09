@@ -30,8 +30,8 @@ public class ImageDataRepository {
         imageDao.createImage(image);
     }
 
-    public void updateImage(String imagePath, long imageId){
-        imageDao.updateImage(imagePath, imageId);
+    public void updateImage(Image image){
+        imageDao.updateImage(image);
     }
 
     public void deleteImagesOneProperty(long propertyId){

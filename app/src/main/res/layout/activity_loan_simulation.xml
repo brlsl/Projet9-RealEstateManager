@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="number"
-            android:maxLength="8"
+            android:maxLength="5"
             android:textAlignment="viewEnd"
             app:layout_constraintStart_toStartOf="@+id/loan_activity_textView_amount_or_terms"
             app:layout_constraintTop_toBottomOf="@+id/loan_activity_textView_amount_or_terms" />

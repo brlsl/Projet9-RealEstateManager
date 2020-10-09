@@ -1,8 +1,12 @@
 package com.openclassrooms.realestatemanager.models;
 
+import android.content.ContentValues;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import java.text.ParseException;
 
 @Entity(tableName = "agent_table")
 public class Agent {
@@ -25,6 +29,10 @@ public class Agent {
     public Agent(String name, String surname){
         this.name = name;
         this.surname = surname;
+    }
+
+    public Agent() {
+
     }
 
     // GETTERS
@@ -53,6 +61,17 @@ public class Agent {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+
+    // ------ UTILS ------
+    public static Agent fromContentValues(ContentValues values) {
+        final Agent agent = new Agent();
+        if (values.containsKey("id")) agent.setId(values.getAsLong("id"));
+        if (values.containsKey("name")) agent.setName(values.getAsString("name"));
+        if (values.containsKey("surname")) agent.setSurname(values.getAsString("surname"));
+
+        return agent;
     }
 
 }

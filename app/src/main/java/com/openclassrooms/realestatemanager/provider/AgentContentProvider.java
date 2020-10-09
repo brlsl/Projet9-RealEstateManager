@@ -10,16 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
-import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.Agent;
 
-import java.text.ParseException;
 
-public class PropertyContentProvider extends ContentProvider {
-
+public class AgentContentProvider extends ContentProvider {
     // FOR DATA
-    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.property_provider";
-    public static final String TABLE_NAME_PROPERTY = "property_table";
-    public static final Uri URI_PROPERTY = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME_PROPERTY);
+    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.agent_provider";
+    public static final String TABLE_NAME = "agent_table";
+    public static final Uri URI_AGENT = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 
     @Override
     public boolean onCreate() { return true; }
@@ -30,8 +28,7 @@ public class PropertyContentProvider extends ContentProvider {
                         @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
         if (getContext() != null){
-            long agentId = ContentUris.parseId(uri);
-            final Cursor cursor = RealEstateManagerDatabase.getInstance(getContext()).propertyDao().getPropertyWithCursor(agentId);
+            final Cursor cursor = RealEstateManagerDatabase.getInstance(getContext()).agentDao().getAllAgent();
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;
         }
@@ -43,7 +40,7 @@ public class PropertyContentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return "vnd.android.cursor.item/" + AUTHORITY + "." + TABLE_NAME_PROPERTY;
+        return "vnd.android.cursor.item/" + AUTHORITY + "." + TABLE_NAME;
     }
 
     @Nullable
@@ -52,23 +49,19 @@ public class PropertyContentProvider extends ContentProvider {
 
         if (getContext() != null){
             final long id;
-            try {
-                if (contentValues != null) {
-                    id = RealEstateManagerDatabase.getInstance(getContext()).propertyDao().createProperty(Property.fromContentValues(contentValues));
-                    if (id != 0){
-                        getContext().getContentResolver().notifyChange(uri, null);
-                        return ContentUris.withAppendedId(uri, id);
-                    }
+            if (contentValues != null) {
+                id = RealEstateManagerDatabase.getInstance(getContext()).agentDao().createAgent(Agent.fromContentValues(contentValues));
+                if (id != 0){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return ContentUris.withAppendedId(uri, id);
                 }
-
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
+
         }
         throw new IllegalArgumentException("Failed to insert row into " + uri);
     }
 
-    // we do not delete properties from database in this app
+    // we do not delete agent from database in this app
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         return 0;
@@ -78,18 +71,11 @@ public class PropertyContentProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         if (getContext() != null){
             final int count;
-            try {
-                if (contentValues != null) {
-                    count = RealEstateManagerDatabase.getInstance(getContext()).propertyDao().updateProperty(Property.fromContentValues(contentValues));
-                    getContext().getContentResolver().notifyChange(uri, null);
-                    return count;
-                }
-
-
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (contentValues != null) {
+                count = RealEstateManagerDatabase.getInstance(getContext()).agentDao().updateAgent(Agent.fromContentValues(contentValues));
+                getContext().getContentResolver().notifyChange(uri, null);
+                return count;
             }
-
         }
         throw new IllegalArgumentException("Failed to update row into " + uri);
     }

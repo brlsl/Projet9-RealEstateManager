@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.models;
 
+import android.content.ContentValues;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -28,6 +30,10 @@ public class Image {
         this.propertyId = propertyId;
         this.imagePath = imagePath;
         this.imageTitle = imageTitle;
+    }
+
+    public Image() {
+
     }
 
     public String getImagePath() {
@@ -60,5 +66,15 @@ public class Image {
 
     public void setImageTitle(String imageTitle) {
         this.imageTitle = imageTitle;
+    }
+
+
+    public static Image fromContentValues(ContentValues values){
+        final Image image = new Image();
+        if (values.containsKey("id")) image.setId(values.getAsLong("id"));
+        if (values.containsKey("propertyId")) image.setPropertyId(values.getAsLong("propertyId"));
+        if (values.containsKey("imagePath")) image.setImagePath(values.getAsString("imagePath"));
+        if (values.containsKey("imageTitle")) image.setImageTitle(values.getAsString("imageTitle"));
+        return image;
     }
 }

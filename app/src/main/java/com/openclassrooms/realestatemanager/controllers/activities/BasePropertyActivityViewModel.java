@@ -86,9 +86,9 @@ public class BasePropertyActivityViewModel extends ViewModel {
         return imageDataRepository.getImageListOneProperty(propertyId);
     }
 
-    public void updateImage(String imagePath, long imageId){
+    public void updateImage(Image image){
         executor.execute(() ->
-                imageDataRepository.updateImage(imagePath, imageId));
+                imageDataRepository.updateImage(image));
     }
 
     public void deleteImagesOneProperty(long propertyId){
