@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.openclassrooms.realestatemanager.REMViewModel;
 
 import com.openclassrooms.realestatemanager.controllers.activities.BasePropertyActivityViewModel;
-import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentDialogFragmentViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailPropertyFragmentViewModel;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
@@ -34,14 +33,12 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(REMViewModel.class)) {
-            return (T) new REMViewModel(agentDataSource, propertyDataSource, imageDataSource, executor);
+            return (T) new REMViewModel(agentDataSource, propertyDataSource, executor);
         }
         if (modelClass.isAssignableFrom(BasePropertyActivityViewModel.class)){
             return (T) new BasePropertyActivityViewModel(agentDataSource,propertyDataSource, imageDataSource, executor);
         }
-        if (modelClass.isAssignableFrom(AddAgentDialogFragmentViewModel.class)){
-            return (T) new AddAgentDialogFragmentViewModel(agentDataSource,executor);
-        }
+
         if (modelClass.isAssignableFrom(DetailPropertyFragmentViewModel.class)){
             return (T) new DetailPropertyFragmentViewModel( propertyDataSource, imageDataSource);
         }

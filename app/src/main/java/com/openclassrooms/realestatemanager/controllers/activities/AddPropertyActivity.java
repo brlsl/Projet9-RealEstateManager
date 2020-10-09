@@ -80,7 +80,6 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
     private TextView mTxtViewAgent, mTxtViewDescriptionTitle, mTxtViewDateAvailable, mTxtViewCurrency;
     private Date mDateAvailable, mDateSold = new Date();
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
-    private RecyclerView mRecyclerView;
     // ----- LIFECYCLE -----
 
     @Override
@@ -122,7 +121,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
     }
 
     private void configureRecyclerViewPhoto() {
-        mRecyclerView = findViewById(R.id.recycler_view_photo_add_activity);
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_photo_add_activity);
         mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList, mImagePathList, getSupportFragmentManager(), getApplicationContext());
         mRecyclerView.setAdapter(mPropertyImageAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -292,7 +291,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
 
                 Log.d(TAG, "Image list content: " + mImagePathList);
                 finish();
-                Snackbar.make(mScrollView,"Property Added", Snackbar.LENGTH_LONG).show();;
+                Snackbar.make(mScrollView,"Property Added", Snackbar.LENGTH_LONG).show();
             }
         });
     }

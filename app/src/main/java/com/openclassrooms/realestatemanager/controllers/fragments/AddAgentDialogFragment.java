@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.REMViewModel;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Agent;
@@ -27,7 +28,7 @@ public class AddAgentDialogFragment extends DialogFragment {
     private Dialog dialog;
     private  AlertDialog.Builder builder;
     private EditText mAgentName, mAgentSurname;
-    private AddAgentDialogFragmentViewModel mViewModel;
+    private REMViewModel mViewModel;
 
     @NonNull
     @Override
@@ -48,7 +49,7 @@ public class AddAgentDialogFragment extends DialogFragment {
 
     private void configureViewModel(){
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(requireContext());
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(AddAgentDialogFragmentViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(REMViewModel.class);
     }
 
     private void buildDialog(View view) {

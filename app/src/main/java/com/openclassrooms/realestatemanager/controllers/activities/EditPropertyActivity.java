@@ -82,7 +82,6 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
     private CheckBox mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant, mCckBoxMall, mCckBoxCinema, mCckBoxPark;
     private Button mEditPropertyButton;
     private ScrollView mScrollView;
-    private RecyclerView mRecyclerView;
 
 
     @Override
@@ -418,9 +417,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
             System.out.println(TAG + "point of Interest list " + mPointsOfInterestList.size());
         });
 
-        currencyLiveData.observe(this, s -> {
-            mTxtViewCurrency.setText(s);
-        });
+        currencyLiveData.observe(this, s -> mTxtViewCurrency.setText(s));
 
     }
 
@@ -477,7 +474,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
     }
 
     private void configureRecyclerViewPhoto() {
-        mRecyclerView = findViewById(R.id.recycler_view_photo_edit_activity);
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_photo_edit_activity);
         mPropertyImageAdapter = new PropertyImageAdapter(mBitmapList, mImageTitleList, mImagePathList, getSupportFragmentManager(), getApplicationContext());
         mRecyclerView.setAdapter(mPropertyImageAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));

@@ -20,9 +20,6 @@ public class DetailPropertyFragmentViewModel extends ViewModel {
     private PropertyDataRepository propertyDataSource;
     private ImageDataRepository imageDataSource;
 
-    private MutableLiveData<Geocode> mResult;
-
-
     public DetailPropertyFragmentViewModel(PropertyDataRepository propertyDataSource,
                                            ImageDataRepository imageDataSource) {
 

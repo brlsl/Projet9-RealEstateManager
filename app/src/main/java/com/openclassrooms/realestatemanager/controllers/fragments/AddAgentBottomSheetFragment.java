@@ -118,6 +118,7 @@ public class AddAgentBottomSheetFragment extends BottomSheetDialogFragment {
                 .setOnItemClickListener((recyclerView, position, v) -> {
                     mListener.onClickAgentItem(mAgentList.get(position));
                     Toast.makeText(requireContext(), "Agent is chosen", Toast.LENGTH_SHORT).show();
+                    dismiss();
                 });
     }
 

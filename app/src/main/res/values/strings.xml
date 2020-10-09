@@ -92,4 +92,7 @@
 
     <string name="simulation_loan_amount_result">Your loan amount is %1$s %2$s, for a loan term of %3$s %4$s and
         for a loan cost without insurance of %5$s %6$s</string>
+    <string name="type">Type</string>
+    <string name="price">Price</string>
+    <string name="status">Status</string>
 </resources>

@@ -77,9 +77,7 @@ public class BasePropertyActivityViewModel extends ViewModel {
     // ---------
 
     public void createImage(Image image){
-        executor.execute(() -> {
-            imageDataRepository.createImage(image);
-        });
+        executor.execute(() -> imageDataRepository.createImage(image));
     }
 
     public LiveData<List<Image>> getImageListOneProperty(long propertyId){
