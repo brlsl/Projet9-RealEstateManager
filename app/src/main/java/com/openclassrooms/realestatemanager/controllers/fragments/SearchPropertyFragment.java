@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class SearchPropertyFragment extends BaseFragment {
+public class SearchPropertyFragment extends Fragment {
 
     // Callback
     public interface OnClickFilterPropertyList{
@@ -51,15 +51,16 @@ public class SearchPropertyFragment extends BaseFragment {
     private static final String TAG = "SearchPropertyFragment";
     private List<Property> mPropertyListFiltered = new ArrayList<>();
     private List<String> mPOIListFilter;
-    private int surfaceMin, surfaceMax, priceMin, priceMax, nbrRoomMin, nbrRoomMax;
-    private String type;
+    private int surfaceMin, surfaceMax, priceMin, priceMax, nbrRoomMin, nbrRoomMax, numberOfPicturesMin, numberOfPicturesMax;
+    private String type, city;
     private Date dateAvailableMin, dateAvailableMax, dateSoldMin, dateSoldMax;
     private boolean isAvailable;
 
     // FOR UI
     private Button mFilterPropertyListBtn, mReInitiateFilterButton;
 
-    private EditText mEdtTxtPriceMin, mEdtTxtPriceMax, mEdtTxtSurfaceMin, mEdtTxtSurfaceMax, mEdtTxtRoomMin, mEdtTxtRoomMax;
+    private EditText mEdtTxtPriceMin, mEdtTxtPriceMax, mEdtTxtSurfaceMin, mEdtTxtSurfaceMax,
+    mEdtTxtRoomMin, mEdtTxtRoomMax, mEdtTxtPicturesMin, mEdtTxtCity;
     private Spinner mSpinnerType, mSpinnerStatus;
     private ImageButton mImgBtnDateAvailableMin, mImgBtnDateAvailableMax, mImgBtnDateSoldMin, mImgBtnDateSoldMax;
     private TextView mTxtViewDateAvailableMin, mTxtViewDateAvailableMax,
@@ -124,6 +125,9 @@ public class SearchPropertyFragment extends BaseFragment {
         dateSoldMin = Utils.formatStringToDate("01/01/1900");
         dateSoldMax = Utils.formatStringToDate("31/12/2100");
         mPOIListFilter = new ArrayList<>();
+        numberOfPicturesMin = 0;
+        numberOfPicturesMax = 7;
+        city = "";
     }
 
     private void configureViewModel() {
@@ -141,6 +145,8 @@ public class SearchPropertyFragment extends BaseFragment {
         mEdtTxtSurfaceMax = view.findViewById(R.id.editTextNumber_activity_search_maximum_surface);
         mEdtTxtRoomMin = view.findViewById(R.id.editTextNumber_activity_search_minimum_room);
         mEdtTxtRoomMax = view.findViewById(R.id.editTextNumber_activity_search_maximum_room);
+        mEdtTxtPicturesMin = view.findViewById(R.id.editTextNumber_activity_search_number_pictures_minimum);
+        mEdtTxtCity = view.findViewById(R.id.editText_activity_search_city);
         mImgBtnDateAvailableMin = view.findViewById(R.id.imageButton_activity_search_date_available_since);
         mImgBtnDateAvailableMax = view.findViewById(R.id.imageButton_activity_search_date_available_before);
         mImgBtnDateSoldMin = view.findViewById(R.id.imageButton_fragment_search_date_sold_since);
@@ -188,9 +194,7 @@ public class SearchPropertyFragment extends BaseFragment {
         LiveData<List<Property>> filteredPropertyListLiveData = mViewModel.getFilteredPropertyList();
         LiveData<List<String>> pointOfInterestsLiveData = mViewModel.getPointsOfInterestList();
 
-        filteredPropertyListLiveData.observe(this, properties -> {
-            mPropertyListFiltered = properties;
-        });
+        filteredPropertyListLiveData.observe(this, properties -> mPropertyListFiltered = properties);
 
         dateAvailableMinLiveData.observe(this, date -> {
             dateAvailableMin = date;
@@ -253,7 +257,7 @@ public class SearchPropertyFragment extends BaseFragment {
 
     private void getFilterValueEntered() throws ParseException {
         type = mSpinnerType.getSelectedItem().toString();
-
+        city = mEdtTxtCity.getText().toString().toLowerCase().trim();
         isAvailable = mSpinnerStatus.getSelectedItem().toString().equals(Objects.requireNonNull(getContext()).getString(R.string.available));
 
         // ternary expression
@@ -263,6 +267,7 @@ public class SearchPropertyFragment extends BaseFragment {
         priceMax = mEdtTxtPriceMax.getText().toString().isEmpty()? 999999999: Integer.parseInt(mEdtTxtPriceMax.getText().toString());
         nbrRoomMin = mEdtTxtRoomMin.getText().toString().isEmpty()? 0: Integer.parseInt(mEdtTxtRoomMin.getText().toString());
         nbrRoomMax = mEdtTxtRoomMax.getText().toString().isEmpty()? 99: Integer.parseInt(mEdtTxtRoomMax.getText().toString());
+        numberOfPicturesMin = mEdtTxtPicturesMin.getText().toString().isEmpty()? 1: Integer.parseInt(mEdtTxtPicturesMin.getText().toString());
 
         dateAvailableMin = mTxtViewDateAvailableMin.getText().toString().isEmpty()?
                 Utils.formatStringToDate("01/01/1900") : Utils.formatStringToDate(mTxtViewDateAvailableMin.getText().toString());
@@ -299,25 +304,42 @@ public class SearchPropertyFragment extends BaseFragment {
     }
 
     private void onClickFilterPropertyList() {
-        mFilterPropertyListBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    getFilterValueEntered();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+        mFilterPropertyListBtn.setOnClickListener(view -> {
+            try {
+                getFilterValueEntered();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-                mViewModel.filterPropertyListAllType(surfaceMin, surfaceMax, priceMin, priceMax
-                        ,nbrRoomMin,nbrRoomMax,dateAvailableMin ,dateAvailableMax,dateSoldMin ,dateSoldMax, isAvailable)
-                        .observe(requireActivity(), properties ->{
+            mViewModel.filterPropertyListAllType(surfaceMin,surfaceMax ,priceMin ,priceMax
+                    ,nbrRoomMin ,nbrRoomMax ,dateAvailableMin ,dateAvailableMax ,dateSoldMin ,dateSoldMax, isAvailable
+                    ,numberOfPicturesMin ,numberOfPicturesMax, city)
+                    .observe(requireActivity(), properties ->{
+                        mPropertyListFiltered.clear();
+                        if (type.trim().isEmpty() && mPOIListFilter.isEmpty()){ // if user do not fill type filter, we return the list returned by the query
+                            mPropertyListFiltered = properties;
+                        }
+                        else if (type.trim().isEmpty() && !mPOIListFilter.isEmpty()){
                             mPropertyListFiltered.clear();
-                            if (type.trim().isEmpty() && mPOIListFilter.isEmpty()){ // if user do not fill type filter, we return the list returned by the query
-                                mPropertyListFiltered = properties;
+                            for (int i = 0; i <properties.size() ; i++) {
+                                if (mPOIListFilter.size() == properties.get(i).getPointsOfInterest().size()){
+                                    if (Utils.areSameListNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
+                                        mPropertyListFiltered.add(properties.get(i));
+                                    }
+                                }
+                                else if (mPOIListFilter.size() < properties.get(i).getPointsOfInterest().size()){
+                                    if (properties.get(i).getPointsOfInterest().containsAll(mPOIListFilter))
+                                        mPropertyListFiltered.add(properties.get(i));
+                                }
                             }
-                            else if (type.trim().isEmpty() && !mPOIListFilter.isEmpty()){
-                                mPropertyListFiltered.clear();
-                                for (int i = 0; i <properties.size() ; i++) {
+                        }
+                        else if (!type.trim().isEmpty()){
+                            mPropertyListFiltered.clear();
+                            for (int i = 0; i < properties.size() ; i++) {
+                                if (properties.get(i).getType().equals(type) && mPOIListFilter.isEmpty()){
+                                    mPropertyListFiltered.add(properties.get(i));
+                                }
+                                else if (properties.get(i).getType().equals(type) && !mPOIListFilter.isEmpty()){
                                     if (mPOIListFilter.size() == properties.get(i).getPointsOfInterest().size()){
                                         if (Utils.areSameListNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
                                             mPropertyListFiltered.add(properties.get(i));
@@ -329,35 +351,16 @@ public class SearchPropertyFragment extends BaseFragment {
                                     }
                                 }
                             }
-                            else if (!type.trim().isEmpty()){
-                                mPropertyListFiltered.clear();
-                                for (int i = 0; i < properties.size() ; i++) {
-                                    if (properties.get(i).getType().equals(type) && mPOIListFilter.isEmpty()){
-                                        mPropertyListFiltered.add(properties.get(i));
-                                    }
-                                    else if (properties.get(i).getType().equals(type) && !mPOIListFilter.isEmpty()){
-                                        if (mPOIListFilter.size() == properties.get(i).getPointsOfInterest().size()){
-                                            if (Utils.areSameListNoMatterOrder(mPOIListFilter, properties.get(i).getPointsOfInterest())){
-                                                mPropertyListFiltered.add(properties.get(i));
-                                            }
-                                        }
-                                        else if (mPOIListFilter.size() < properties.get(i).getPointsOfInterest().size()){
-                                            if (properties.get(i).getPointsOfInterest().containsAll(mPOIListFilter))
-                                                mPropertyListFiltered.add(properties.get(i));
-                                        }
-                                    }
-                                }
-                            }
+                        }
 
-                            mPOIListFilter.clear();
-                            Log.d(TAG, "Size POI after CLick :" + mPOIListFilter.size());
-                            mViewModel.getPointsOfInterestList().setValue(mPOIListFilter);
-                            mViewModel.getFilteredPropertyList().setValue(mPropertyListFiltered);
-                            // pass list to main activity then to property list fragment filtered
-                            mCallback.onClickFilterPropertiesListener(mPropertyListFiltered);
-                            Log.d(TAG, "Filtered property size after type input :" + mPropertyListFiltered.size());
-                        });
-            }
+                        mPOIListFilter.clear();
+                        Log.d(TAG, "Size POI after CLick :" + mPOIListFilter.size());
+                        mViewModel.getPointsOfInterestList().setValue(mPOIListFilter);
+                        mViewModel.getFilteredPropertyList().setValue(mPropertyListFiltered);
+                        // pass list to main activity then to property list fragment filtered
+                        mCallback.onClickFilterPropertiesListener(mPropertyListFiltered);
+                        Log.d(TAG, "Filtered property size after type input :" + mPropertyListFiltered.size());
+                    });
         });
     }
 
@@ -395,38 +398,32 @@ public class SearchPropertyFragment extends BaseFragment {
 
 
     void onClickDateAvailablePicker(ImageButton imageButton, View view){
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view2) {
-                int currentYear, currentMonth, currentDayOfMonth;
-                Calendar calendar = Calendar.getInstance();
-                currentYear = calendar.get(Calendar.YEAR);
-                currentMonth = calendar.get(Calendar.MONTH);
-                currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        imageButton.setOnClickListener(view2 -> {
+            int currentYear, currentMonth, currentDayOfMonth;
+            Calendar calendar = Calendar.getInstance();
+            currentYear = calendar.get(Calendar.YEAR);
+            currentMonth = calendar.get(Calendar.MONTH);
+            currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, month);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (datePicker, year, month, dayOfMonth) -> {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                        if (imageButton == view.findViewById(R.id.imageButton_activity_search_date_available_since)) {
-                            mViewModel.getDateAvailableMin().setValue(calendar.getTime());
-                        }
-                        else if (imageButton == view.findViewById(R.id.imageButton_activity_search_date_available_before)) {
-                            mViewModel.getDateAvailableMax().setValue(calendar.getTime());
-                        }
-                        else if (imageButton == view.findViewById(R.id.imageButton_fragment_search_date_sold_since)) {
-                            mViewModel.getDateSoldMin().setValue(calendar.getTime());
-                        }
-                        else if (imageButton == view.findViewById(R.id.imageButton_fragment_search_date_sold_before)) {
-                            mViewModel.getDateSoldMax().setValue(calendar.getTime());
-                        }
-                    }
-                }, currentYear, currentMonth, currentDayOfMonth);
-                datePickerDialog.show();
-            }
+                if (imageButton == view.findViewById(R.id.imageButton_activity_search_date_available_since)) {
+                    mViewModel.getDateAvailableMin().setValue(calendar.getTime());
+                }
+                else if (imageButton == view.findViewById(R.id.imageButton_activity_search_date_available_before)) {
+                    mViewModel.getDateAvailableMax().setValue(calendar.getTime());
+                }
+                else if (imageButton == view.findViewById(R.id.imageButton_fragment_search_date_sold_since)) {
+                    mViewModel.getDateSoldMin().setValue(calendar.getTime());
+                }
+                else if (imageButton == view.findViewById(R.id.imageButton_fragment_search_date_sold_before)) {
+                    mViewModel.getDateSoldMax().setValue(calendar.getTime());
+                }
+            }, currentYear, currentMonth, currentDayOfMonth);
+            datePickerDialog.show();
         });
     }
 }

@@ -3,11 +3,15 @@ package com.openclassrooms.realestatemanager.models;
 import android.content.ContentValues;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "image_table")
+@Entity(tableName = "image_table",
+        foreignKeys = @ForeignKey(entity = Property.class,
+                parentColumns = "id",
+                childColumns = "propertyId"))
 public class Image {
 
     @PrimaryKey(autoGenerate = true)

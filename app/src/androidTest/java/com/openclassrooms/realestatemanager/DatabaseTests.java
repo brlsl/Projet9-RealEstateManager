@@ -30,6 +30,24 @@ public class DatabaseTests {
     // FOR DATA
     private RealEstateManagerDatabase database;
 
+    // DATA SET FOR TESTS
+    private static long AGENT_ID_1 = 42;
+    private static long AGENT_ID_2 = 654;
+    private static Agent AGENT_DEMO_1 = new Agent(AGENT_ID_1,"ABC","Br");
+    private static Agent AGENT_DEMO_2 = new Agent(AGENT_ID_2,"LAN","Vin");
+
+    private static long PROPERTY_ID_1 = 123456;
+    private static long PROPERTY_ID_2 = 987654;
+    private static Property PROPERTY_DEMO_1 = new Property(PROPERTY_ID_1, AGENT_ID_1, "Paris", 123);
+    private static Property PROPERTY_DEMO_2 = new Property(PROPERTY_ID_2, AGENT_ID_1, "Issy", 456);
+
+    private static String IMAGE_PATH_1 = "storage/originalPath1/";
+    private static String IMAGE_PATH_2 = "storage/originalPath2/";
+    private static long IMAGE_ID_1 = 147;
+    private static long IMAGE_ID_2 = 963;
+    private static Image IMAGE_DEMO_1 = new Image(IMAGE_ID_1, PROPERTY_ID_1, IMAGE_PATH_1);
+    private static Image IMAGE_DEMO_2 = new Image(IMAGE_ID_2, PROPERTY_ID_2, IMAGE_PATH_2);
+
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
@@ -46,24 +64,6 @@ public class DatabaseTests {
         database.close();
     }
 
-
-    // DATA SET FOR TESTS
-    private static long AGENT_ID_1 = 42;
-    private static long AGENT_ID_2 = 654;
-    private static Agent AGENT_DEMO_1 = new Agent(AGENT_ID_1,"ABC","Br");
-    private static Agent AGENT_DEMO_2 = new Agent(AGENT_ID_2,"ABC","Br");
-
-    private static long PROPERTY_ID_1 = 123456;
-    private static long PROPERTY_ID_2 = 987654;
-    private static Property PROPERTY_DEMO_1 = new Property(PROPERTY_ID_1, AGENT_ID_1, "Paris", 123);
-    private static Property PROPERTY_DEMO_2 = new Property(PROPERTY_ID_2, AGENT_ID_1, "Issy", 456);
-
-    private static String IMAGE_PATH_1 = "storage/originalPath1/";
-    private static String IMAGE_PATH_2 = "storage/originalPath2/";
-    private static long IMAGE_ID_1 = 147;
-    private static long IMAGE_ID_2 = 963;
-    private static Image IMAGE_DEMO_1 = new Image(IMAGE_ID_1, PROPERTY_ID_1, IMAGE_PATH_1);
-    private static Image IMAGE_DEMO_2 = new Image(IMAGE_ID_2, PROPERTY_ID_2, IMAGE_PATH_2);
 
     // ----- AGENT DAO TESTS -----
 
@@ -131,25 +131,6 @@ public class DatabaseTests {
                 && propertyList.size() == 2);
 
     }
-/*
-    @Test
-    public void insertAndUpdateProperty() throws InterruptedException{
-        this.database.agentDao().createAgent(AGENT_DEMO_1);
-        this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
-        this.database.propertyDao().createProperty(PROPERTY_DEMO_2);
-        Property property = LiveDataTestUtil.getValue(database.propertyDao().getProperty(PROPERTY_ID_1, AGENT_ID_1));
-        Property property2 = LiveDataTestUtil.getValue(database.propertyDao().getProperty(PROPERTY_ID_2, AGENT_ID_1));
-        property.setCity("Marseille");
-        property.setPrice("789");
-        // TEST
-        this.database.propertyDao().updateProperty(property);
-        List<Property> propertyList = LiveDataTestUtil.getValue(database.propertyDao().getPropertyList());
-        assertTrue(propertyList.size() == 1
-                && propertyList.get(0).getCity().equals("Marseille")
-                && propertyList.get(0).getPrice().equals("789"));
-    }
-
- */
 
     @Test
     public void insertAndUpdateProperty() throws InterruptedException{
@@ -185,37 +166,47 @@ public class DatabaseTests {
 
     @Test
     public void insertAndGetImage() throws InterruptedException {
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.agentDao().createAgent(AGENT_DEMO_2);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_2);
         this.database.imageDao().createImage(IMAGE_DEMO_1);
         this.database.imageDao().createImage(IMAGE_DEMO_2);
+        List<Image> imageListAllProperties, imageListProperty1, imageListProperty2;
         //TEST
-        Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_2, PROPERTY_ID_2));
-        List<Image> imageListAllProperties = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
-        List<Image> imageListProperty = LiveDataTestUtil.getValue(this.database.imageDao().getImageListOfOneProperty(PROPERTY_ID_2));
-        assertTrue(IMAGE_DEMO_2.getImagePath().equals(image.getImagePath())
-                && IMAGE_DEMO_2.getId() == image.getId()
-                && imageListAllProperties.size() == 2
-                && imageListProperty.size() == 1);
+        //Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_2, PROPERTY_ID_2));
+        imageListAllProperties = LiveDataTestUtil.getValue(this.database.imageDao().getImageListAllProperties());
+        imageListProperty1 = LiveDataTestUtil.getValue(this.database.imageDao().getImageListOfOneProperty(PROPERTY_ID_1));
+        imageListProperty2 = LiveDataTestUtil.getValue(this.database.imageDao().getImageListOfOneProperty(PROPERTY_ID_2));
+        assertTrue( imageListAllProperties.size() == 2 &&
+                imageListProperty1.size() == 1 && imageListProperty2.size() == 1);
     }
 
     @Test
     public void insertAndUpdateImage() throws InterruptedException {
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.agentDao().createAgent(AGENT_DEMO_2);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_2);
         this.database.imageDao().createImage(IMAGE_DEMO_1);
         this.database.imageDao().createImage(IMAGE_DEMO_2);
         Image image = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
-        assertTrue(image.getId() == IMAGE_ID_1
-                && image.getImagePath().equals(IMAGE_PATH_1));
-
+        assertTrue(image.getId() == IMAGE_ID_1 && image.getImagePath().equals(IMAGE_PATH_1));
         image.setImagePath("storage/updatedPath");
 
         // TEST
         this.database.imageDao().updateImage(image);
-        // imageUpdated = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
+        Image imageUpdated = LiveDataTestUtil.getValue(this.database.imageDao().getImage(IMAGE_ID_1, PROPERTY_ID_1));
         assertTrue(image.getId() == IMAGE_ID_1
-                && image.getImagePath().equals("storage/updatedPath"));
+                && imageUpdated.getImagePath().equals("storage/updatedPath"));
     }
 
     @Test
     public void insertAndDeleteImage() throws InterruptedException {
+        this.database.agentDao().createAgent(AGENT_DEMO_1);
+        this.database.agentDao().createAgent(AGENT_DEMO_2);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_1);
+        this.database.propertyDao().createProperty(PROPERTY_DEMO_2);
         this.database.imageDao().createImage(IMAGE_DEMO_1);
         this.database.imageDao().createImage(IMAGE_DEMO_2);
         Image image = new Image(3, PROPERTY_ID_1, IMAGE_PATH_1);
@@ -228,7 +219,7 @@ public class DatabaseTests {
         assertEquals(1, imageList.size());
     }
 
-    // ------ DATABASE TESTS ------
+    // ------ FILTER TESTS ------
     @Test
     public void filterPropertyListWithString() throws InterruptedException{
         Property property1 = new Property(1, AGENT_DEMO_1.getId(), "Apartment");
@@ -250,6 +241,10 @@ public class DatabaseTests {
         filteredList = LiveDataTestUtil.getValue(
                 this.database.propertyDao().searchPropertyTestString("Loft"));
         assertEquals(0, filteredList.size());
+
+        filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestString(""));
+        assertEquals(3, filteredList.size());
 
     }
 
@@ -308,7 +303,7 @@ public class DatabaseTests {
     }
 
     @Test
-    public void filterPropertyIsAvailable() throws InterruptedException {
+    public void filterPropertyAvailable() throws InterruptedException {
         Property property = new Property(1, AGENT_DEMO_1.getId(), true);
         Property property2 = new Property(2, AGENT_DEMO_1.getId(), false);
         Property property3 = new Property(3, AGENT_DEMO_1.getId(), true);

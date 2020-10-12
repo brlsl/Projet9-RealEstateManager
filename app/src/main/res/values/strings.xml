@@ -92,7 +92,15 @@
 
     <string name="simulation_loan_amount_result">Your loan amount is %1$s %2$s, for a loan term of %3$s %4$s and
         for a loan cost without insurance of %5$s %6$s</string>
-    <string name="type">Type</string>
-    <string name="price">Price</string>
-    <string name="status">Status</string>
+
+    <string name="notification_text">%1$s located at %2$s %3$s for %4$s %5$s.</string>
+    <string name="filter_one_result_found">Search result: %1$d property found</string>
+    <string name="filter_results_found">Search result: %1$d properties found</string>
+    <string name="filter_0_result">Search result: 0  property found </string>
+    <string name="map_not_available_please_check_connexion">Map not available, please check property address</string>
+    <string name="description_lenght">Description %1$d/300)</string>
+    <string name="cannot_add_more_pictures">Cannot add more pictures</string>
+    <string name="number_of_pictures_minimum_between_1_and_7">Number of pictures minimum (between 1 and 7)</string>
+    <string name="reinitiate_filters">Reinitiate filters</string>
+    <string name="filter_property_list">Filter Property List</string>
 </resources>

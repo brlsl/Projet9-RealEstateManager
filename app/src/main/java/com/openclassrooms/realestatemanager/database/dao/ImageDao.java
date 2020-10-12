@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -36,6 +35,6 @@ public interface ImageDao {
     int updateImage(Image image);
 
     @Query("DELETE FROM image_table WHERE propertyId =:propertyId")
-    int deleteImagesOneProperty(long propertyId);
+    void deleteImagesOneProperty(long propertyId);
 
 }

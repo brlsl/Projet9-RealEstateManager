@@ -1,15 +1,14 @@
 package com.openclassrooms.realestatemanager;
 
-import android.app.Instrumentation;
 
 import com.openclassrooms.realestatemanager.utils.ExamUtils;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.Test;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +39,22 @@ public class UnitTest {
     }
 
     @Test
-    public void testIfTwoListsAreSameNoMatterTheOrder_AreEquals(){
+    public void convertDateToString_shouldWorks() {
+        Date date = new Date();
+        String todayStr = ExamUtils.getTodayDate();
+        assertEquals(todayStr, Utils.formatDateToString(date));
+    }
+
+    @Test
+    public void convertStringToDate_shouldWorks() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+        String todayStr = ExamUtils.getTodayDate();
+        Date date = Utils.formatStringToDate(todayStr);
+        assertEquals(sdf.format(new Date()), sdf.format(date));
+    }
+
+    @Test
+    public void twoListsAreSameNoMatterTheOrder_isCorrect(){
         List<String> listOne = Arrays.asList("b","a","c");
         List<String> listTwo= Arrays.asList("c","b","a");
         List<String> listThree = Arrays.asList("c", "b", "a", "c");
@@ -58,17 +72,6 @@ public class UnitTest {
         assertTrue(listTwo.get(0).equals("c") && listTwo.get(1).equals("b") && listTwo.get(2).equals("a") && listTwo.size() == 3);
         assertTrue(listThree.get(0).equals("c") && listThree.get(1).equals("b") &&
                 listThree.get(2).equals("a") && listThree.get(3).equals("c") && listThree.size() == 4);
-    }
-
-    @Test
-    public void testIfListContainsElementsAnotherList(){
-        List<String> listOne = Arrays.asList("b", "a","c");
-        List<String> listTwo= Arrays.asList("a","c"); // filter
-
-        for (int i = 0; i <listOne.size() ; i++) {
-            assertTrue(listOne.containsAll(listTwo));
-            assertFalse(listTwo.containsAll(listOne));
-        }
     }
 
 }

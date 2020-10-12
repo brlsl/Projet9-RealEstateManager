@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -42,7 +42,7 @@ import static com.openclassrooms.realestatemanager.controllers.activities.MainAc
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
 
 
-public class DetailPropertyFragment extends BaseFragment {
+public class DetailPropertyFragment extends Fragment {
 
     // FOR DATA
     private DetailPropertyFragmentViewModel mViewModel;
@@ -139,17 +139,15 @@ public class DetailPropertyFragment extends BaseFragment {
                                     Glide.with(requireContext())
                                             .load(staticMapUrl1 + mPropertyLatLng + staticMapUrl2 + API_KEY)
                                             .into(mStaticMapImageView);
-
                                 }
                                 else {
                                     mTxtViewNoConnexion.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_baseline_map_24_black,0,0);
-                                    mTxtViewNoConnexion.setText("Map not available, please check property address");
+                                    mTxtViewNoConnexion.setText(requireContext().getString(R.string.map_not_available_please_check_connexion));
                                 }
                                 Log.d(TAG, "mPropertyLatLng : " + mPropertyLatLng);
                                 Log.d(TAG, "url link :" + staticMapUrl1+mPropertyLatLng+staticMapUrl2+API_KEY);
                             }
                         });
-
 
                 if (property.isAvailable()) {
                     mTxtViewDateSoldField.setVisibility(View.GONE);
@@ -170,10 +168,7 @@ public class DetailPropertyFragment extends BaseFragment {
                 Log.d(TAG, "Image list: "+ images.size());
 
                 // method for dots indicator in viewpager2
-                new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy(){
-                    @Override
-                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                    }
+                new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> {
                 }).attach();
 
             });

@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
@@ -94,7 +95,7 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
         configureLiveData();
         configureRecyclerViewPhoto();
 
-        descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
+        descriptionTitleLengthListener(this, mEdtTxtDescription, mTxtViewDescriptionTitle);
         configureSpinnerType();
         configureSpinnerPropertyStatus();
 
@@ -304,10 +305,14 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                 EasyPermissions.requestPermissions(this,"Real Estate Manager needs to access your photo storage",RC_CHOOSE_PHOTO, READ_EXT_STORAGE_PERMS);
                 return;
             }
-            // Intent for Selection Image Activity
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RC_CHOOSE_PHOTO);
-        });
+            if (mBitmapList.size() <= 6){
+                // Intent for Selection Image Activity
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RC_CHOOSE_PHOTO);
+            }
+            else
+                Snackbar.make(mScrollView, this.getString(R.string.cannot_add_more_pictures), Snackbar.LENGTH_SHORT).show();
+    });
     }
 
     @AfterPermissionGranted(RC_TAKE_PHOTO)
@@ -317,7 +322,10 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
                 EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS);
                 return;
             }
-            takePictureIntent();
+            if (mBitmapList.size() <= 6)
+                takePictureIntent();
+            else
+                Snackbar.make(mScrollView, this.getString(R.string.cannot_add_more_pictures), Snackbar.LENGTH_SHORT).show();
         });
     }
 
@@ -330,11 +338,11 @@ public class EditPropertyActivity extends BasePropertyActivity implements AddAge
             else {
 
                 mEditPropertyButton.setEnabled(false); // avoid more than one click
-                Snackbar.make(mScrollView,"Property Edited", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(this, "Property edited", Toast.LENGTH_SHORT).show();
 
                 Property updatedProperty = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), mTxtViewCurrency.getText().toString() , Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
                         Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,
-                        mImagePathList.get(0), isAvailable);
+                        mImagePathList.get(0), isAvailable, mBitmapList.size());
 
                 updatedProperty.setId(mPropertyId);
 

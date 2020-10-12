@@ -48,7 +48,7 @@ public class Property implements Parcelable {
     private String agentNameSurname;
     private String mainImagePath;
     private boolean isAvailable;
-
+    private int numberOfPictures;
 
     // constructor for database testing
     @Ignore
@@ -84,7 +84,8 @@ public class Property implements Parcelable {
 
     public Property(long agentId, String city, String type, String address, int price, String currency, int surface,
                     int numberOfRooms, int numberOfBedrooms, int numberOfBathRooms, String description,
-                    Date dateAvailable, Date dateSold, String agentNameSurname, List<String> pointsOfInterest, String mainImagePath, boolean isAvailable) {
+                    Date dateAvailable, Date dateSold, String agentNameSurname, List<String> pointsOfInterest, String mainImagePath, boolean isAvailable,
+                    int numberOfPictures) {
         this.agentId = agentId;
         this.city = city;
         this.type = type;
@@ -102,6 +103,7 @@ public class Property implements Parcelable {
         this.pointsOfInterest = pointsOfInterest;
         this.mainImagePath = mainImagePath;
         this.isAvailable = isAvailable;
+        this.numberOfPictures = numberOfPictures;
     }
 
     @Ignore
@@ -129,6 +131,7 @@ public class Property implements Parcelable {
         agentNameSurname = in.readString();
         mainImagePath = in.readString();
         isAvailable = in.readByte() != 0;
+        numberOfPictures = in.readInt();
     }
 
     public static final Creator<Property> CREATOR = new Creator<Property>() {
@@ -295,6 +298,14 @@ public class Property implements Parcelable {
         this.dateSold = dateSold;
     }
 
+    public int getNumberOfPictures() {
+        return numberOfPictures;
+    }
+
+    public void setNumberOfPictures(int numberOfPictures) {
+        this.numberOfPictures = numberOfPictures;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -317,6 +328,7 @@ public class Property implements Parcelable {
         parcel.writeString(agentNameSurname);
         parcel.writeString(mainImagePath);
         parcel.writeByte((byte) (isAvailable ? 1 : 0));
+        parcel.writeInt(numberOfPictures);
     }
 
 
@@ -354,6 +366,7 @@ public class Property implements Parcelable {
         if (values.containsKey("agentNameSurname")) property.setAgentNameSurname(values.getAsString("agentNameSurname"));
         if (values.containsKey("mainImagePath")) property.setMainImagePath(values.getAsString("mainImagePath"));
         if (values.containsKey("isAvailable")) property.setAvailable(values.getAsBoolean("isAvailable"));
+        if (values.containsKey("numberOfPictures")) property.setNumberOfPictures(values.getAsInteger("numberOfPictures"));
 
         Log.e("PROPERTY CONTENT", "Error on Property content values " + property);
         return property;

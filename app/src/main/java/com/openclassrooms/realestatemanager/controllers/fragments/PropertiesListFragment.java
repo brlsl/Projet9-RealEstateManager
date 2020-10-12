@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,19 +28,13 @@ import com.openclassrooms.realestatemanager.views.PropertyList.PropertiesAdapter
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_LIST_FILTERED_KEY;
-
-
-public class PropertiesListFragment extends BaseFragment {
+public class PropertiesListFragment extends Fragment {
 
     // FOR DATA
     private RecyclerView mRecyclerView;
     private PropertiesAdapter mAdapter;
     private List<Property> mPropertiesList = new ArrayList<>();
     private REMViewModel mViewModel;
-
-    // FOR UI
-    private FloatingActionButton mFabAddProperty;
 
     // CALLBACK
     private OnItemPropertyClickListener mCallback;
@@ -71,7 +65,8 @@ public class PropertiesListFragment extends BaseFragment {
         configureRecyclerView(view);
         configureOnClickRecyclerView();
 
-        mFabAddProperty = view.findViewById(R.id.add_property_fab);
+        // FOR UI
+        FloatingActionButton mFabAddProperty = view.findViewById(R.id.add_property_fab);
         mFabAddProperty.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddPropertyActivity.class);
             startActivity(intent);
@@ -99,17 +94,11 @@ public class PropertiesListFragment extends BaseFragment {
             mAdapter.updatePropertyList(propertyList);
             mPropertiesList = propertyList;
         });
-
     }
 
     private void configureOnClickRecyclerView(){
         ItemClickSupport.addTo(mRecyclerView, R.layout.rv_property_item)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        mCallback.onItemPropertySelected(mPropertiesList.get(position));
-                    }
-                });
+                .setOnItemClickListener((recyclerView, position, v) -> mCallback.onItemPropertySelected(mPropertiesList.get(position)));
     }
 
 }

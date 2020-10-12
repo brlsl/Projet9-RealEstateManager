@@ -35,7 +35,7 @@ public interface PropertyDao {
     int updateProperty(Property property);
 
     // test for String query
-    @Query("SELECT * FROM property_table WHERE (type LIKE :input) ")
+    @Query("SELECT * FROM property_table WHERE (type LIKE :input) OR LENGTH(:input) = 0 ")
     LiveData<List<Property>> searchPropertyTestString(String input);
 
     // Query for testing
@@ -54,18 +54,20 @@ public interface PropertyDao {
 
 
     // QUERY FOR APP
-
     @Query("SELECT * FROM property_table WHERE (surface BETWEEN :surfaceMin AND :surfaceMax) AND" +
             " (price BETWEEN :priceMin AND :priceMax) " +
             "AND (numberOfRooms BETWEEN :nbrRoomMin AND :nbrRoomMax)" +
             "AND (dateAvailable >= :dateAvailableMin AND dateAvailable <= :dateAvailableMax )" +
             "AND (dateSold >= :dateSoldMin AND dateSold <= :dateSoldMax) " +
-            "AND (isAvailable = :isAvailable)")
+            "AND (isAvailable = :isAvailable) " +
+            "AND (numberOfPictures BETWEEN :numberOfPicturesMin AND :numberOfPicturesMax) " +
+            "AND ((city LIKE :city) OR LENGTH(:city) = 0)")
     LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax,
                                                        int priceMin, int priceMax,
                                                        int nbrRoomMin, int nbrRoomMax,
                                                        Date dateAvailableMin, Date dateAvailableMax,
                                                        Date dateSoldMin, Date dateSoldMax,
-                                                       boolean isAvailable);
-
+                                                       boolean isAvailable,
+                                                       int numberOfPicturesMin, int numberOfPicturesMax,
+                                                       String city);
 }

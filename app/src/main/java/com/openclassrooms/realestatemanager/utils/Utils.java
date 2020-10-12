@@ -40,12 +40,13 @@ public class Utils {
         }
 
         //to avoid messing the order of the original lists, we use a copy
-        listOne = new ArrayList<>(listOne);
-        listTwo = new ArrayList<>(listTwo);
+        List<String> copy1, copy2;
+        copy1 = new ArrayList<>(listOne);
+        copy2 = new ArrayList<>(listTwo);
 
-        Collections.sort(listOne);
-        Collections.sort(listTwo);
-        return listOne.equals(listTwo);
+        Collections.sort(copy1);
+        Collections.sort(copy2);
+        return copy1.equals(copy2);
     }
 
 }

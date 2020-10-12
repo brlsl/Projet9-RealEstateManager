@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -42,6 +43,7 @@ import com.openclassrooms.realestatemanager.controllers.fragments.AddPhotoTitleD
 import com.openclassrooms.realestatemanager.models.Agent;
 import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.notifications.Notification;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.views.PropertyImageList.PropertyImageAdapter;
 
@@ -90,11 +92,11 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
 
 
         configureViews();
-        configureCurrenryField();
+        configureCurrencyField();
         configureLiveData();
 
         configureRecyclerViewPhoto();
-        descriptionTitleLengthListener(mEdtTxtDescription, mTxtViewDescriptionTitle);
+        descriptionTitleLengthListener(this, mEdtTxtDescription, mTxtViewDescriptionTitle);
         configureSpinnerType();
 
         onClickCheckBoxes(mCckBoxSchool, mCckBoxHospital, mCckBoxRestaurant,mCckBoxMall, mCckBoxCinema,
@@ -108,7 +110,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
 
     }
 
-    private void configureCurrenryField() {
+    private void configureCurrencyField() {
         SharedPreferences preferences =  PreferenceManager.getDefaultSharedPreferences(this);
         boolean isDollar = preferences.getBoolean(PREFERENCES_CURRENCY,false);
         if (isDollar){
@@ -136,9 +138,15 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
                 EasyPermissions.requestPermissions(this,"Real Estate Manager needs to access your photo storage",RC_CHOOSE_PHOTO, READ_EXT_STORAGE_PERMS);
                 return;
             }
-            // Intent for Selection Image Activity
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RC_CHOOSE_PHOTO);
+
+            if (mBitmapList.size() <= 6){
+                // Intent for Selection Image Activity
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RC_CHOOSE_PHOTO);
+            }
+            else
+                Snackbar.make(mScrollView,this.getString(R.string.cannot_add_more_pictures), Snackbar.LENGTH_SHORT).show();
+
         });
     }
 
@@ -149,7 +157,11 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
                 EasyPermissions.requestPermissions(this,"Real Estate Manager needs your permission to use camera", RC_TAKE_PHOTO, CAMERA_PERMS);
                 return;
             }
-            takePictureIntent();
+            if (mBitmapList.size() <= 6)
+                takePictureIntent();
+            else
+                Snackbar.make(mScrollView,this.getString(R.string.cannot_add_more_pictures), Snackbar.LENGTH_SHORT).show();
+
         });
     }
 
@@ -162,8 +174,6 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
         LiveData<List<String>> pointOfInterestLiveData = mPropertyActivityViewModel.getPointsOfInterestList();
         LiveData<List<String>> pathListLiveData = mPropertyActivityViewModel.getPathList();
         MutableLiveData<List<String>> imageTitleListLiveData = mPropertyActivityViewModel.getImageTitleList();
-        LiveData<String> currencyLiveData = mPropertyActivityViewModel.getCurrency();
-
 
         pathListLiveData.observe(this, strings -> {
             mPropertyImageAdapter.updatePathList(strings);
@@ -204,9 +214,6 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
             Log.d(TAG, "point of Interest list " + mPointsOfInterestList.size());
         } );
 
-        currencyLiveData.observe(this, s -> {
-           // mC
-        });
     }
 
     private void configureSpinnerType() {
@@ -268,7 +275,7 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
             else {
                 mAddPropertyButton.setEnabled(false); // avoid more than one click
                 Property propertyAdded = new Property(mAgentId, mCity, mType, mAddress, Integer.parseInt(mPrice), mTxtViewCurrency.getText().toString() ,Integer.parseInt(mSurface), Integer.parseInt(mNbrOfRoom), Integer.parseInt(mNbrOfBedroom),
-                        Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable);
+                        Integer.parseInt(mNbrOfBathroom), mDescription, mDateAvailable, mDateSold, mAgentNameSurname, mPointsOfInterestList,mImagePathList.get(0), isAvailable, mBitmapList.size());
                 mPropertyActivityViewModel.createProperty(propertyAdded);
 
                 // wait between property creation and get all properties from database
@@ -290,8 +297,14 @@ public class AddPropertyActivity extends BasePropertyActivity implements AddAgen
                 });
 
                 Log.d(TAG, "Image list content: " + mImagePathList);
+
+                Notification notification = new Notification();
+                notification.createNotification(this, mType, mAddress, mCity, mPrice, mTxtViewCurrency.getText().toString());
+
+                Toast.makeText(this, "Property added", Toast.LENGTH_SHORT).show();
                 finish();
-                Snackbar.make(mScrollView,"Property Added", Snackbar.LENGTH_LONG).show();
+
+
             }
         });
     }

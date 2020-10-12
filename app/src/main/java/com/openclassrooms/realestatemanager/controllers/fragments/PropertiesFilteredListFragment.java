@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,18 +26,15 @@ import java.util.List;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_LIST_FILTERED_KEY;
 
-public class PropertiesFilteredListFragment extends BaseFragment {
+public class PropertiesFilteredListFragment extends Fragment {
 
     // FOR DATA
     private List<Property> mFilteredPropertiesList = new ArrayList<>();
-
 
     // FOR UI
     private RecyclerView mRecyclerView;
     private TextView mTxtViewFilteredListResult;
     private FloatingActionButton mFabAddProperty;
-
-
 
     // CALLBACK
     private PropertiesListFragment.OnItemPropertyClickListener mCallback;
@@ -65,7 +63,6 @@ public class PropertiesFilteredListFragment extends BaseFragment {
 
         onClickFab();
 
-
         return view;
     }
 
@@ -88,15 +85,16 @@ public class PropertiesFilteredListFragment extends BaseFragment {
             List<Property> list = bundle.getParcelableArrayList(PROPERTY_LIST_FILTERED_KEY);
             if (list != null) {
                 mFilteredPropertiesList = list;
+                if (list.size() == 0)
+                    mTxtViewFilteredListResult.setText(this.getString(R.string.filter_0_result));
+                if (list.size() == 1)
+                    mTxtViewFilteredListResult.setText(this.getString(R.string.filter_one_result_found, list.size()));
                 if (list.size() > 1)
-                    mTxtViewFilteredListResult.setText("Search result: "+ list.size() + " properties found" );
-                else
-                    mTxtViewFilteredListResult.setText("Search" +
-                            " result: "+ list.size() + " property found" );
+                    mTxtViewFilteredListResult.setText(this.getString(R.string.filter_results_found ,list.size()));
+
                 mAdapter.updatePropertyList(list);
             }
         }
-
     }
 
     // ------ LISTENERS ------
@@ -111,11 +109,6 @@ public class PropertiesFilteredListFragment extends BaseFragment {
 
     private void configureOnClickRecyclerView(){
         ItemClickSupport.addTo(mRecyclerView, R.layout.rv_property_item)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        mCallback.onItemPropertySelected(mFilteredPropertiesList.get(position));
-                    }
-                });
+                .setOnItemClickListener((recyclerView, position, v) -> mCallback.onItemPropertySelected(mFilteredPropertiesList.get(position)));
     }
 }

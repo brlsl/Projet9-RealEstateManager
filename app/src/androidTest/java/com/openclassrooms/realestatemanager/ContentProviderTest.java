@@ -27,7 +27,6 @@ import static org.junit.Assert.assertThat;
 public class ContentProviderTest {
     // FOR DATA
     private ContentResolver mContentResolver;
-    private Context mContext;
 
     // DATA SET FOR TEST
     private static long AGENT_ID = (long) (Math.random() * 100000);
@@ -43,7 +42,7 @@ public class ContentProviderTest {
 
     @Before
     public void setUp() {
-        mContext = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().getContext();
+        Context mContext = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().getContext();
         Room.inMemoryDatabaseBuilder(mContext,
                 RealEstateManagerDatabase.class)
                 .allowMainThreadQueries()
@@ -129,6 +128,7 @@ public class ContentProviderTest {
         values.put("agentNameSurname", AGENT_NAME +" "+ AGENT_SURNAME);
         values.put("mainImagePath", mainImagePath);
         values.put("isAvailable","false");
+        values.put("numberOfPictures", pathList.size());
 
         return values;
     }

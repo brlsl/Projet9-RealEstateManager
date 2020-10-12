@@ -24,7 +24,7 @@ public class BasePropertyActivityViewModel extends ViewModel {
     private final ImageDataRepository imageDataRepository;
     private final Executor executor; // permits to realize asynchronous requests
 
-    private MutableLiveData<Date> mDateAvailable, mDateSold;;
+    private MutableLiveData<Date> mDateAvailable, mDateSold;
     private MutableLiveData<List<Bitmap>> mBitmapList;
     private MutableLiveData<Agent> mAgent;
 
@@ -82,11 +82,6 @@ public class BasePropertyActivityViewModel extends ViewModel {
 
     public LiveData<List<Image>> getImageListOneProperty(long propertyId){
         return imageDataRepository.getImageListOneProperty(propertyId);
-    }
-
-    public void updateImage(Image image){
-        executor.execute(() ->
-                imageDataRepository.updateImage(image));
     }
 
     public void deleteImagesOneProperty(long propertyId){

@@ -60,25 +60,22 @@ public class AddAgentDialogFragment extends DialogFragment {
 
         dialog = builder.create();
 
-        dialog.setOnShowListener(dialogInterface -> {
-            ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setOnClickListener(v -> {
-                        String agentName = mAgentName.getText().toString();
-                        String agentSurname = mAgentSurname.getText().toString();
+        dialog.setOnShowListener(dialogInterface -> ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
+                    String agentName = mAgentName.getText().toString();
+                    String agentSurname = mAgentSurname.getText().toString();
 
-                        if (!(agentName.isEmpty() || agentSurname.isEmpty())){
-                            Agent agent = new Agent(agentName, agentSurname);
-                            mViewModel.createAgent(agent);
-                            dialog.dismiss();
-                            Toast.makeText(requireContext(), "Agent added", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                            Toast.makeText(requireContext(), "Please fill all forms", Toast.LENGTH_SHORT).show();
-                    });
-        });
+                    if (!(agentName.isEmpty() || agentSurname.isEmpty())){
+                        Agent agent = new Agent(agentName, agentSurname);
+                        mViewModel.createAgent(agent);
+                        dialog.dismiss();
+                        Toast.makeText(requireContext(), "Agent added", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                        Toast.makeText(requireContext(), "Please fill all forms", Toast.LENGTH_SHORT).show();
+                }));
 
         dialog.setCanceledOnTouchOutside(false);
-
     }
 
 }

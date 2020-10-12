@@ -1,16 +1,21 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -32,13 +37,13 @@ import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_AGENT_ID_KEY;
 import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.PROPERTY_ID_KEY;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
-
 
     // FOR UI
     private GoogleMap mMap;
@@ -52,7 +57,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Disposable mDisposable;
     private static String API_KEY;
     private HashMap<LatLng, Property> mHashMap = new HashMap<>();
-
+    private FusedLocationProviderClient mFusedLocationProvider;
 
     // ------ LIFE CYCLE ------
     @Override
@@ -64,12 +69,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        Objects.requireNonNull(mapFragment).getMapAsync(this);
 
         API_KEY = getString(R.string.api_key);
         configureViewModel();
 
+        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this);
+        askGpsPermission();
     }
+
+    @SuppressLint("MissingPermission")
+    private void askGpsPermission() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            getDeviceLocation();
+        } else{
+            EasyPermissions.requestPermissions(this,"SolarTime needs your position to calculate", 123, permissions);
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -84,6 +103,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        getDeviceLocation();
         mViewModel.getPropertyList().observe(this, propertyList -> {
             for (int i = 0; i < propertyList.size() ; i++) {
                 int finalI = i;
@@ -125,16 +145,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             if (property != null) {
                 mMap.setInfoWindowAdapter(new MapCustomWindowAdapter(this, property));
-                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                    @Override
-                    public void onInfoWindowClick(Marker marker) {
-                        mMarker = marker;
-                        Intent intent = new Intent(getApplicationContext(), EditPropertyActivity.class);
-                        intent.putExtra(PROPERTY_ID_KEY, property.getId());
-                        intent.putExtra(PROPERTY_AGENT_ID_KEY, property.getAgentId());
-                        startActivityForResult(intent, REQUEST_CODE_EDIT_PROPERTY);
+                mMap.setOnInfoWindowClickListener(marker1 -> {
+                    mMarker = marker1;
+                    Intent intent = new Intent(getApplicationContext(), EditPropertyActivity.class);
+                    intent.putExtra(PROPERTY_ID_KEY, property.getId());
+                    intent.putExtra(PROPERTY_AGENT_ID_KEY, property.getAgentId());
+                    startActivityForResult(intent, REQUEST_CODE_EDIT_PROPERTY);
 
-                    }
                 });
             }
             return false;
@@ -187,6 +204,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    // ------ DEVICE LOCATION METHODS ------
+
+    @SuppressLint("MissingPermission")
+    private void getDeviceLocation(){
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, permissions)) {
+            mFusedLocationProvider.getLastLocation().addOnSuccessListener(this, location -> {
+                if (location != null) {
+                    mMap.setMyLocationEnabled(true);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(location.getLatitude(),
+                                    location.getLongitude()), 12f));
+
+                    writeLastKnownLocation(location);
+
+                } else {
+                    readLastKnownLocation();
+                }
+            });
+        }
+    }
+
+    private void writeLastKnownLocation(Location deviceLocation){
+        SharedPreferences pref = this.getPreferences(Context.MODE_PRIVATE);
+        deviceLocation.getLongitude();
+        pref.edit().putString("device_latitude", String.valueOf(deviceLocation.getLatitude())).apply();
+        pref.edit().putString("device_longitude", String.valueOf(deviceLocation.getLongitude())).apply();
+    }
+    private void readLastKnownLocation(){
+        String lat = this.getPreferences(Context.MODE_PRIVATE).getString("device_latitude", "48.8534");
+        String lng = this.getPreferences(Context.MODE_PRIVATE).getString("device_longitude", "2.3488");
+        if (lat != null && lng != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)), 12f));
+        }
+    }
 
 
 
@@ -199,5 +253,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         return null;
     }
+
+
 
 }

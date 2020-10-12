@@ -5,10 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Agent;
-import com.openclassrooms.realestatemanager.models.Image;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
-import com.openclassrooms.realestatemanager.repositories.ImageDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
 import java.util.Date;
@@ -20,11 +18,8 @@ public class REMViewModel extends ViewModel {
     private final AgentDataRepository agentDataSource;
     private final PropertyDataRepository propertyDataSource;
     private final Executor executor; // permits to realize asynchronous requests
-
-
     private MutableLiveData<List<Property>> mFilteredPropertyList;
     private MutableLiveData<List<String>> mPointsOfInterestList;
-
     private MutableLiveData<Date> mDateAvailableMin, mDateAvailableMax, mDateSoldMin, mDateSoldMax;
 
     public REMViewModel(AgentDataRepository agentDataSource, PropertyDataRepository propertyDataSource, Executor executor) {
@@ -32,7 +27,6 @@ public class REMViewModel extends ViewModel {
         this.propertyDataSource = propertyDataSource;
         this.executor = executor;
     }
-
 
     // ---------
     // AGENT
@@ -43,7 +37,6 @@ public class REMViewModel extends ViewModel {
         executor.execute(()->
                 agentDataSource.createAgent(agent));
     }
-
 
     public LiveData<List<Agent>> getAgentList(){
         return agentDataSource.getAgentList();
@@ -59,9 +52,10 @@ public class REMViewModel extends ViewModel {
     }
 
     public LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax, int priceMin, int priceMax, int nbrRoomMin, int nbrRoomMax,
-                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax, boolean isAvailable){
+                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax, boolean isAvailable,
+                                                              int numberOfPicturesMin, int numberOfPicturesMax, String city){
         return propertyDataSource.filterPropertyListAllType(surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
-                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax, isAvailable);
+                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax, isAvailable, numberOfPicturesMin, numberOfPicturesMax, city);
     }
 
     public void updateProperty(Property property){
@@ -69,7 +63,9 @@ public class REMViewModel extends ViewModel {
                 propertyDataSource.updateProperty(property));
     }
 
-    // Date
+    // ------
+    // DATE
+    // ------
 
     public MutableLiveData<Date> getDateAvailableMin() {
         if (mDateAvailableMin == null){
@@ -100,7 +96,9 @@ public class REMViewModel extends ViewModel {
         return mDateSoldMax;
     }
 
-    // List
+    // -------
+    // LIST
+    // -------
 
     public MutableLiveData<List<Property>> getFilteredPropertyList(){
         if (mFilteredPropertyList == null){

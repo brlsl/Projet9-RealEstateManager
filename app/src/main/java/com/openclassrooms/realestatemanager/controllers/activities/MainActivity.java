@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListFra
     private FragmentManager mFragmentManager;
     private boolean isTwoPane;
     private DetailPropertyFragment mDetailPropertyFragment = new DetailPropertyFragment();
-    private long mPropertyId = -1, mAgentId = -1;;
+    private long mPropertyId = -1, mAgentId = -1;
 
     // FOR UI
     private androidx.appcompat.widget.Toolbar mToolbar;

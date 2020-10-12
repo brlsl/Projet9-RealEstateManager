@@ -1,7 +1,9 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,12 +16,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
 
@@ -29,7 +28,7 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddAgentBottomSheetFragment;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
@@ -66,14 +65,10 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
         configureViewModel();
 
         LiveData<String> chosenPhotoLiveData = mPropertyActivityViewModel.getChosenPhotoPath();
-        chosenPhotoLiveData.observe(this, s -> {
-            mChosenPhotoPath = s;
-        });
+        chosenPhotoLiveData.observe(this, s -> mChosenPhotoPath = s);
 
         LiveData<String> photoPathLiveData = mPropertyActivityViewModel.getTakenPhotoPath();
-        photoPathLiveData.observe(this, s ->{
-            mTakenPhotoPath = s;
-        });
+        photoPathLiveData.observe(this, s -> mTakenPhotoPath = s);
     }
 
     @Override
@@ -87,7 +82,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
         mPropertyActivityViewModel = new ViewModelProvider(this, viewModelFactory).get(BasePropertyActivityViewModel.class);
     }
 
-    void descriptionTitleLengthListener(EditText editText, TextView textView) {
+    void descriptionTitleLengthListener(Context context, EditText editText, TextView textView) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -97,8 +92,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 int maxLength = 300;
-                textView.setText("Description (" + (maxLength - editText.length()) + "/300)");
-
+                textView.setText(context.getString(R.string.description_lenght, (maxLength - editText.length())));
             }
 
             @Override
@@ -112,9 +106,8 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
     // ------ LISTENERS ------
 
     void onClickChooseAgent(ImageButton imageButton) {
-        imageButton.setOnClickListener(view -> {
-            AddAgentBottomSheetFragment.newInstance().show(getSupportFragmentManager(),"AddAgentBottomSheetFragment");
-        });
+        imageButton.setOnClickListener(view ->
+                AddAgentBottomSheetFragment.newInstance().show(getSupportFragmentManager(),"AddAgentBottomSheetFragment"));
     }
 
     void onClickCheckBoxes(CheckBox cckBoxSchool, CheckBox cckBoxHospital, CheckBox cckBoxRestaurant,
@@ -179,17 +172,14 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
             currentMonth = calendar.get(Calendar.MONTH);
             currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                    calendar.set(Calendar.YEAR, year);
-                    calendar.set(Calendar.MONTH, month);
-                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    viewModel.getDateAvailable().setValue(calendar.getTime());
-                    // avoid a sold date before available date
-                    if (viewModel.getDateSold().getValue() != null && calendar.getTime().after(viewModel.getDateSold().getValue())){
-                        viewModel.getDateSold().setValue(calendar.getTime());
-                    }
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, (datePicker, year, month, dayOfMonth) -> {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                viewModel.getDateAvailable().setValue(calendar.getTime());
+                // avoid a sold date before available date
+                if (viewModel.getDateSold().getValue() != null && calendar.getTime().after(viewModel.getDateSold().getValue())){
+                    viewModel.getDateSold().setValue(calendar.getTime());
                 }
             }, currentYear, currentMonth, currentDayOfMonth);
             datePickerDialog.show();
@@ -307,6 +297,7 @@ public abstract class BasePropertyActivity extends AppCompatActivity {
     //helper to retrieve the path of an image URI
     public String getRealPathFromUri(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressLint("Recycle")
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
 
         if(cursor!=null)

@@ -49,9 +49,10 @@ public class PropertyDataRepository {
 */
 
     public LiveData<List<Property>> filterPropertyListAllType(int surfaceMin, int surfaceMax, int priceMin, int priceMax, int nbrRoomMin, int nbrRoomMax,
-                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax, boolean isAvailable){
+                                                              Date dateAvailableMin, Date dateAvailableMax, Date dateSoldMin, Date dateSoldMax, boolean isAvailable,
+                                                              int numberOfPicturesMin, int numberOfPicturesMax, String city){
         return propertyDao.filterPropertyListAllType(surfaceMin,surfaceMax,priceMin,priceMax, nbrRoomMin,nbrRoomMax,
-                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax, isAvailable);
+                dateAvailableMin,dateAvailableMax,dateSoldMin,dateSoldMax, isAvailable, numberOfPicturesMin, numberOfPicturesMax, city);
     }
 
 }

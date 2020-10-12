@@ -123,18 +123,16 @@ public class AddPhotoTitleDialogFragment extends DialogFragment {
 
         dialog = builder.create();
 
-        dialog.setOnShowListener(dialogInterface -> {
-            ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setOnClickListener(v -> {
-                        if (mPhotoTitleDescriptionEdtTxt.getText().toString().length() > 0) {
-                            String photoTitle =  mPhotoTitleDescriptionEdtTxt.getText().toString();
-                            mCopyImageTitleList.set(copyPosition, photoTitle);
-                            mListener.onConfirmClick(mCopyImageTitleList);
+        dialog.setOnShowListener(dialogInterface -> ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
+                    if (mPhotoTitleDescriptionEdtTxt.getText().toString().length() > 0) {
+                        String photoTitle =  mPhotoTitleDescriptionEdtTxt.getText().toString();
+                        mCopyImageTitleList.set(copyPosition, photoTitle);
+                        mListener.onConfirmClick(mCopyImageTitleList);
 
-                            dialog.dismiss();
-                        }
-                    });
-        });
+                        dialog.dismiss();
+                    }
+                }));
         dialog.setCanceledOnTouchOutside(false);
     }
 
