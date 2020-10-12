@@ -1,15 +1,11 @@
 package com.openclassrooms.realestatemanager.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.openclassrooms.realestatemanager.database.dao.AgentDao;
 import com.openclassrooms.realestatemanager.database.dao.ImageDao;

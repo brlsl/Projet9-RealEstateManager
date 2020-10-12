@@ -26,12 +26,4 @@ public class AgentDataRepository {
         return agentDao.getAgentList();
     }
 
-    public void updateAgent(Agent agent){
-        agentDao.updateAgent(agent);
-    }
-
-    public void deleteAgent(Agent agent){
-        agentDao.deleteAgent(agent);
-    }
-
 }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -18,7 +17,6 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.fragments.AddPhotoTitleDialogFragment;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageViewHolder> {
 
@@ -54,24 +52,16 @@ public class PropertyImageAdapter extends RecyclerView.Adapter<PropertyImageView
         holder.displayData(mBitmapList, mImageTitleList, position);
 
         TextView textViewTitle = holder.itemView.findViewById(R.id.photo_title_item_textView);
-        textViewTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddPhotoTitleDialogFragment fragment = new AddPhotoTitleDialogFragment(position, mImageTitleList, mContext);
-                if (fm != null){
-                    fragment.show(fm, "Add photo dialog");
-                }
+        textViewTitle.setOnClickListener(view -> {
+            AddPhotoTitleDialogFragment fragment = new AddPhotoTitleDialogFragment(position, mImageTitleList, mContext);
+            if (fm != null){
+                fragment.show(fm, "Add photo dialog");
             }
         });
 
 
         ImageButton delete = holder.itemView.findViewById(R.id.delete_photo_imageButton);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                removeAt(position);
-            }
-        });
+        delete.setOnClickListener(view -> removeAt(position));
     }
 
     @Override

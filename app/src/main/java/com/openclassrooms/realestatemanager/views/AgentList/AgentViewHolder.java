@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.views.AgentList;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ public class AgentViewHolder extends RecyclerView.ViewHolder {
 
 
     // FOR UI
-    private ImageView mAgentPhoto;
     private TextView mAgentName, mAgentSurname;
 
     public AgentViewHolder(@NonNull View itemView) {

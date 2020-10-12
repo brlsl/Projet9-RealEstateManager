@@ -1,8 +1,5 @@
 package com.openclassrooms.realestatemanager.utils;
 
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 import com.openclassrooms.realestatemanager.models.api.Geocode;
 
 import java.util.concurrent.TimeUnit;

@@ -230,6 +230,7 @@ public class DatabaseTests {
         this.database.propertyDao().createProperty(property2);
         this.database.propertyDao().createProperty(property3);
 
+        // TEST
         List<Property> filteredList = LiveDataTestUtil.getValue(
                 this.database.propertyDao().searchPropertyTestString("Apartment"));
         assertEquals(1, filteredList.size());
@@ -258,6 +259,7 @@ public class DatabaseTests {
         this.database.propertyDao().createProperty(property2);
         this.database.propertyDao().createProperty(property3);
 
+        // TEST
         List<Property> filteredList = LiveDataTestUtil.getValue(
                 this.database.propertyDao().searchPropertyTestInt(0,300, 0, 4000));
         assertTrue(filteredList.size() == 1  && filteredList.get(0).getPrice() == 4000);
@@ -281,7 +283,6 @@ public class DatabaseTests {
         Date dateAvailable1 = Utils.formatStringToDate("01/01/2019");
         Date dateAvailable2 = Utils.formatStringToDate("01/01/2020");
         Date dateAvailable3 = Utils.formatStringToDate("01/01/2021");
-
         Date dateSold1 = Utils.formatStringToDate("01/01/2020");
         Date dateSold2 = Utils.formatStringToDate("01/01/2021");
         Date dateSold3 = Utils.formatStringToDate("01/01/2022");
@@ -293,6 +294,7 @@ public class DatabaseTests {
         this.database.propertyDao().createProperty(property2);
         this.database.propertyDao().createProperty(property3);
 
+        // TEST
         Date dateAvailableMin = Utils.formatStringToDate("01/01/1900");
         Date dateAvailableMax = Utils.formatStringToDate("01/01/2021");
         Date dateSoldMin = Utils.formatStringToDate("01/01/1900");
@@ -300,6 +302,12 @@ public class DatabaseTests {
         List<Property> filteredList = LiveDataTestUtil.getValue(
                 this.database.propertyDao().searchPropertyTestDate(dateAvailableMin, dateAvailableMax, dateSoldMin, dateSoldMax));
         assertEquals(2, filteredList.size());
+
+        dateAvailableMin = Utils.formatStringToDate("01/01/2020");
+        dateSoldMin = Utils.formatStringToDate("01/01/2021");
+        filteredList = LiveDataTestUtil.getValue(
+                this.database.propertyDao().searchPropertyTestDate(dateAvailableMin, dateAvailableMax, dateSoldMin, dateSoldMax));
+        assertEquals(1, filteredList.size());
     }
 
     @Test

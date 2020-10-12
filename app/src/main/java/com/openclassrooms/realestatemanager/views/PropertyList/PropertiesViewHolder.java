@@ -1,25 +1,21 @@
 package com.openclassrooms.realestatemanager.views.PropertyList;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 
 import com.openclassrooms.realestatemanager.models.Property;
-import com.openclassrooms.realestatemanager.utils.ExamUtils;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.File;
 
-import static com.openclassrooms.realestatemanager.controllers.activities.SettingsActivity.SettingsFragment.PREFERENCES_CURRENCY;
 
 public class PropertiesViewHolder extends RecyclerView.ViewHolder{
 

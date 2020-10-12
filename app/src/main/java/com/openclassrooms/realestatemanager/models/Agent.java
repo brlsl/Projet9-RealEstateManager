@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.text.ParseException;
-
 @Entity(tableName = "agent_table")
 public class Agent {
 
