@@ -2,7 +2,7 @@
 
 ## Description de l'application
 
-Real Estate Manager est une application qui permet d'enregistrer des propriétés qui ont des attributs et des photos qui sont stockées sur le téléphone.
+Real Estate Manager est une application qui permet d'enregistrer des propriétés Ces dernières ont des attributs et des photos qui sont stockées sur le téléphone.
 ### Les fonctionnalités:
 * Ajouter et modifier un bien immobilier
 * Afficher les biens sous forme de liste ou sous forme de carte
