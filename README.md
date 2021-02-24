@@ -4,6 +4,9 @@
 
 Real Estate Manager est une application qui permet d'enregistrer des propriétés.
 Ces dernières ont des attributs et des photos qui sont stockées sur le téléphone.
+Si l'agent immobilier est connecté et géo-localisable, il peut afficher les biens sur une carte, afin de voir d'un coup d'œil les biens les plus proches de lui. Cette carte est dynamique : l'agent peut zoomer, dézoomer, se déplacer, et afficher le détail d'un bien en cliquant sur la punaise correspondante.
+L’agent immobilier peut effectuer une recherche multi-critères sur l’ensemble des biens immobiliers de la base grâce à un moteur de recherche.
+
 ### Les fonctionnalités:
 * Ajouter et modifier un bien immobilier
 * Afficher les biens sous forme de liste ou sous forme de carte
